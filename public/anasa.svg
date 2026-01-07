@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="aegean" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E88E5"/>
+      <stop offset="100%" stop-color="#0D4F8B"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="15" fill="url(#aegean)"/>
+  <!-- Stylized "A" with breath/wave element -->
+  <path d="M16 6 L10 24 L13 24 L14.5 20 L17.5 20 L19 24 L22 24 L16 6 Z M15.2 17.5 L16 14 L16.8 17.5 Z" fill="white"/>
+  <!-- Three breath lines (wave motif) -->
+  <path d="M7 12 Q9 10, 11 12 Q13 14, 15 12" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.8"/>
+  <path d="M17 12 Q19 10, 21 12 Q23 14, 25 12" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.8"/>
+</svg>

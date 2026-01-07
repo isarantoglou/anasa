@@ -1,0 +1,947 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ΑΝΑΣΑ — MODERN AEGEAN DESIGN SYSTEM
+   Inspired by the azure Mediterranean, Cycladic architecture, and Greek elegance
+
+   FONT CHOICES:
+   - Cormorant Garamond: Used ONLY for the "Ανάσα" title (decorative)
+   - Inter: Used for ALL body text, numbers, labels (highly legible)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─────────────────────────────────────────────────────────────────────────
+     COLOR PALETTE — Aegean Inspired (Light Mode)
+     ───────────────────────────────────────────────────────────────────────── */
+
+  /* Primary: Deep Aegean Blues */
+  --aegean-900: #0A2540;
+  --aegean-800: #0D4F8B;
+  --aegean-700: #1565C0;
+  --aegean-600: #1976D2;
+  --aegean-500: #2196F3;
+  --aegean-400: #64B5F6;
+  --aegean-300: #90CAF9;
+  --aegean-200: #BBDEFB;
+  --aegean-100: #E3F2FD;
+  --aegean-50: #F0F7FF;
+
+  /* Accent: Terracotta & Coral (Greek pottery, sunsets) */
+  --terracotta-700: #C55A3C;
+  --terracotta-600: #D66853;
+  --terracotta-500: #E07A5F;
+  --terracotta-400: #E89B85;
+  --terracotta-300: #F0BDB0;
+  --terracotta-200: #F7DDD6;
+  --terracotta-100: #FDF0ED;
+
+  /* Neutrals: Cycladic White & Marble */
+  --marble-white: #FEFDFB;
+  --marble-50: #FAF9F7;
+  --marble-100: #F5F3F0;
+  --marble-200: #E8E6E1;
+  --marble-300: #D4D1CB;
+  --marble-400: #9E9A92;
+  --marble-500: #6B6760;
+  --marble-600: #4A4641;
+  --marble-700: #2D2A26;
+  --marble-800: #1A1816;
+
+  /* Semantic Colors - Success (Mediterranean Green) */
+  --success-700: #15803D;
+  --success-600: #16A34A;
+  --success-500: #22C55E;
+  --success-400: #4ADE80;
+  --success-300: #86EFAC;
+  --success-200: #BBF7D0;
+  --success-100: #DCFCE7;
+  --success-50: #F0FDF4;
+
+  /* Semantic Colors - Warning */
+  --warning-700: #A16207;
+  --warning-600: #CA8A04;
+  --warning-500: #F59E0B;
+  --warning-400: #FBBF24;
+  --warning-300: #FCD34D;
+  --warning-200: #FDE68A;
+  --warning-100: #FEF3C7;
+
+  /* Semantic Colors - Error */
+  --error-500: #EF4444;
+  --error-100: #FEE2E2;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     TYPOGRAPHY
+     - font-display: Decorative serif for "Ανάσα" title ONLY
+     - font-body: Inter for everything else (highly legible numbers)
+     ───────────────────────────────────────────────────────────────────────── */
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+  /* Type Scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+  --text-5xl: 3rem;
+  --text-6xl: 3.75rem;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     SPACING & LAYOUT
+     ───────────────────────────────────────────────────────────────────────── */
+  --container-max: 1400px;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     SHADOWS & EFFECTS
+     ───────────────────────────────────────────────────────────────────────── */
+  --shadow-sm: 0 1px 2px rgba(10, 37, 64, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(10, 37, 64, 0.06), 0 2px 4px -2px rgba(10, 37, 64, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(10, 37, 64, 0.08), 0 4px 6px -4px rgba(10, 37, 64, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(10, 37, 64, 0.1), 0 8px 10px -6px rgba(10, 37, 64, 0.04);
+  --shadow-glow: 0 0 40px rgba(33, 150, 243, 0.15);
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     ANIMATIONS
+     ───────────────────────────────────────────────────────────────────────── */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DARK MODE VARIABLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.dark {
+  --aegean-900: #E3F2FD;
+  --aegean-800: #BBDEFB;
+  --aegean-700: #90CAF9;
+  --aegean-600: #64B5F6;
+  --aegean-500: #2196F3;
+  --aegean-400: #1976D2;
+  --aegean-300: #1565C0;
+  --aegean-200: #0D4F8B;
+  --aegean-100: #0A3A66;
+  --aegean-50: #061F38;
+
+  --terracotta-700: #F0BDB0;
+  --terracotta-600: #E89B85;
+  --terracotta-500: #E07A5F;
+  --terracotta-400: #D66853;
+  --terracotta-300: #C55A3C;
+  --terracotta-200: #8B3F2A;
+  --terracotta-100: #4A2218;
+
+  --marble-white: #1A1816;
+  --marble-50: #1E1C1A;
+  --marble-100: #252320;
+  --marble-200: #2D2A26;
+  --marble-300: #3D3935;
+  --marble-400: #6B6760;
+  --marble-500: #9E9A92;
+  --marble-600: #D4D1CB;
+  --marble-700: #E8E6E1;
+  --marble-800: #FAF9F7;
+
+  --success-700: #86EFAC;
+  --success-600: #4ADE80;
+  --success-500: #22C55E;
+  --success-400: #16A34A;
+  --success-300: #15803D;
+  --success-200: #166534;
+  --success-100: #14532D;
+  --success-50: #052E16;
+
+  --warning-700: #FDE68A;
+  --warning-600: #FCD34D;
+  --warning-500: #FBBF24;
+  --warning-400: #F59E0B;
+  --warning-300: #D97706;
+  --warning-200: #B45309;
+  --warning-100: #78350F;
+
+  --error-500: #F87171;
+  --error-100: #450A0A;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BASE STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--marble-50);
+  color: var(--marble-700);
+  line-height: 1.6;
+  margin: 0;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BACKGROUND PATTERNS & TEXTURES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Subtle marble texture overlay */
+.bg-marble-texture {
+  background-image:
+    radial-gradient(ellipse at 20% 30%, rgba(187, 222, 251, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(224, 122, 95, 0.08) 0%, transparent 40%),
+    linear-gradient(180deg, var(--marble-white) 0%, var(--marble-50) 100%);
+  transition: background 0.3s ease;
+}
+
+.dark .bg-marble-texture {
+  background-image:
+    radial-gradient(ellipse at 20% 30%, rgba(33, 150, 243, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(224, 122, 95, 0.05) 0%, transparent 40%),
+    linear-gradient(180deg, var(--marble-white) 0%, var(--marble-50) 100%);
+}
+
+/* Wave pattern for hero sections */
+.bg-waves {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%230D4F8B' fill-opacity='0.03' d='M0,160L48,170.7C96,181,192,203,288,192C384,181,480,139,576,138.7C672,139,768,181,864,181.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: 100% auto;
+}
+
+.dark .bg-waves {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2364B5F6' fill-opacity='0.05' d='M0,160L48,170.7C96,181,192,203,288,192C384,181,480,139,576,138.7C672,139,768,181,864,181.3C960,181,1056,139,1152,122.7C1248,107,1344,117,1392,122.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* Greek key pattern border */
+.greek-key-border {
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--aegean-200) 0px,
+    var(--aegean-200) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+  height: 4px;
+  transition: background 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TYPOGRAPHY UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* Elegant heading styles - ONLY for the main "Ανάσα" title */
+.heading-hero {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--aegean-900);
+}
+
+/* Section headings use Inter for legibility */
+.heading-section {
+  font-family: var(--font-body);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--aegean-800);
+  letter-spacing: -0.01em;
+}
+
+/* Card headings use Inter for legibility */
+.heading-card {
+  font-family: var(--font-body);
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--aegean-800);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMPONENT STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Elegant cards with depth */
+.card-elevated {
+  background: var(--marble-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(212, 209, 203, 0.5);
+  transition: transform var(--duration-normal) var(--ease-out-expo),
+              box-shadow var(--duration-normal) var(--ease-out-expo),
+              background-color 0.3s ease,
+              border-color 0.3s ease;
+}
+
+.dark .card-elevated {
+  border-color: rgba(61, 57, 53, 0.5);
+}
+
+.card-elevated:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+/* Glass morphism card */
+.card-glass {
+  background: rgba(254, 253, 251, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-xl);
+}
+
+.dark .card-glass {
+  background: rgba(26, 24, 22, 0.85);
+  border-color: rgba(61, 57, 53, 0.5);
+}
+
+/* Primary button */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--aegean-600);
+  color: white;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out-expo);
+}
+
+.dark .btn-primary {
+  background: var(--aegean-500);
+  color: var(--marble-800);
+}
+
+.btn-primary:hover {
+  background: var(--aegean-700);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Secondary button */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--marble-100);
+  color: var(--aegean-800);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--marble-200);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out-expo);
+}
+
+.btn-secondary:hover {
+  background: var(--marble-200);
+  border-color: var(--marble-300);
+}
+
+/* Elegant input fields */
+.input-elegant {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: var(--marble-white);
+  border: 1.5px solid var(--marble-200);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--marble-700);
+  transition: all var(--duration-fast) var(--ease-out-expo);
+}
+
+.input-elegant::placeholder {
+  color: var(--marble-400);
+}
+
+.input-elegant:focus {
+  outline: none;
+  border-color: var(--aegean-400);
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.dark .input-elegant:focus {
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DARK MODE TOGGLE BUTTON
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.dark-mode-toggle {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-lg);
+  background: var(--marble-100);
+  border: 1px solid var(--marble-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+  background: var(--marble-200);
+  border-color: var(--marble-300);
+}
+
+.dark-mode-toggle svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--marble-600);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.dark-mode-toggle:hover svg {
+  color: var(--aegean-600);
+}
+
+.dark .dark-mode-toggle svg {
+  color: var(--warning-500);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOGGLE SWITCH (for Today/Jan 1 selector)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.375rem;
+  background: var(--marble-100);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--marble-200);
+}
+
+.toggle-switch button {
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: var(--marble-500);
+}
+
+.toggle-switch button.active {
+  background: var(--aegean-600);
+  color: white;
+}
+
+.dark .toggle-switch button.active {
+  background: var(--aegean-500);
+  color: var(--marble-800);
+}
+
+.toggle-switch button:not(.active):hover {
+  background: var(--marble-200);
+  color: var(--marble-700);
+}
+
+/* Toggle Switch Container (alternative style) */
+.toggle-switch-container {
+  display: flex;
+  background: var(--marble-100);
+  border-radius: var(--radius-lg);
+  padding: 4px;
+  gap: 4px;
+}
+
+.dark .toggle-switch-container {
+  background: var(--marble-700);
+}
+
+.toggle-switch-option {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: var(--marble-500);
+}
+
+.toggle-switch-option.active {
+  background: var(--aegean-600);
+  color: white;
+}
+
+.dark .toggle-switch-option {
+  color: var(--marble-400);
+}
+
+.dark .toggle-switch-option.active {
+  background: var(--aegean-500);
+  color: white;
+}
+
+.toggle-switch-option:not(.active):hover {
+  background: var(--marble-200);
+  color: var(--marble-700);
+}
+
+.dark .toggle-switch-option:not(.active):hover {
+  background: var(--marble-600);
+  color: var(--marble-200);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOOLTIP STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.tooltip-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  overflow: visible;
+}
+
+.tooltip-trigger {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--radius-full);
+  background: var(--marble-200);
+  color: var(--marble-500);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.tooltip-trigger:hover {
+  background: var(--aegean-100);
+  color: var(--aegean-700);
+}
+
+.tooltip-content {
+  position: absolute;
+  bottom: calc(100% + 0.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.75rem 1rem;
+  background: var(--marble-800);
+  color: var(--marble-white);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  box-shadow: var(--shadow-lg);
+}
+
+.tooltip-content::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--marble-800);
+}
+
+.tooltip-container:hover .tooltip-content {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dark .tooltip-content {
+  background: var(--marble-100);
+  color: var(--marble-800);
+}
+
+.dark .tooltip-content::after {
+  border-top-color: var(--marble-100);
+}
+
+/* Simple tooltip class (used for efficiency badges) */
+.tooltip {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: 0;
+  transform: none;
+  padding: 0.75rem 1rem;
+  background: var(--marble-800);
+  color: var(--marble-white);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  white-space: normal;
+  max-width: 280px;
+  min-width: 200px;
+  line-height: 1.4;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  pointer-events: none;
+}
+
+.tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  right: 1rem;
+  transform: none;
+  border: 6px solid transparent;
+  border-bottom-color: var(--marble-800);
+}
+
+.tooltip-container:hover .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dark .tooltip {
+  background: var(--marble-100);
+  color: var(--marble-800);
+}
+
+.dark .tooltip::after {
+  border-bottom-color: var(--marble-100);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EXPANDABLE SECTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.expandable-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0;
+}
+
+.expandable-trigger:hover {
+  color: var(--aegean-600);
+}
+
+.dark .expandable-trigger:hover {
+  color: var(--aegean-400);
+}
+
+.expandable-content {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.expandable-content.expanded {
+  max-height: 500px;
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s var(--ease-out-expo) forwards;
+}
+
+/* Staggered animation delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* Subtle float animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Shimmer effect for loading states */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--marble-100) 25%,
+    var(--marble-50) 50%,
+    var(--marble-100) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Wave animation for decorative elements */
+@keyframes wave {
+  0%, 100% { transform: translateX(0) scaleY(1); }
+  50% { transform: translateX(-2%) scaleY(1.02); }
+}
+
+.animate-wave {
+  animation: wave 8s ease-in-out infinite;
+}
+
+/* Spin animation for loading */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BADGE & TAG STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.badge-aegean {
+  background: var(--aegean-100);
+  color: var(--aegean-700);
+}
+
+.badge-terracotta {
+  background: var(--terracotta-100);
+  color: var(--terracotta-600);
+}
+
+.badge-success {
+  background: #DCFCE7;
+  color: #166534;
+}
+
+.dark .badge-success {
+  background: #052E16;
+  color: #86EFAC;
+}
+
+.badge-warning {
+  background: #FEF3C7;
+  color: #78350F;
+}
+
+.dark .badge-warning {
+  background: #422006;
+  color: #FCD34D;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   OPPORTUNITY CARD RANK STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Gold - Best option (flat muted gold) */
+.rank-gold {
+  background: #B8860B;
+  overflow: visible;
+}
+
+/* Silver - Second best (flat muted silver) */
+.rank-silver {
+  background: #6B7280;
+  overflow: visible;
+}
+
+/* Bronze - Third best (flat muted bronze) */
+.rank-bronze {
+  background: #92643A;
+  overflow: visible;
+}
+
+/* Default - Other options (flat aegean) */
+.rank-default {
+  background: var(--aegean-700);
+  overflow: visible;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DAY INDICATOR STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.day-indicator {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: transform var(--duration-fast) var(--ease-out-expo);
+}
+
+.day-indicator:hover {
+  transform: scale(1.1);
+}
+
+.day-workday {
+  background: #FEF3C7;
+  color: #78350F;
+  border: 1px solid #E5D4A1;
+}
+
+.dark .day-workday {
+  background: #422006;
+  color: #FDE68A;
+  border-color: rgba(253, 230, 138, 0.2);
+}
+
+.day-weekend {
+  background: var(--aegean-100);
+  color: var(--aegean-700);
+  border: 1px solid var(--aegean-200);
+}
+
+.day-holiday {
+  background: var(--terracotta-100);
+  color: var(--terracotta-600);
+  border: 1px solid var(--terracotta-200);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   STAT NUMBER STYLES (highly legible)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.stat-number {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLLBAR STYLING
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--marble-100);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--marble-300);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--marble-400);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE UTILITIES
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .heading-hero {
+    font-size: clamp(2rem, 8vw, 2.5rem);
+  }
+}
