@@ -10,9 +10,9 @@ No developer wrote or debugged the code manually. Instead, the human role was li
 
 ---
 
-A Vue 3 application by [Oxygen](https://oxygen.gr) that helps users maximize their vacation days by finding optimal leave periods around Greek public holidays. The UI is fully in Greek.
+A Vue 3 application by [Oxygen](https://www.oxygen.gr) that helps users maximize their vacation days by finding optimal leave periods around Greek public holidays. The UI is fully in Greek.
 
-**[Live Demo](https://leaves.sarantoglou.com/)**
+**[Live Demo](https://anasa.oxygen.gr/)**
 
 ## Features
 
