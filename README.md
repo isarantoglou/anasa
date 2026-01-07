@@ -80,15 +80,29 @@ npm run preview  # Preview production build locally
 
 ```
 src/
-├── components/        # Vue components
-├── composables/       # Vue composables
-│   ├── useGreekHolidays.ts    # Greek public holidays calculation
-│   └── useLeaveOptimizer.ts   # Leave optimization algorithm
+├── components/              # Vue components
+│   ├── modals/              # Modal dialogs
+│   │   ├── ConflictWarningModal.vue
+│   │   ├── LeaveRequestModal.vue
+│   │   ├── ShareCard.vue
+│   │   └── YearComparisonModal.vue
+│   ├── AnnualPlanSection.vue
+│   ├── CustomHolidaysCard.vue
+│   ├── HolidayTable.vue
+│   ├── OpportunityCard.vue
+│   ├── PublicHolidaysCard.vue
+│   └── SettingsCard.vue
+├── composables/             # Vue composables
+│   ├── useAnnualPlan.ts     # Annual plan management & conflict detection
+│   ├── useGreekHolidays.ts  # Greek public holidays calculation
+│   ├── useLeaveOptimizer.ts # Leave optimization algorithm
+│   ├── usePersistedState.ts # localStorage persistence utilities
+│   └── useYearComparison.ts # Year comparison utilities
 ├── data/
-│   ├── patronSaints.ts        # 130+ Greek towns with patron saints
-│   └── schoolHolidays.ts      # School calendar for Parent Mode
-├── types.ts           # TypeScript type definitions
-└── style.css          # "Modern Aegean" design system
+│   ├── patronSaints.ts      # 130+ Greek towns with patron saints
+│   └── schoolHolidays.ts    # School calendar for Parent Mode
+├── types.ts                 # TypeScript type definitions
+└── style.css                # "Modern Aegean" design system
 ```
 
 ## How It Works
