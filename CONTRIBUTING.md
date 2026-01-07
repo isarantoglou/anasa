@@ -61,10 +61,39 @@ Before contributing, please familiarize yourself with the project structure:
    npm run build
    ```
 
-2. Commit your changes with a clear message:
+2. Commit your changes following [Conventional Commits](https://www.conventionalcommits.org/):
    ```bash
-   git commit -m "Add: description of your changes"
+   git commit -m "feat: add new feature description"
    ```
+
+## Commit Message Format
+
+We use [Conventional Commits](https://www.conventionalcommits.org/) for clear, standardized commit messages.
+
+### Format
+```
+<type>(<scope>): <description>
+
+[optional body]
+```
+
+### Types
+- `feat` - New feature
+- `fix` - Bug fix
+- `docs` - Documentation changes
+- `style` - Code style changes (formatting, no logic change)
+- `refactor` - Code refactoring (no feature/fix)
+- `test` - Adding or updating tests
+- `chore` - Maintenance tasks (deps, build, etc.)
+
+### Examples
+```bash
+feat(optimizer): add efficiency sorting option
+fix(holidays): correct Orthodox Easter calculation for 2025
+docs: update README with new features
+test(composables): add useAnnualPlan tests
+chore: update dependencies
+```
 
 3. Push to your fork:
    ```bash

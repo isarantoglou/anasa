@@ -189,3 +189,32 @@ Unit tests use Vitest with jsdom environment. **356 tests** with 95%+ coverage.
 - `vitest.config.ts` - Test configuration with Vue plugin and jsdom
 - Coverage includes `src/composables/**` and `src/data/**`
 - Tests use `toBeCloseTo()` for date calculations to handle DST/timezone edge cases
+
+## Commit Message Convention
+
+Use [Conventional Commits](https://www.conventionalcommits.org/) format for all commits:
+
+```
+<type>(<scope>): <description>
+```
+
+**Types:**
+- `feat` - New feature
+- `fix` - Bug fix
+- `docs` - Documentation changes
+- `style` - Code style changes (formatting, no logic change)
+- `refactor` - Code refactoring (no feature/fix)
+- `test` - Adding or updating tests
+- `chore` - Maintenance tasks (deps, build, etc.)
+
+**Examples:**
+```
+feat(optimizer): add family sort option for parent mode
+fix(holidays): correct Holy Spirit date calculation
+docs: update project structure in README
+test(useAnnualPlan): add conflict detection tests
+refactor(components): extract SettingsCard from App.vue
+chore: update dependencies
+```
+
+Keep descriptions concise and in lowercase (except proper nouns).
