@@ -5,7 +5,7 @@
  * Reuses the calculateOrthodoxEaster function from useGreekHolidays.
  */
 
-import { format, addDays } from 'date-fns'
+import { format, addDays, isWeekend } from 'date-fns'
 import { el } from 'date-fns/locale'
 import { calculateOrthodoxEaster } from './useGreekHolidays'
 
@@ -44,12 +44,9 @@ function getMovableHolidayDate(year: number, offsetFromEaster: number): Date {
  * Format a date as holiday info with weekend detection
  */
 function formatHolidayInfo(date: Date): HolidayInfo {
-  const dayOfWeek = date.getDay()
-  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
-
   return {
     label: format(date, 'd MMM', { locale: el }),
-    isWeekend
+    isWeekend: isWeekend(date)
   }
 }
 
@@ -101,11 +98,10 @@ export function getFixedHolidayDay(holidayName: string, year: number): HolidayIn
   const day = parseInt(dayStr!, 10)
   const date = new Date(year, month - 1, day)
   const dayOfWeek = date.getDay()
-  const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
 
   return {
     label: `${GREEK_DAYS[dayOfWeek]} ${day}/${month}`,
-    isWeekend
+    isWeekend: isWeekend(date)
   }
 }
 

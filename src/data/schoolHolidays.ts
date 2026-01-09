@@ -5,6 +5,8 @@
  * Based on the official Greek school calendar.
  */
 
+import { calculateOrthodoxEaster } from '../utils/easterCalculation'
+
 export interface SchoolBreak {
   id: string
   name: string
@@ -18,26 +20,6 @@ export interface SchoolHoliday {
   date: Date
   name: string
   nameGreek: string
-}
-
-/**
- * Calculate Orthodox Easter using Meeus/Jones/Butcher algorithm
- */
-function calculateOrthodoxEaster(year: number): Date {
-  const a = year % 4
-  const b = year % 7
-  const c = year % 19
-  const d = (19 * c + 15) % 30
-  const e = (2 * a + 4 * b - d + 34) % 7
-  const month = Math.floor((d + e + 114) / 31)
-  const day = ((d + e + 114) % 31) + 1
-
-  // Julian calendar date
-  const julianDate = new Date(year, month - 1, day)
-  // Add 13 days for Gregorian conversion (valid for 1900-2099)
-  julianDate.setDate(julianDate.getDate() + 13)
-
-  return julianDate
 }
 
 /**

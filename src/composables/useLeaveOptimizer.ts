@@ -54,6 +54,7 @@ import {
 } from 'date-fns'
 import { el } from 'date-fns/locale'
 import type { Holiday, DayInfo, OptimizationResult, DateRange } from '../types'
+import { getEfficiencyLabel } from '../utils/labels'
 
 /**
  * Generate a calendar with cost information
@@ -93,14 +94,6 @@ function generateCalendar(
       holidayName: holiday?.name
     }
   })
-}
-
-/**
- * Calculate efficiency label in Greek (e.g., "Κάντε 3 ημέρες 9")
- */
-function getEfficiencyLabel(leaveDays: number, totalDays: number): string {
-  if (leaveDays === 0) return `${totalDays} δωρεάν ημέρες`
-  return `Κάντε ${leaveDays} ημέρ${leaveDays > 1 ? 'ες' : 'α'} ${totalDays}`
 }
 
 /**

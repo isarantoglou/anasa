@@ -10,6 +10,7 @@ import {
   isValid
 } from 'date-fns'
 import type { Holiday, DayInfo, OptimizationResult } from '../types'
+import { getEfficiencyLabel } from '../utils/labels'
 
 /**
  * Validation result for date range input
@@ -41,14 +42,6 @@ function generateCustomCalendar(
       holidayName: holiday?.nameGreek
     }
   })
-}
-
-/**
- * Calculate efficiency label (matches useLeaveOptimizer pattern)
- */
-function getEfficiencyLabel(leaveDays: number, totalDays: number): string {
-  if (leaveDays === 0) return `${totalDays} δωρεάν ημέρες`
-  return `Κάντε ${leaveDays} ημέρ${leaveDays > 1 ? 'ες' : 'α'} ${totalDays}`
 }
 
 /**
@@ -143,7 +136,9 @@ export function useCustomPeriod(holidays: Ref<Holiday[]>) {
 // Export standalone functions for testing
 export {
   generateCustomCalendar,
-  getEfficiencyLabel,
   createCustomPeriod,
   validateDateRange
 }
+
+// Re-export getEfficiencyLabel from utils for backwards compatibility
+export { getEfficiencyLabel } from '../utils/labels'
