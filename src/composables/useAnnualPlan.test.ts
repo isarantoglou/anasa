@@ -473,5 +473,273 @@ describe('useAnnualPlan', () => {
       expect(savedData.year).toBe(2026)
       expect(savedData.opportunities).toHaveLength(1)
     })
+
+    it('should persist isCustom flag in localStorage', async () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { addCustomPeriod } = useAnnualPlan(currentYear, totalDays)
+
+      addCustomPeriod(createMockOpportunity())
+
+      await new Promise(resolve => setTimeout(resolve, 10))
+
+      const savedData = JSON.parse(localStorageMock.store['anasa-annual-plan']!)
+      expect(savedData.opportunities[0].isCustom).toBe(true)
+    })
+
+    it('should restore isCustom flag from localStorage', () => {
+      const storedPlan = {
+        year: 2026,
+        opportunities: [{
+          id: 'test-id',
+          range: {
+            startDate: new Date(2026, 3, 10).toISOString(),
+            endDate: new Date(2026, 3, 15).toISOString()
+          },
+          totalDays: 6,
+          leaveDaysRequired: 3,
+          freeDays: 3,
+          efficiency: 2,
+          efficiencyLabel: 'Test',
+          days: [],
+          isCustom: true
+        }]
+      }
+      localStorageMock.store['anasa-annual-plan'] = JSON.stringify(storedPlan)
+
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, loadFromStorage } = useAnnualPlan(currentYear, totalDays)
+
+      loadFromStorage()
+
+      expect(annualPlan.value[0]!.isCustom).toBe(true)
+    })
+
+    it('should persist label in localStorage', async () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { addCustomPeriod } = useAnnualPlan(currentYear, totalDays)
+
+      addCustomPeriod(createMockOpportunity(), 'Ταξίδι στην Ελλάδα')
+
+      await new Promise(resolve => setTimeout(resolve, 10))
+
+      const savedData = JSON.parse(localStorageMock.store['anasa-annual-plan']!)
+      expect(savedData.opportunities[0].label).toBe('Ταξίδι στην Ελλάδα')
+    })
+
+    it('should restore label from localStorage', () => {
+      const storedPlan = {
+        year: 2026,
+        opportunities: [{
+          id: 'test-id',
+          range: {
+            startDate: new Date(2026, 3, 10).toISOString(),
+            endDate: new Date(2026, 3, 15).toISOString()
+          },
+          totalDays: 6,
+          leaveDaysRequired: 3,
+          freeDays: 3,
+          efficiency: 2,
+          efficiencyLabel: 'Test',
+          days: [],
+          isCustom: true,
+          label: 'Διακοπές Καλοκαιριού'
+        }]
+      }
+      localStorageMock.store['anasa-annual-plan'] = JSON.stringify(storedPlan)
+
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, loadFromStorage } = useAnnualPlan(currentYear, totalDays)
+
+      loadFromStorage()
+
+      expect(annualPlan.value[0]!.label).toBe('Διακοπές Καλοκαιριού')
+    })
+  })
+
+  describe('addCustomPeriod', () => {
+    it('should add custom period with isCustom flag', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addCustomPeriod } = useAnnualPlan(currentYear, totalDays)
+
+      const opportunity = createMockOpportunity()
+      addCustomPeriod(opportunity)
+
+      expect(annualPlan.value).toHaveLength(1)
+      expect(annualPlan.value[0]!.isCustom).toBe(true)
+    })
+
+    it('should not add duplicate custom period', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addCustomPeriod } = useAnnualPlan(currentYear, totalDays)
+
+      const opportunity = createMockOpportunity()
+      addCustomPeriod(opportunity)
+      addCustomPeriod(opportunity) // Try again
+
+      expect(annualPlan.value).toHaveLength(1)
+    })
+
+    it('should detect conflict with existing periods', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addToPlan, addCustomPeriod, conflictWarning } = useAnnualPlan(currentYear, totalDays)
+
+      // Add regular opportunity
+      const opp1 = createMockOpportunity({
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+      })
+      addToPlan(opp1)
+
+      // Try to add overlapping custom period
+      const opp2 = createMockOpportunity({
+        range: { startDate: new Date(2026, 3, 13), endDate: new Date(2026, 3, 18) }
+      })
+      addCustomPeriod(opp2)
+
+      expect(annualPlan.value).toHaveLength(1)
+      expect(conflictWarning.value.show).toBe(true)
+      expect(conflictWarning.value.isCustom).toBe(true)
+    })
+
+    it('should preserve isCustom flag when force adding conflicting period', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addToPlan, addCustomPeriod, forceAddToPlan } = useAnnualPlan(currentYear, totalDays)
+
+      const opp1 = createMockOpportunity({
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+      })
+      addToPlan(opp1)
+
+      const opp2 = createMockOpportunity({
+        range: { startDate: new Date(2026, 3, 13), endDate: new Date(2026, 3, 18) }
+      })
+      addCustomPeriod(opp2)
+
+      forceAddToPlan()
+
+      expect(annualPlan.value).toHaveLength(2)
+      expect(annualPlan.value[0]!.isCustom).toBeUndefined()
+      expect(annualPlan.value[1]!.isCustom).toBe(true)
+    })
+
+    it('should add non-conflicting custom period directly', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addToPlan, addCustomPeriod, conflictWarning } = useAnnualPlan(currentYear, totalDays)
+
+      const opp1 = createMockOpportunity({
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+      })
+      addToPlan(opp1)
+
+      // Non-overlapping custom period
+      const opp2 = createMockOpportunity({
+        range: { startDate: new Date(2026, 4, 10), endDate: new Date(2026, 4, 15) }
+      })
+      addCustomPeriod(opp2)
+
+      expect(annualPlan.value).toHaveLength(2)
+      expect(conflictWarning.value.show).toBe(false)
+      expect(annualPlan.value[1]!.isCustom).toBe(true)
+    })
+
+    it('should add custom period with label', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addCustomPeriod } = useAnnualPlan(currentYear, totalDays)
+
+      const opportunity = createMockOpportunity()
+      addCustomPeriod(opportunity, 'Ταξίδι στην Αμερική')
+
+      expect(annualPlan.value).toHaveLength(1)
+      expect(annualPlan.value[0]!.label).toBe('Ταξίδι στην Αμερική')
+    })
+
+    it('should not set label when empty string', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addCustomPeriod } = useAnnualPlan(currentYear, totalDays)
+
+      const opportunity = createMockOpportunity()
+      addCustomPeriod(opportunity, '')
+
+      expect(annualPlan.value).toHaveLength(1)
+      expect(annualPlan.value[0]!.label).toBeUndefined()
+    })
+
+    it('should preserve label when force adding conflicting period', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addToPlan, addCustomPeriod, forceAddToPlan } = useAnnualPlan(currentYear, totalDays)
+
+      const opp1 = createMockOpportunity({
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+      })
+      addToPlan(opp1)
+
+      const opp2 = createMockOpportunity({
+        range: { startDate: new Date(2026, 3, 13), endDate: new Date(2026, 3, 18) }
+      })
+      addCustomPeriod(opp2, 'Διακοπές Πάσχα')
+
+      forceAddToPlan()
+
+      expect(annualPlan.value).toHaveLength(2)
+      expect(annualPlan.value[1]!.label).toBe('Διακοπές Πάσχα')
+    })
+
+    it('should handle label with special characters', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addCustomPeriod } = useAnnualPlan(currentYear, totalDays)
+
+      const opportunity = createMockOpportunity()
+      addCustomPeriod(opportunity, 'Γάμος & Μήνα του Μέλιτος!')
+
+      expect(annualPlan.value[0]!.label).toBe('Γάμος & Μήνα του Μέλιτος!')
+    })
+
+    it('should handle label with emoji', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addCustomPeriod } = useAnnualPlan(currentYear, totalDays)
+
+      const opportunity = createMockOpportunity()
+      addCustomPeriod(opportunity, 'Διακοπές 🏖️ στην Κρήτη')
+
+      expect(annualPlan.value[0]!.label).toBe('Διακοπές 🏖️ στην Κρήτη')
+    })
+
+    it('should handle very long label', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addCustomPeriod } = useAnnualPlan(currentYear, totalDays)
+
+      const opportunity = createMockOpportunity()
+      const longLabel = 'Α'.repeat(100) // 100 Greek characters
+      addCustomPeriod(opportunity, longLabel)
+
+      expect(annualPlan.value[0]!.label).toBe(longLabel)
+    })
+  })
+
+  describe('regular addToPlan should not set isCustom', () => {
+    it('should not have isCustom flag for regular opportunities', () => {
+      const currentYear = ref(2026)
+      const totalDays = ref(25)
+      const { annualPlan, addToPlan } = useAnnualPlan(currentYear, totalDays)
+
+      const opportunity = createMockOpportunity()
+      addToPlan(opportunity)
+
+      expect(annualPlan.value[0]!.isCustom).toBeUndefined()
+    })
   })
 })

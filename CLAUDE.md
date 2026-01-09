@@ -55,6 +55,13 @@ npm run test:coverage # Run tests with coverage report
 - All keys prefixed with `anasa-`
 - Loads on mount, persists on change
 
+**`useCustomPeriod.ts`** - Custom leave period creation:
+- `generateCustomCalendar(start, end, holidays)` - Generates DayInfo array for date range
+- `createCustomPeriod(start, end, holidays)` - Creates OptimizationResult for custom dates
+- `validateDateRange(start, end, year)` - Validates dates (future only, within year, start ≤ end)
+- `getEfficiencyLabel(leaveDays, totalDays)` - Generates Greek efficiency label
+- `useCustomPeriod(holidays)` - Composable wrapper with reactive holidays
+
 ### Component Architecture
 
 **App.vue** (~500 lines) - Main application shell, orchestrates child components
@@ -65,7 +72,8 @@ npm run test:coverage # Run tests with coverage report
 - `PublicHolidaysCard.vue` - Public holidays list with weekend warnings
 
 **Plan Management:**
-- `AnnualPlanSection.vue` - Annual plan display, stats, export buttons
+- `AnnualPlanSection.vue` - Annual plan display, stats, export buttons, custom period form
+- `CustomPeriodForm.vue` - Collapsible form to add custom leave periods with date picker and label
 - `HolidayTable.vue` - Full calendar table with all holidays
 
 **Modals:**
@@ -100,7 +108,7 @@ npm run test:coverage # Run tests with coverage report
 - `Holiday` - Date, name, Greek name, isMovable, isCustom
 - `DayInfo` - Calendar day with cost (0=free, 1=workday)
 - `OptimizationResult` - Leave period with efficiency metrics
-- `SavedOpportunity` - A saved period in the annual plan
+- `SavedOpportunity` - A saved period in the annual plan (includes `isCustom` flag and optional `label` for custom periods)
 - `CustomHoliday` - User-added custom holiday
 
 ## App Features
@@ -115,6 +123,8 @@ npm run test:coverage # Run tests with coverage report
 
 ### Annual Plan Features
 - **Annual Leave Plan**: Save multiple opportunities to build a yearly plan
+- **Custom Periods**: Add custom leave periods with date picker and optional description label (e.g., "Ταξίδι στην Αμερική")
+- **Custom Period Badge**: Custom periods display "Προσαρμοσμένο" badge to distinguish from optimizer suggestions
 - **Conflict Detection**: Warns when adding overlapping periods (modal with force-add option)
 - **Remaining Days Tracking**: Shows used/remaining days from total allocation
 - **Warning**: Alerts when searching for more days than remaining
@@ -156,16 +166,17 @@ All under `anasa-*` prefix:
 
 ## Testing
 
-Unit tests use Vitest with jsdom environment. **356 tests** with 95%+ coverage.
+Unit tests use Vitest with jsdom environment. **428 tests** with 95%+ coverage.
 
 ### Test Files
 
 **Composables:**
-- `src/composables/useAnnualPlan.test.ts` - Annual plan management, conflict detection, localStorage
+- `src/composables/useAnnualPlan.test.ts` - Annual plan management, conflict detection, custom periods with labels, localStorage
 - `src/composables/useGreekHolidays.test.ts` - Orthodox Easter calculation (2020-2030), fixed/movable holidays
 - `src/composables/useLeaveOptimizer.test.ts` - Calendar generation, optimization algorithm, statistics
 - `src/composables/useYearComparison.test.ts` - Easter/holiday calculations, weekend detection
 - `src/composables/usePersistedState.test.ts` - localStorage persistence for all data types
+- `src/composables/useCustomPeriod.test.ts` - Custom period creation, validation, calendar generation
 
 **Data:**
 - `src/data/schoolHolidays.test.ts` - School breaks (Christmas/Easter), overlap calculations
@@ -175,7 +186,8 @@ Unit tests use Vitest with jsdom environment. **356 tests** with 95%+ coverage.
 - `src/components/SettingsCard.test.ts` - Year picker, toggles, inputs, stats
 - `src/components/CustomHolidaysCard.test.ts` - Town search, manual form, list
 - `src/components/PublicHolidaysCard.test.ts` - Holiday display, badges
-- `src/components/AnnualPlanSection.test.ts` - Plan items, stats, actions
+- `src/components/AnnualPlanSection.test.ts` - Plan items, stats, actions, custom badges and labels
+- `src/components/CustomPeriodForm.test.ts` - Date inputs, validation, preview, label input, events
 - `src/components/HolidayTable.test.ts` - Table structure, formatting
 
 **Modals:**

@@ -24,6 +24,8 @@ A Vue 3 application by [Oxygen](https://www.oxygen.gr) that helps users maximize
 
 ### Annual Planning
 - **Annual Leave Plan** - Save multiple opportunities to build a complete yearly plan
+- **Custom Periods** - Add your own leave periods with optional labels (e.g., "Trip to America")
+- **Custom Period Badges** - Custom periods are visually distinct with "Προσαρμοσμένο" badge
 - **Conflict Detection** - Warns when adding overlapping periods
 - **Remaining Days Tracking** - Track used vs remaining days from your total allocation
 
@@ -88,12 +90,14 @@ src/
 │   │   └── YearComparisonModal.vue
 │   ├── AnnualPlanSection.vue
 │   ├── CustomHolidaysCard.vue
+│   ├── CustomPeriodForm.vue # Form to add custom leave periods
 │   ├── HolidayTable.vue
 │   ├── OpportunityCard.vue
 │   ├── PublicHolidaysCard.vue
 │   └── SettingsCard.vue
 ├── composables/             # Vue composables
 │   ├── useAnnualPlan.ts     # Annual plan management & conflict detection
+│   ├── useCustomPeriod.ts   # Custom period creation & validation
 │   ├── useGreekHolidays.ts  # Greek public holidays calculation
 │   ├── useLeaveOptimizer.ts # Leave optimization algorithm
 │   ├── usePersistedState.ts # localStorage persistence utilities

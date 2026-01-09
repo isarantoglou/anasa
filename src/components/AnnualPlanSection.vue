@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import type { SavedOpportunity, DateRange } from '../types'
+import type { SavedOpportunity, DateRange, Holiday, OptimizationResult } from '../types'
+import CustomPeriodForm from './CustomPeriodForm.vue'
 
-defineProps<{
+const props = defineProps<{
   currentYear: number
   annualPlan: SavedOpportunity[]
   annualPlanTotalDays: number
   remainingLeaveDays: number
   formatDateRange: (range: DateRange) => string
+  holidays: Holiday[]
 }>()
 
 const emit = defineEmits<{
@@ -14,6 +16,7 @@ const emit = defineEmits<{
   'clear-plan': []
   'export-to-calendar': []
   'show-leave-request': []
+  'add-custom-period': [period: OptimizationResult, label: string]
 }>()
 </script>
 
@@ -77,8 +80,20 @@ const emit = defineEmits<{
                 {{ index + 1 }}
               </div>
               <div>
-                <div class="font-semibold text-(--marble-700)">
-                  {{ formatDateRange(opp.range) }}
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-(--marble-700)">
+                    {{ formatDateRange(opp.range) }}
+                  </span>
+                  <span
+                    v-if="opp.isCustom"
+                    class="px-2 py-0.5 rounded-full bg-(--terracotta-100) text-(--terracotta-700) text-xs font-semibold"
+                    data-testid="custom-badge"
+                  >
+                    Προσαρμοσμένο
+                  </span>
+                </div>
+                <div v-if="opp.label" class="text-sm font-medium text-(--terracotta-600)" data-testid="custom-label">
+                  {{ opp.label }}
                 </div>
                 <div class="text-sm text-(--marble-500)">
                   {{ opp.efficiencyLabel }}
@@ -100,6 +115,16 @@ const emit = defineEmits<{
               </button>
             </div>
           </div>
+        </div>
+
+        <!-- Custom Period Form -->
+        <div class="mt-6">
+          <CustomPeriodForm
+            :current-year="props.currentYear"
+            :holidays="props.holidays"
+            :remaining-leave-days="props.remainingLeaveDays"
+            @add-custom-period="(period, label) => emit('add-custom-period', period, label)"
+          />
         </div>
 
         <!-- Action Buttons -->

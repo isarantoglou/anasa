@@ -5,6 +5,8 @@ export interface ConflictWarning {
   show: boolean
   conflictWith: SavedOpportunity | null
   pendingOpportunity: OptimizationResult | null
+  isCustom?: boolean // Track if pending opportunity is custom
+  pendingLabel?: string // Label for custom periods
 }
 
 export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Ref<number>) {
@@ -14,7 +16,9 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
   const conflictWarning = ref<ConflictWarning>({
     show: false,
     conflictWith: null,
-    pendingOpportunity: null
+    pendingOpportunity: null,
+    isCustom: false,
+    pendingLabel: ''
   })
 
   // Computed
@@ -91,7 +95,7 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
   }
 
   // Add opportunity to plan (internal, no conflict check)
-  function addToPlanConfirmed(opportunity: OptimizationResult) {
+  function addToPlanConfirmed(opportunity: OptimizationResult, isCustom = false, label = '') {
     const saved: SavedOpportunity = {
       id: crypto.randomUUID(),
       range: opportunity.range,
@@ -101,7 +105,9 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
       efficiency: opportunity.efficiency,
       efficiencyLabel: opportunity.efficiencyLabel,
       days: opportunity.days,
-      addedAt: new Date().toISOString()
+      addedAt: new Date().toISOString(),
+      ...(isCustom && { isCustom: true }),
+      ...(label && { label })
     }
     annualPlan.value.push(saved)
     showAnnualPlan.value = true
@@ -125,16 +131,39 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
     addToPlanConfirmed(opportunity)
   }
 
+  // Add custom period to annual plan (with conflict detection)
+  function addCustomPeriod(opportunity: OptimizationResult, label = '') {
+    if (isInPlan(opportunity)) return
+
+    const conflict = hasConflict(opportunity)
+    if (conflict) {
+      conflictWarning.value = {
+        show: true,
+        conflictWith: conflict,
+        pendingOpportunity: opportunity,
+        isCustom: true,
+        pendingLabel: label
+      }
+      return
+    }
+
+    addToPlanConfirmed(opportunity, true, label)
+  }
+
   // Force add despite conflict
   function forceAddToPlan() {
     if (conflictWarning.value.pendingOpportunity) {
-      addToPlanConfirmed(conflictWarning.value.pendingOpportunity)
+      addToPlanConfirmed(
+        conflictWarning.value.pendingOpportunity,
+        conflictWarning.value.isCustom ?? false,
+        conflictWarning.value.pendingLabel ?? ''
+      )
     }
   }
 
   // Dismiss conflict warning
   function dismissConflictWarning() {
-    conflictWarning.value = { show: false, conflictWith: null, pendingOpportunity: null }
+    conflictWarning.value = { show: false, conflictWith: null, pendingOpportunity: null, isCustom: false, pendingLabel: '' }
   }
 
   // Remove opportunity from annual plan
@@ -162,6 +191,7 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
     isInPlan,
     hasConflict,
     addToPlan,
+    addCustomPeriod,
     forceAddToPlan,
     dismissConflictWarning,
     removeFromPlan,

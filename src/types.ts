@@ -62,6 +62,8 @@ export interface SavedOpportunity {
   efficiencyLabel: string
   days: DayInfo[]
   addedAt: string // ISO date string
+  isCustom?: boolean // True for manually added periods
+  label?: string // Optional description for custom periods (e.g., "Ταξίδι στην Αμερική")
 }
 
 /** Annual leave plan */

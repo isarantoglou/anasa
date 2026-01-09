@@ -1,7 +1,18 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import AnnualPlanSection from './AnnualPlanSection.vue'
-import type { SavedOpportunity, DateRange } from '../types'
+import type { SavedOpportunity, DateRange, Holiday } from '../types'
+
+// Mock holidays for CustomPeriodForm
+const mockHolidays: Holiday[] = [
+  {
+    date: new Date(2026, 0, 1),
+    name: "New Year's Day",
+    nameGreek: 'Πρωτοχρονιά',
+    isMovable: false,
+    isCustom: false
+  }
+]
 
 // Helper to create mock opportunity
 function createMockOpportunity(overrides: Partial<SavedOpportunity> = {}): SavedOpportunity {
@@ -28,12 +39,22 @@ function formatDateRange(range: DateRange) {
 }
 
 describe('AnnualPlanSection', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date(2026, 0, 8))
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   const defaultProps = {
     currentYear: 2026,
     annualPlan: [] as SavedOpportunity[],
     annualPlanTotalDays: 0,
     remainingLeaveDays: 25,
-    formatDateRange
+    formatDateRange,
+    holidays: mockHolidays
   }
 
   it('should render section title', () => {
@@ -205,6 +226,121 @@ describe('AnnualPlanSection', () => {
       await requestButton?.trigger('click')
 
       expect(wrapper.emitted('show-leave-request')).toHaveLength(1)
+    })
+  })
+
+  describe('Custom Period Badge', () => {
+    it('should show custom badge for custom periods', () => {
+      const wrapper = mount(AnnualPlanSection, {
+        props: {
+          ...defaultProps,
+          annualPlan: [createMockOpportunity({ id: '1', isCustom: true })]
+        }
+      })
+
+      expect(wrapper.find('[data-testid="custom-badge"]').exists()).toBe(true)
+      expect(wrapper.text()).toContain('Προσαρμοσμένο')
+    })
+
+    it('should not show custom badge for regular periods', () => {
+      const wrapper = mount(AnnualPlanSection, {
+        props: {
+          ...defaultProps,
+          annualPlan: [createMockOpportunity({ id: '1' })]
+        }
+      })
+
+      expect(wrapper.find('[data-testid="custom-badge"]').exists()).toBe(false)
+    })
+
+    it('should show badge only for custom items in mixed list', () => {
+      const wrapper = mount(AnnualPlanSection, {
+        props: {
+          ...defaultProps,
+          annualPlan: [
+            createMockOpportunity({ id: '1' }),
+            createMockOpportunity({
+              id: '2',
+              isCustom: true,
+              range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+            }),
+            createMockOpportunity({
+              id: '3',
+              range: { startDate: new Date(2026, 5, 10), endDate: new Date(2026, 5, 15) }
+            })
+          ]
+        }
+      })
+
+      const badges = wrapper.findAll('[data-testid="custom-badge"]')
+      expect(badges).toHaveLength(1)
+    })
+  })
+
+  describe('Custom Period Form', () => {
+    it('should render CustomPeriodForm component', () => {
+      const wrapper = mount(AnnualPlanSection, { props: defaultProps })
+
+      expect(wrapper.text()).toContain('Προσθήκη Προσαρμοσμένης Περιόδου')
+    })
+
+    it('should show form even when plan is empty', () => {
+      const wrapper = mount(AnnualPlanSection, { props: defaultProps })
+
+      expect(wrapper.findComponent({ name: 'CustomPeriodForm' }).exists()).toBe(true)
+    })
+  })
+
+  describe('Custom Period Label', () => {
+    it('should display label for custom periods with label', () => {
+      const wrapper = mount(AnnualPlanSection, {
+        props: {
+          ...defaultProps,
+          annualPlan: [
+            createMockOpportunity({
+              id: '1',
+              isCustom: true,
+              label: 'Ταξίδι στην Αμερική'
+            })
+          ]
+        }
+      })
+
+      expect(wrapper.find('[data-testid="custom-label"]').exists()).toBe(true)
+      expect(wrapper.text()).toContain('Ταξίδι στην Αμερική')
+    })
+
+    it('should not display label element when no label provided', () => {
+      const wrapper = mount(AnnualPlanSection, {
+        props: {
+          ...defaultProps,
+          annualPlan: [
+            createMockOpportunity({
+              id: '1',
+              isCustom: true
+            })
+          ]
+        }
+      })
+
+      expect(wrapper.find('[data-testid="custom-label"]').exists()).toBe(false)
+    })
+
+    it('should display label for regular periods with label', () => {
+      const wrapper = mount(AnnualPlanSection, {
+        props: {
+          ...defaultProps,
+          annualPlan: [
+            createMockOpportunity({
+              id: '1',
+              label: 'Σημαντική Περίοδος'
+            })
+          ]
+        }
+      })
+
+      expect(wrapper.find('[data-testid="custom-label"]').exists()).toBe(true)
+      expect(wrapper.text()).toContain('Σημαντική Περίοδος')
     })
   })
 })

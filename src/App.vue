@@ -78,6 +78,7 @@ const {
   loadFromStorage: loadAnnualPlanFromStorage,
   isInPlan,
   addToPlan,
+  addCustomPeriod,
   forceAddToPlan,
   dismissConflictWarning,
   removeFromPlan,
@@ -361,10 +362,12 @@ async function shareAsImage(opportunity: OptimizationResult) {
         :annual-plan-total-days="annualPlanTotalDays"
         :remaining-leave-days="remainingLeaveDays"
         :format-date-range="formatDateRange"
+        :holidays="allHolidays"
         @remove-from-plan="removeFromPlan"
         @clear-plan="clearPlan"
         @export-to-calendar="exportToCalendar"
         @show-leave-request="showLeaveRequest = true"
+        @add-custom-period="addCustomPeriod"
       />
 
       <!-- Results Section -->
