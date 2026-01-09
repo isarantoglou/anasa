@@ -72,7 +72,6 @@ const calculateFromToday = ref(true)
 // Annual Plan (using composable)
 const {
   annualPlan,
-  showAnnualPlan,
   conflictWarning,
   annualPlanTotalDays,
   remainingLeaveDays,
@@ -357,7 +356,6 @@ async function shareAsImage(opportunity: OptimizationResult) {
 
       <!-- Annual Plan Section -->
       <AnnualPlanSection
-        v-if="annualPlan.length > 0 || showAnnualPlan"
         :current-year="currentYear"
         :annual-plan="annualPlan"
         :annual-plan-total-days="annualPlanTotalDays"
