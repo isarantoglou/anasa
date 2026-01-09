@@ -10,9 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Copy Success Alert**: Toast notification "Αντιγράφηκε!" when copying leave request text
 - **Version Display**: App version shown in footer
+- **Social Links**: Footer now includes links to Facebook, Instagram, LinkedIn, YouTube, and GitHub
+- 54 new tests for utils and OpportunityCard (total: 496 tests)
 
 ### Changed
 - **Annual Plan Always Visible**: Section now always shows, allowing users to add custom periods before selecting optimizer suggestions
+
+### Refactored
+- **Shared Utilities**: Extracted duplicate code to `src/utils/` directory
+  - `easterCalculation.ts`: Orthodox Easter calculation (was duplicated in useGreekHolidays and schoolHolidays)
+  - `labels.ts`: Greek efficiency label generation (was duplicated in useLeaveOptimizer and useCustomPeriod)
+- **Consistent Weekend Detection**: All files now use `date-fns` `isWeekend()` instead of manual checks
 
 ## [1.1.0] - 2026-01-09
 

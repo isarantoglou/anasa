@@ -177,7 +177,7 @@ All under `anasa-*` prefix:
 
 ## Testing
 
-Unit tests use Vitest with jsdom environment. **428 tests** with 95%+ coverage.
+Unit tests use Vitest with jsdom environment. **496 tests** with 95%+ coverage.
 
 ### Test Files
 
@@ -200,12 +200,17 @@ Unit tests use Vitest with jsdom environment. **428 tests** with 95%+ coverage.
 - `src/components/AnnualPlanSection.test.ts` - Plan items, stats, actions, custom badges and labels
 - `src/components/CustomPeriodForm.test.ts` - Date inputs, validation, preview, label input, events
 - `src/components/HolidayTable.test.ts` - Table structure, formatting
+- `src/components/OpportunityCard.test.ts` - Card rendering, rank display, parent mode, events
 
 **Modals:**
 - `src/components/modals/ConflictWarningModal.test.ts` - Warning display, events
 - `src/components/modals/LeaveRequestModal.test.ts` - Request generation, clipboard
 - `src/components/modals/YearComparisonModal.test.ts` - Year selection, comparison
 - `src/components/modals/ShareCard.test.ts` - Card structure, stats
+
+**Utils:**
+- `src/utils/easterCalculation.test.ts` - Orthodox Easter algorithm, Julian-Gregorian offset
+- `src/utils/labels.test.ts` - Greek efficiency label generation
 
 ### Configuration
 
