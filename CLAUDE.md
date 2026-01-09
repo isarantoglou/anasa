@@ -31,7 +31,7 @@ npm run test:coverage # Run tests with coverage report
 ### Core Composables
 
 **`useGreekHolidays.ts`** - Provides Greek public holidays for any year:
-- `calculateOrthodoxEaster(year)` - Meeus/Jones/Butcher algorithm for Orthodox Easter (Julian → Gregorian conversion)
+- Re-exports `calculateOrthodoxEaster` from `utils/easterCalculation.ts`
 - Returns fixed holidays (Jan 1, Mar 25, etc.) and movable holidays (Easter-dependent: Clean Monday, Good Friday, etc.)
 - Tracks which holidays fall on weekends
 
@@ -59,8 +59,19 @@ npm run test:coverage # Run tests with coverage report
 - `generateCustomCalendar(start, end, holidays)` - Generates DayInfo array for date range
 - `createCustomPeriod(start, end, holidays)` - Creates OptimizationResult for custom dates
 - `validateDateRange(start, end, year)` - Validates dates (future only, within year, start ≤ end)
-- `getEfficiencyLabel(leaveDays, totalDays)` - Generates Greek efficiency label
+- Re-exports `getEfficiencyLabel` from `utils/labels.ts`
 - `useCustomPeriod(holidays)` - Composable wrapper with reactive holidays
+
+### Shared Utilities (src/utils/)
+
+**`easterCalculation.ts`** - Orthodox Easter calculation:
+- `calculateOrthodoxEaster(year)` - Meeus/Jones/Butcher algorithm for Orthodox Easter (Julian → Gregorian conversion)
+- `getJulianGregorianOffset(year)` - Calendar offset calculation (13 days for 1900-2099)
+- Used by `useGreekHolidays`, `schoolHolidays`, and `useYearComparison`
+
+**`labels.ts`** - Greek label generation:
+- `getEfficiencyLabel(leaveDays, totalDays)` - Generates Greek efficiency labels (e.g., "Κάντε 3 ημέρες 9")
+- Used by `useLeaveOptimizer` and `useCustomPeriod`
 
 ### Component Architecture
 
