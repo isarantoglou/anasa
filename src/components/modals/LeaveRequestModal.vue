@@ -16,6 +16,7 @@ const emit = defineEmits<{
 }>()
 
 const leaveRequestReason = ref('Προσωπικοί λόγοι')
+const showCopiedAlert = ref(false)
 
 const leaveRequestText = computed(() => {
   if (props.annualPlan.length === 0) return ''
@@ -55,6 +56,10 @@ ${periods}
 
 function copyLeaveRequest() {
   navigator.clipboard.writeText(leaveRequestText.value)
+  showCopiedAlert.value = true
+  setTimeout(() => {
+    showCopiedAlert.value = false
+  }, 2000)
 }
 
 function downloadLeaveRequest() {
@@ -119,6 +124,26 @@ function downloadLeaveRequest() {
           ></textarea>
         </div>
       </div>
+
+      <!-- Copy Success Alert -->
+      <Transition
+        enter-active-class="transition-all duration-300 ease-out"
+        enter-from-class="opacity-0 translate-y-2"
+        enter-to-class="opacity-100 translate-y-0"
+        leave-active-class="transition-all duration-200 ease-in"
+        leave-from-class="opacity-100 translate-y-0"
+        leave-to-class="opacity-0 translate-y-2"
+      >
+        <div
+          v-if="showCopiedAlert"
+          class="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-lg bg-(--success-600) text-white text-sm font-medium shadow-lg"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          Αντιγράφηκε!
+        </div>
+      </Transition>
 
       <!-- Modal Footer -->
       <div class="px-6 py-4 border-t border-(--marble-200) bg-(--marble-50) flex gap-3">
