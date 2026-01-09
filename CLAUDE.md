@@ -202,6 +202,19 @@ Unit tests use Vitest with jsdom environment. **428 tests** with 95%+ coverage.
 - Coverage includes `src/composables/**` and `src/data/**`
 - Tests use `toBeCloseTo()` for date calculations to handle DST/timezone edge cases
 
+## Versioning
+
+This project follows [Semantic Versioning](https://semver.org/):
+- **MAJOR** (x.0.0): Breaking changes or major redesigns
+- **MINOR** (0.x.0): New features, backwards compatible
+- **PATCH** (0.0.x): Bug fixes, backwards compatible
+
+Current version is defined in `package.json`. Update the version and `CHANGELOG.md` when releasing:
+
+1. Update `version` in `package.json`
+2. Add new section to `CHANGELOG.md` with date and changes
+3. Commit with message: `chore: release vX.Y.Z`
+
 ## Commit Message Convention
 
 Use [Conventional Commits](https://www.conventionalcommits.org/) format for all commits:

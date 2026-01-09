@@ -21,6 +21,7 @@ import ConflictWarningModal from './components/modals/ConflictWarningModal.vue'
 import LeaveRequestModal from './components/modals/LeaveRequestModal.vue'
 import YearComparisonModal from './components/modals/YearComparisonModal.vue'
 import ShareCard from './components/modals/ShareCard.vue'
+import { version } from '../package.json'
 
 // Persisted state (auto-syncs with localStorage)
 const customHolidays = usePersistedJson<CustomHoliday[]>('custom-holidays', [])
@@ -473,7 +474,10 @@ async function shareAsImage(opportunity: OptimizationResult) {
       <div class="max-w-350 mx-auto px-6 lg:px-8 py-8">
         <div class="flex flex-col md:flex-row items-center justify-between gap-4">
           <div class="text-center md:text-left">
-            <span class="font-display text-xl font-semibold text-(--aegean-800)">Ανάσα</span>
+            <div class="flex items-center justify-center md:justify-start gap-2">
+              <span class="font-display text-xl font-semibold text-(--aegean-800)">Ανάσα</span>
+              <span class="text-xs px-1.5 py-0.5 rounded bg-(--marble-200) text-(--marble-500) font-mono">v{{ version }}</span>
+            </div>
             <p class="text-sm text-(--marble-500) mt-1">
               Υπολογισμός Ορθόδοξου Πάσχα με τον αλγόριθμο Meeus/Jones/Butcher
             </p>
