@@ -783,6 +783,18 @@ body {
   animation: spin 1s linear infinite;
 }
 
+/* Slide up transition for notifications (Vue Transition) */
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    BADGE & TAG STYLES
    ═══════════════════════════════════════════════════════════════════════════ */

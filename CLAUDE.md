@@ -62,6 +62,18 @@ npm run test:coverage # Run tests with coverage report
 - Re-exports `getEfficiencyLabel` from `utils/labels.ts`
 - `useCustomPeriod(holidays)` - Composable wrapper with reactive holidays
 
+**`useShareableState.ts`** - URL-based state sharing:
+- `encodeState(state)` - Compresses AppState to URL-safe string using LZ-String
+- `decodeState(encoded)` - Decompresses string back to AppState
+- `generateShareUrl(state)` - Creates full shareable URL with encoded state
+- `loadStateFromUrl()` - Loads state from URL `?s=` parameter
+- `hasSharedState()` - Checks if URL contains shared state
+- `clearUrlState()` - Removes state from URL without page reload
+- `recalculateOpportunity(opp, holidays)` - Recalculates opportunity properties with holidays
+- `recalculateAppState(state, holidays)` - Recalculates all opportunities in state
+- Uses minimal state format with short keys for compression efficiency
+- State includes: year, settings, custom holidays, and annual plan (without days array)
+
 ### Shared Utilities (src/utils/)
 
 **`easterCalculation.ts`** - Orthodox Easter calculation:
@@ -140,7 +152,8 @@ npm run test:coverage # Run tests with coverage report
 - **Remaining Days Tracking**: Shows used/remaining days from total allocation
 - **Warning**: Alerts when searching for more days than remaining
 
-### Export Features
+### Export & Sharing Features
+- **URL Sharing**: Share complete plan setup via compressed URL (uses LZ-String)
 - **Share as Image**: Generate PNG of any opportunity (uses html2canvas with hex colors)
 - **Export to Calendar**: Download annual plan as .ics file for Google Calendar/Outlook
 - **Leave Request Generator**: Generate formal Greek leave request letter with copy/download
@@ -177,7 +190,7 @@ All under `anasa-*` prefix:
 
 ## Testing
 
-Unit tests use Vitest with jsdom environment. **496 tests** with 95%+ coverage.
+Unit tests use Vitest with jsdom environment. **520 tests** with 95%+ coverage.
 
 ### Test Files
 
@@ -188,6 +201,7 @@ Unit tests use Vitest with jsdom environment. **496 tests** with 95%+ coverage.
 - `src/composables/useYearComparison.test.ts` - Easter/holiday calculations, weekend detection
 - `src/composables/usePersistedState.test.ts` - localStorage persistence for all data types
 - `src/composables/useCustomPeriod.test.ts` - Custom period creation, validation, calendar generation
+- `src/composables/useShareableState.test.ts` - URL encoding/decoding, state compression, round-trip tests
 
 **Data:**
 - `src/data/schoolHolidays.test.ts` - School breaks (Christmas/Easter), overlap calculations

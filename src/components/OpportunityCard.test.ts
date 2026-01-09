@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import OpportunityCard from './OpportunityCard.vue'
 import type { OptimizationResult, DayInfo } from '../types'
@@ -180,7 +180,7 @@ describe('OpportunityCard', () => {
     it('should emit shareAsImage when share button is clicked', async () => {
       const wrapper = mount(OpportunityCard, { props: defaultProps })
       const buttons = wrapper.findAll('button')
-      const shareButton = buttons[buttons.length - 1] // Last button is share
+      const shareButton = buttons[buttons.length - 1]! // Last button is share
       await shareButton.trigger('click')
       expect(wrapper.emitted('shareAsImage')).toBeTruthy()
       expect(wrapper.emitted('shareAsImage')![0]).toEqual([defaultProps.opportunity])
@@ -190,7 +190,7 @@ describe('OpportunityCard', () => {
       const wrapper = mount(OpportunityCard, { props: { ...defaultProps, isInPlan: true } })
       const buttons = wrapper.findAll('button')
       // The first button should be the "Στο Πλάνο" button which doesn't have click handler for adding
-      await buttons[0].trigger('click')
+      await buttons[0]!.trigger('click')
       expect(wrapper.emitted('addToPlan')).toBeFalsy()
     })
   })

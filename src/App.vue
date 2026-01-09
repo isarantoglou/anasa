@@ -7,6 +7,14 @@ import { useGreekHolidays } from './composables/useGreekHolidays'
 import { useLeaveOptimizer } from './composables/useLeaveOptimizer'
 import { useAnnualPlan } from './composables/useAnnualPlan'
 import { usePersistedBoolean, usePersistedNumber, usePersistedJson } from './composables/usePersistedState'
+import {
+  loadStateFromUrl,
+  hasSharedState,
+  clearUrlState,
+  generateShareUrl,
+  recalculateAppState,
+  type AppState
+} from './composables/useShareableState'
 import { calculateSchoolOverlap, getSchoolBreaks, type SchoolBreak } from './data/schoolHolidays'
 import type { CustomHoliday, OptimizationResult } from './types'
 
@@ -42,8 +50,18 @@ onMounted(() => {
   }
   updateDarkModeClass()
 
-  // Load annual plan from localStorage
-  loadAnnualPlanFromStorage()
+  // Check for shared state in URL first
+  checkForSharedState()
+
+  // If we have shared state, apply it after a tick (to let holidays compute)
+  if (pendingUrlState.value) {
+    nextTick(() => {
+      applySharedState()
+    })
+  } else {
+    // Load annual plan from localStorage only if no shared state
+    loadAnnualPlanFromStorage()
+  }
 })
 
 // Toggle dark mode
@@ -79,6 +97,7 @@ const {
   isInPlan,
   addToPlan,
   addCustomPeriod,
+  addDirectToPlan,
   forceAddToPlan,
   dismissConflictWarning,
   removeFromPlan,
@@ -219,6 +238,90 @@ const showLeaveRequest = ref(false)
 // Share opportunity as image
 const isGeneratingImage = ref(false)
 const opportunityToShare = ref<OptimizationResult | null>(null)
+
+// URL sharing state
+const shareUrlCopied = ref(false)
+const loadedFromUrl = ref(false)
+const pendingUrlState = ref<AppState | null>(null)
+
+// Check for shared state on mount
+function checkForSharedState() {
+  if (hasSharedState()) {
+    const state = loadStateFromUrl()
+    if (state) {
+      pendingUrlState.value = state
+    }
+  }
+}
+
+// Apply shared state once holidays are ready
+function applySharedState() {
+  if (!pendingUrlState.value) return
+
+  const state = pendingUrlState.value
+
+  // Recalculate opportunities with current holidays
+  const recalculated = recalculateAppState(state, allHolidays.value)
+
+  // Apply state
+  currentYear.value = recalculated.year
+  includeHolySpirit.value = recalculated.includeHolySpirit
+  parentMode.value = recalculated.parentMode
+  totalAnnualLeaveDays.value = recalculated.totalAnnualLeaveDays
+
+  // Replace custom holidays
+  customHolidays.value = recalculated.customHolidays
+
+  // Clear and replace annual plan
+  clearPlan()
+  for (const opp of recalculated.annualPlan) {
+    addDirectToPlan(opp)
+  }
+
+  // Clear URL and show notification
+  clearUrlState()
+  loadedFromUrl.value = true
+  pendingUrlState.value = null
+
+  // Auto-hide notification after 5 seconds
+  setTimeout(() => {
+    loadedFromUrl.value = false
+  }, 5000)
+}
+
+// Generate shareable URL and copy to clipboard
+async function copyShareUrl() {
+  const state: AppState = {
+    year: currentYear.value,
+    includeHolySpirit: includeHolySpirit.value,
+    parentMode: parentMode.value,
+    totalAnnualLeaveDays: totalAnnualLeaveDays.value,
+    customHolidays: customHolidays.value,
+    annualPlan: annualPlan.value
+  }
+
+  const url = generateShareUrl(state)
+
+  try {
+    await navigator.clipboard.writeText(url)
+    shareUrlCopied.value = true
+    setTimeout(() => {
+      shareUrlCopied.value = false
+    }, 3000)
+  } catch (err) {
+    // Fallback for older browsers
+    const textArea = document.createElement('textarea')
+    textArea.value = url
+    document.body.appendChild(textArea)
+    textArea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+    shareUrlCopied.value = true
+    setTimeout(() => {
+      shareUrlCopied.value = false
+    }, 3000)
+  }
+}
 
 async function shareAsImage(opportunity: OptimizationResult) {
   opportunityToShare.value = opportunity
@@ -367,6 +470,7 @@ async function shareAsImage(opportunity: OptimizationResult) {
         @export-to-calendar="exportToCalendar"
         @show-leave-request="showLeaveRequest = true"
         @add-custom-period="addCustomPeriod"
+        @share-url="copyShareUrl"
       />
 
       <!-- Results Section -->
@@ -527,5 +631,39 @@ async function shareAsImage(opportunity: OptimizationResult) {
       :current-year="currentYear"
       :format-date-range="formatDateRange"
     />
+
+    <!-- URL Loaded Notification -->
+    <Transition name="slide-up">
+      <div
+        v-if="loadedFromUrl"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl bg-(--aegean-600) text-white shadow-xl flex items-center gap-3"
+      >
+        <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span class="font-medium">Το κοινόχρηστο πλάνο φορτώθηκε επιτυχώς!</span>
+        <button
+          @click="loadedFromUrl = false"
+          class="ml-2 p-1 rounded-full hover:bg-white/20 transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </Transition>
+
+    <!-- URL Copied Notification -->
+    <Transition name="slide-up">
+      <div
+        v-if="shareUrlCopied"
+        class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl bg-(--success-600) text-white shadow-xl flex items-center gap-3"
+      >
+        <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+        </svg>
+        <span class="font-medium">Ο σύνδεσμος αντιγράφηκε στο πρόχειρο!</span>
+      </div>
+    </Transition>
   </div>
 </template>

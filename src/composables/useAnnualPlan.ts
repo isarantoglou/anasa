@@ -176,6 +176,12 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
     annualPlan.value = []
   }
 
+  // Direct add without conflict check (for URL loading)
+  function addDirectToPlan(opportunity: SavedOpportunity) {
+    annualPlan.value.push(opportunity)
+    showAnnualPlan.value = true
+  }
+
   return {
     // State
     annualPlan,
@@ -192,6 +198,7 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
     hasConflict,
     addToPlan,
     addCustomPeriod,
+    addDirectToPlan,
     forceAddToPlan,
     dismissConflictWarning,
     removeFromPlan,

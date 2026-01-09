@@ -5,6 +5,23 @@ All notable changes to Ανάσα (Anasa) will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-01-10
+
+### Added
+- **URL Sharing**: Share your complete leave plan setup via URL
+  - Generates compressed shareable URLs using LZ-String compression
+  - Shared links include: year, settings, custom holidays, and annual plan
+  - "Κοινοποίηση" (Share) button in Annual Plan section copies URL to clipboard
+  - Toast notifications for "URL copied" and "Plan loaded from URL" feedback
+- New `useShareableState` composable for URL-based state encoding/decoding
+- 24 new tests for URL sharing functionality (total: 520 tests)
+
+### Changed
+- `useAnnualPlan` composable now exports `addDirectToPlan` for URL-loaded state
+
+### Dependencies
+- Added `lz-string` package for URL compression
+
 ## [1.2.0] - 2026-01-09
 
 ### Added
@@ -65,6 +82,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - date-fns with Greek locale support
 - Vitest + Vue Test Utils for testing
 
+[1.3.0]: https://github.com/isarantoglou/anasa/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/isarantoglou/anasa/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/isarantoglou/anasa/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/isarantoglou/anasa/releases/tag/v1.0.0

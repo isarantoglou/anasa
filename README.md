@@ -29,7 +29,8 @@ A Vue 3 application by [Oxygen](https://www.oxygen.gr) that helps users maximize
 - **Conflict Detection** - Warns when adding overlapping periods
 - **Remaining Days Tracking** - Track used vs remaining days from your total allocation
 
-### Export Options
+### Export & Sharing
+- **URL Sharing** - Share your complete plan setup via compressed URL
 - **Share as Image** - Generate PNG cards for any opportunity
 - **Calendar Export** - Download your annual plan as .ics file for Google Calendar/Outlook
 - **Leave Request Generator** - Generate formal Greek leave request letters
@@ -101,6 +102,7 @@ src/
 │   ├── useGreekHolidays.ts  # Greek public holidays calculation
 │   ├── useLeaveOptimizer.ts # Leave optimization algorithm
 │   ├── usePersistedState.ts # localStorage persistence utilities
+│   ├── useShareableState.ts # URL-based state sharing with LZ-String
 │   └── useYearComparison.ts # Year comparison utilities
 ├── data/
 │   ├── patronSaints.ts      # 130+ Greek towns with patron saints
