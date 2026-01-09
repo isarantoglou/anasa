@@ -617,7 +617,12 @@ async function shareAnnualPlanAsImage() {
           <div class="text-center md:text-left">
             <div class="flex items-center justify-center md:justify-start gap-2">
               <span class="font-display text-xl font-semibold text-(--aegean-800)">Ανάσα</span>
-              <span class="text-xs px-1.5 py-0.5 rounded bg-(--marble-200) text-(--marble-500) font-mono">v{{ version }}</span>
+              <a
+                href="https://github.com/isarantoglou/anasa/blob/master/CHANGELOG.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-xs px-1.5 py-0.5 rounded bg-(--marble-200) text-(--marble-500) hover:bg-(--aegean-100) hover:text-(--aegean-600) font-mono transition-colors"
+              >v{{ version }}</a>
             </div>
             <p class="text-sm text-(--marble-500) mt-1">
               Υπολογισμός Ορθόδοξου Πάσχα με τον αλγόριθμο Meeus/Jones/Butcher
