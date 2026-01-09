@@ -191,7 +191,7 @@ function addCustomHoliday() {
     <!-- Custom Holidays List -->
     <div v-if="customHolidays.length > 0" class="mt-6 pt-6 border-t border-(--marble-200)">
       <h3 class="text-sm font-semibold text-(--marble-500) uppercase tracking-wider mb-3">Προστιθέμενες Αργίες</h3>
-      <ul class="space-y-2 max-h-32 overflow-y-auto">
+      <ul class="space-y-2 max-h-64 overflow-y-auto">
         <li
           v-for="holiday in customHolidays"
           :key="holiday.id"
