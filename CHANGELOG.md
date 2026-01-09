@@ -5,6 +5,15 @@ All notable changes to Ανάσα (Anasa) will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-01-09
+
+### Added
+- **Copy Success Alert**: Toast notification "Αντιγράφηκε!" when copying leave request text
+- **Version Display**: App version shown in footer
+
+### Changed
+- **Annual Plan Always Visible**: Section now always shows, allowing users to add custom periods before selecting optimizer suggestions
+
 ## [1.1.0] - 2026-01-09
 
 ### Added
@@ -48,5 +57,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - date-fns with Greek locale support
 - Vitest + Vue Test Utils for testing
 
+[1.2.0]: https://github.com/isarantoglou/anasa-app/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/isarantoglou/anasa-app/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/isarantoglou/anasa-app/releases/tag/v1.0.0
