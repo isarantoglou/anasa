@@ -29,6 +29,7 @@ import ConflictWarningModal from './components/modals/ConflictWarningModal.vue'
 import LeaveRequestModal from './components/modals/LeaveRequestModal.vue'
 import YearComparisonModal from './components/modals/YearComparisonModal.vue'
 import ShareCard from './components/modals/ShareCard.vue'
+import AnnualPlanShareCard from './components/modals/AnnualPlanShareCard.vue'
 import { version } from '../package.json'
 
 // Persisted state (auto-syncs with localStorage)
@@ -359,6 +360,43 @@ async function shareAsImage(opportunity: OptimizationResult) {
     opportunityToShare.value = null
   }
 }
+
+// Share annual plan as image
+async function shareAnnualPlanAsImage() {
+  if (annualPlan.value.length === 0) return
+
+  isGeneratingImage.value = true
+  await nextTick()
+
+  const cardElement = document.getElementById('annual-plan-share-card')
+  if (!cardElement) {
+    isGeneratingImage.value = false
+    return
+  }
+
+  try {
+    const canvas = await html2canvas(cardElement, {
+      backgroundColor: '#ffffff',
+      scale: 2,
+      logging: false,
+      useCORS: true
+    })
+
+    canvas.toBlob((blob) => {
+      if (!blob) return
+      const url = URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.download = `anasa-plan-${currentYear.value}.png`
+      link.href = url
+      link.click()
+      URL.revokeObjectURL(url)
+    }, 'image/png')
+  } catch (error) {
+    console.error('Failed to generate annual plan image:', error)
+  } finally {
+    isGeneratingImage.value = false
+  }
+}
 </script>
 
 <template>
@@ -471,6 +509,7 @@ async function shareAsImage(opportunity: OptimizationResult) {
         @show-leave-request="showLeaveRequest = true"
         @add-custom-period="addCustomPeriod"
         @share-url="copyShareUrl"
+        @share-as-image="shareAnnualPlanAsImage"
       />
 
       <!-- Results Section -->
@@ -630,6 +669,15 @@ async function shareAsImage(opportunity: OptimizationResult) {
       :opportunity="opportunityToShare"
       :current-year="currentYear"
       :format-date-range="formatDateRange"
+    />
+
+    <!-- Hidden Annual Plan Share Card for Image Generation -->
+    <AnnualPlanShareCard
+      :annual-plan="annualPlan"
+      :current-year="currentYear"
+      :annual-plan-total-days="annualPlanTotalDays"
+      :remaining-leave-days="remainingLeaveDays"
+      :total-annual-leave-days="totalAnnualLeaveDays"
     />
 
     <!-- URL Loaded Notification -->

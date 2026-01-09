@@ -103,7 +103,8 @@ npm run test:coverage # Run tests with coverage report
 - `modals/ConflictWarningModal.vue` - Overlap warning with force-add option
 - `modals/LeaveRequestModal.vue` - Greek leave request letter generator
 - `modals/YearComparisonModal.vue` - Compare holidays across 3 years
-- `modals/ShareCard.vue` - Hidden card for image generation (uses inline hex colors for html2canvas)
+- `modals/ShareCard.vue` - Hidden card for opportunity image generation (uses inline hex colors for html2canvas)
+- `modals/AnnualPlanShareCard.vue` - Hidden card for annual plan image generation
 
 ### Data Layer
 

@@ -13,11 +13,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Shared links include: year, settings, custom holidays, and annual plan
   - "Κοινοποίηση" (Share) button in Annual Plan section copies URL to clipboard
   - Toast notifications for "URL copied" and "Plan loaded from URL" feedback
+- **Annual Plan Image Export**: Download annual plan as PNG image
+  - "Λήψη ως Εικόνα" button in Annual Plan section
+  - Styled card showing year, stats, and all planned periods
 - New `useShareableState` composable for URL-based state encoding/decoding
+- New `AnnualPlanShareCard` component for annual plan image generation
 - 24 new tests for URL sharing functionality (total: 520 tests)
 
 ### Changed
 - `useAnnualPlan` composable now exports `addDirectToPlan` for URL-loaded state
+- Custom holidays list max height increased from 128px to 256px
+
+### Fixed
+- **Greek Language**: Town search and patron saints now display in Greek
+  - Search dropdown shows Greek town names (e.g., "Ιεράπετρα" instead of "Ierapetra")
+  - Patron saint names in Greek (e.g., "Άγιος Γεώργιος" instead of "Saint George")
+  - Added holidays use Greek format: "Άγιος Γεώργιος (Ιεράπετρα)"
 
 ### Dependencies
 - Added `lz-string` package for URL compression

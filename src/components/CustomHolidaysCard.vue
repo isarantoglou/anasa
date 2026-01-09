@@ -28,7 +28,7 @@ const selectedTown = ref<PatronSaint | null>(null)
 // Watch town search input
 watch(townSearch, (query) => {
   // Don't reopen dropdown if user just selected a town
-  if (selectedTown.value && query === selectedTown.value.town) {
+  if (selectedTown.value && query === selectedTown.value.townGreek) {
     showTownDropdown.value = false
     return
   }
@@ -45,22 +45,23 @@ watch(townSearch, (query) => {
 // Select a town from search results
 function selectTown(town: PatronSaint) {
   selectedTown.value = town
-  townSearch.value = town.town
+  townSearch.value = town.townGreek
   showTownDropdown.value = false
 
   // Add patron saint as custom holiday
   const [month, day] = town.date.split('-')
   const holidayDate = `${props.currentYear}-${month}-${day}`
 
-  // Check if already added
+  // Check if already added (check both Greek and English names for backwards compatibility)
   const exists = props.customHolidays.some(
-    h => h.name === `${town.saint} (${town.town})`
+    h => h.name === `${town.saintGreek} (${town.townGreek})` ||
+         h.name === `${town.saint} (${town.town})`
   )
 
   if (!exists) {
     emit('add-holiday', {
       id: crypto.randomUUID(),
-      name: `${town.saint} (${town.town})`,
+      name: `${town.saintGreek} (${town.townGreek})`,
       date: holidayDate
     })
   }
@@ -136,11 +137,10 @@ function addCustomHoliday() {
             @click="selectTown(town)"
             class="w-full px-4 py-3 text-left hover:bg-(--aegean-50) border-b border-(--marble-100) last:border-0 transition-colors"
           >
-            <span class="block font-semibold text-(--marble-700)">{{ town.town }}</span>
-            <span class="block text-xs text-(--marble-500)">{{ town.townGreek }}</span>
+            <span class="block font-semibold text-(--marble-700)">{{ town.townGreek }}</span>
             <span class="flex items-center gap-2 mt-1">
               <span class="badge badge-terracotta text-[10px]">{{ town.date.split('-').reverse().join('/') }}</span>
-              <span class="text-xs text-(--aegean-600)">{{ town.saint }}</span>
+              <span class="text-xs text-(--aegean-600)">{{ town.saintGreek }}</span>
             </span>
           </button>
         </div>
