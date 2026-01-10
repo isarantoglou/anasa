@@ -76,7 +76,7 @@ describe('AnnualPlanSection', () => {
       })
 
       expect(wrapper.text()).toContain('10')
-      expect(wrapper.text()).toContain('Χρησιμοποιημένες')
+      expect(wrapper.text()).toContain('Χρησιμ.')
     })
 
     it('should show remaining days', () => {
@@ -194,26 +194,26 @@ describe('AnnualPlanSection', () => {
     it('should show export button when plan has items', () => {
       const wrapper = mount(AnnualPlanSection, { props: propsWithPlan })
 
-      expect(wrapper.text()).toContain('Εξαγωγή σε Ημερολόγιο')
+      expect(wrapper.text()).toContain('Ημερολόγιο')
     })
 
     it('should show leave request button when plan has items', () => {
       const wrapper = mount(AnnualPlanSection, { props: propsWithPlan })
 
-      expect(wrapper.text()).toContain('Δημιουργία Αίτησης')
+      expect(wrapper.text()).toContain('Αίτηση')
     })
 
     it('should not show action buttons when plan is empty', () => {
       const wrapper = mount(AnnualPlanSection, { props: defaultProps })
 
-      expect(wrapper.text()).not.toContain('Εξαγωγή σε Ημερολόγιο')
-      expect(wrapper.text()).not.toContain('Δημιουργία Αίτησης')
+      expect(wrapper.text()).not.toContain('Ημερολόγιο')
+      expect(wrapper.text()).not.toContain('Αίτηση')
     })
 
     it('should emit export-to-calendar when export is clicked', async () => {
       const wrapper = mount(AnnualPlanSection, { props: propsWithPlan })
 
-      const exportButton = wrapper.findAll('button').find(b => b.text().includes('Εξαγωγή'))
+      const exportButton = wrapper.findAll('button').find(b => b.text().includes('Ημερολόγιο'))
       await exportButton?.trigger('click')
 
       expect(wrapper.emitted('export-to-calendar')).toHaveLength(1)
@@ -222,7 +222,7 @@ describe('AnnualPlanSection', () => {
     it('should emit show-leave-request when leave request is clicked', async () => {
       const wrapper = mount(AnnualPlanSection, { props: propsWithPlan })
 
-      const requestButton = wrapper.findAll('button').find(b => b.text().includes('Δημιουργία Αίτησης'))
+      const requestButton = wrapper.findAll('button').find(b => b.text().includes('Αίτηση'))
       await requestButton?.trigger('click')
 
       expect(wrapper.emitted('show-leave-request')).toHaveLength(1)

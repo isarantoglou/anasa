@@ -26,35 +26,41 @@ const emit = defineEmits<{
   <section class="mb-12 animate-fade-in-up delay-150">
     <div class="card-elevated overflow-hidden">
       <!-- Header -->
-      <div class="px-6 py-5 border-b border-(--marble-200) bg-gradient-to-r from-(--aegean-600) to-(--aegean-700)">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+      <div class="px-4 sm:px-6 py-4 sm:py-5 border-b border-(--marble-200) bg-gradient-to-r from-(--aegean-600) to-(--aegean-700)">
+        <div class="flex items-start sm:items-center justify-between gap-3">
+          <!-- Title -->
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
               <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
               </svg>
             </div>
-            <div>
-              <h2 class="text-xl font-semibold text-white">Ετήσιο Πλάνο Αδειών {{ currentYear }}</h2>
-              <p class="text-white/70 text-sm">Οι επιλεγμένες περίοδοι άδειας</p>
+            <div class="min-w-0">
+              <h2 class="text-lg sm:text-xl font-semibold text-white truncate">Ετήσιο Πλάνο Αδειών {{ currentYear }}</h2>
+              <p class="text-white/70 text-xs sm:text-sm hidden sm:block">Οι επιλεγμένες περίοδοι άδειας</p>
             </div>
           </div>
-          <!-- Stats -->
-          <div class="flex items-center gap-4">
-            <div class="text-center px-4 py-2 rounded-xl bg-white/10">
-              <div class="stat-number text-2xl font-bold text-white">{{ annualPlanTotalDays }}</div>
-              <div class="text-[10px] font-semibold text-white/70 uppercase">Χρησιμοποιημένες</div>
+          <!-- Stats & Clear - responsive layout -->
+          <div class="flex items-center gap-2 sm:gap-4 shrink-0">
+            <div class="text-center px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-white/10">
+              <div class="stat-number text-lg sm:text-2xl font-bold text-white">{{ annualPlanTotalDays }}</div>
+              <div class="text-[9px] sm:text-[10px] font-semibold text-white/70 uppercase">Χρησιμ.</div>
             </div>
-            <div class="text-center px-4 py-2 rounded-xl bg-white/10">
-              <div class="stat-number text-2xl font-bold" :class="remainingLeaveDays >= 0 ? 'text-white' : 'text-red-300'">{{ remainingLeaveDays }}</div>
-              <div class="text-[10px] font-semibold text-white/70 uppercase">Υπόλοιπο</div>
+            <div class="text-center px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-white/10">
+              <div class="stat-number text-lg sm:text-2xl font-bold" :class="remainingLeaveDays >= 0 ? 'text-white' : 'text-red-300'">{{ remainingLeaveDays }}</div>
+              <div class="text-[9px] sm:text-[10px] font-semibold text-white/70 uppercase">Υπόλοιπο</div>
             </div>
+            <!-- Clear button: icon on mobile, text on desktop -->
             <button
               v-if="annualPlan.length > 0"
               @click="emit('clear-plan')"
-              class="px-3 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors"
+              class="p-2 sm:px-3 sm:py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors"
+              title="Καθαρισμός"
             >
-              Καθαρισμός
+              <svg class="w-4 h-4 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              <span class="hidden sm:inline">Καθαρισμός</span>
             </button>
           </div>
         </div>
@@ -129,44 +135,50 @@ const emit = defineEmits<{
           />
         </div>
 
-        <!-- Action Buttons -->
-        <div v-if="annualPlan.length > 0" class="mt-6 pt-6 border-t border-(--marble-200) flex flex-wrap gap-3">
-          <button
-            @click="emit('export-to-calendar')"
-            class="flex items-center gap-2 px-4 py-2 rounded-lg bg-(--aegean-600) text-white font-medium hover:bg-(--aegean-700) transition-colors"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            Εξαγωγή σε Ημερολόγιο
-          </button>
-          <button
-            @click="emit('show-leave-request')"
-            class="flex items-center gap-2 px-4 py-2 rounded-lg bg-(--terracotta-500) text-white font-medium hover:bg-(--terracotta-600) transition-colors"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            Δημιουργία Αίτησης
-          </button>
-          <button
-            @click="emit('share-url')"
-            class="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-(--marble-300) text-(--marble-600) font-medium hover:border-(--aegean-400) hover:text-(--aegean-600) transition-colors"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-            </svg>
-            Κοινοποίηση
-          </button>
-          <button
-            @click="emit('share-as-image')"
-            class="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-(--marble-300) text-(--marble-600) font-medium hover:border-(--aegean-400) hover:text-(--aegean-600) transition-colors"
-          >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
-            Λήψη ως Εικόνα
-          </button>
+        <!-- Action Buttons - 2x2 grid on mobile, row on desktop -->
+        <div v-if="annualPlan.length > 0" class="mt-6 pt-6 border-t border-(--marble-200)">
+          <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 sm:gap-3">
+            <!-- Export to Calendar -->
+            <button
+              @click="emit('export-to-calendar')"
+              class="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2 px-3 py-3 sm:py-2 rounded-xl sm:rounded-lg bg-(--aegean-600) text-white font-medium hover:bg-(--aegean-700) transition-colors"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span class="text-xs sm:text-sm">Ημερολόγιο</span>
+            </button>
+            <!-- Leave Request -->
+            <button
+              @click="emit('show-leave-request')"
+              class="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2 px-3 py-3 sm:py-2 rounded-xl sm:rounded-lg bg-(--terracotta-500) text-white font-medium hover:bg-(--terracotta-600) transition-colors"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span class="text-xs sm:text-sm">Αίτηση</span>
+            </button>
+            <!-- Share URL -->
+            <button
+              @click="emit('share-url')"
+              class="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2 px-3 py-3 sm:py-2 rounded-xl sm:rounded-lg border-2 border-(--marble-300) text-(--marble-600) font-medium hover:border-(--aegean-400) hover:text-(--aegean-600) transition-colors"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+              </svg>
+              <span class="text-xs sm:text-sm">Κοινοποίηση</span>
+            </button>
+            <!-- Download as Image -->
+            <button
+              @click="emit('share-as-image')"
+              class="flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1 sm:gap-2 px-3 py-3 sm:py-2 rounded-xl sm:rounded-lg border-2 border-(--marble-300) text-(--marble-600) font-medium hover:border-(--aegean-400) hover:text-(--aegean-600) transition-colors"
+            >
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span class="text-xs sm:text-sm">Εικόνα</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
