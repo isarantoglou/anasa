@@ -76,6 +76,39 @@ describe('CustomHolidaysCard', () => {
 
       expect((searchInput.element as HTMLInputElement).value).toBe('')
     })
+
+    it('should show calculated date for movable feasts in dropdown', async () => {
+      // Aigio has Παναγία Τρυπητή (Bright Friday = Easter + 5)
+      // For 2026, Easter is April 12, so Bright Friday is April 17
+      // The raw date in patronSaints is 04-20, but dropdown should show 17/04
+      const wrapper = mount(CustomHolidaysCard, { props: defaultProps })
+
+      const searchInput = wrapper.find('input[placeholder="Αναζήτηση πόλης..."]')
+      await searchInput.setValue('Αίγιο')
+      await flushPromises()
+
+      const dropdown = wrapper.find('.absolute.z-20')
+      expect(dropdown.exists()).toBe(true)
+
+      // Should show the Easter-calculated date (17/04), not the raw date (20/04)
+      expect(dropdown.text()).toContain('17/04')
+      expect(dropdown.text()).not.toContain('20/04')
+    })
+
+    it('should show fixed date for non-movable patron saints in dropdown', async () => {
+      // Athens has Saint Dionysios on October 3 (fixed date)
+      const wrapper = mount(CustomHolidaysCard, { props: defaultProps })
+
+      const searchInput = wrapper.find('input[placeholder="Αναζήτηση πόλης..."]')
+      await searchInput.setValue('Αθήνα')
+      await flushPromises()
+
+      const dropdown = wrapper.find('.absolute.z-20')
+      expect(dropdown.exists()).toBe(true)
+
+      // Should show the fixed date (03/10)
+      expect(dropdown.text()).toContain('03/10')
+    })
   })
 
   describe('Manual Holiday Form', () => {

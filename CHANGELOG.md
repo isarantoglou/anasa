@@ -34,6 +34,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Clear button shows icon-only on mobile, full text on desktop
   - Action buttons arranged in 2x2 grid on mobile with shorter labels
 - **Search Input Spacing**: Added proper spacing between magnifying glass icon and placeholder text
+- **Movable Feast Dropdown Date**: Search dropdown now shows the calculated date for movable feasts
+  - Previously showed raw date (e.g., 20/04 for Αίγιο)
+  - Now calculates correct Easter-based date (e.g., 17/04 for 2026)
 
 ## [1.3.0] - 2026-01-10
 

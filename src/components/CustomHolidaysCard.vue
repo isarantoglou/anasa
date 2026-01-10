@@ -56,6 +56,40 @@ function formatDisplayDate(holiday: CustomHoliday): string {
   return format(date, 'd MMM yyyy', { locale: el })
 }
 
+/**
+ * Get the display date for a patron saint in the search dropdown
+ * Calculates the correct date for movable feasts based on Easter
+ */
+function getPatronSaintDisplayDate(town: PatronSaint): string {
+  let date: Date
+
+  if (town.isMovable && town.easterOffset !== undefined) {
+    // Movable feast: calculate from Easter
+    date = addDays(easterDate.value, town.easterOffset)
+  } else if (town.movesIfBeforeEaster) {
+    // Conditionally movable feast (e.g., Saint George):
+    // If fixed date falls on/before Easter, move to Bright Monday
+    const parts = town.date.split('-')
+    const month = parts[0] ?? '01'
+    const day = parts[1] ?? '01'
+    const fixedDate = new Date(props.currentYear, parseInt(month) - 1, parseInt(day))
+
+    if (fixedDate <= easterDate.value) {
+      date = addDays(easterDate.value, 1) // Bright Monday
+    } else {
+      date = fixedDate
+    }
+  } else {
+    // Fixed feast: use the date field with current year
+    const parts = town.date.split('-')
+    const month = parts[0] ?? '01'
+    const day = parts[1] ?? '01'
+    date = new Date(props.currentYear, parseInt(month) - 1, parseInt(day))
+  }
+
+  return format(date, 'dd/MM', { locale: el })
+}
+
 const emit = defineEmits<{
   'add-holiday': [holiday: CustomHoliday]
   'remove-holiday': [id: string]
@@ -191,7 +225,7 @@ function addCustomHoliday() {
           >
             <span class="block font-semibold text-(--marble-700)">{{ town.townGreek }}</span>
             <span class="flex items-center gap-2 mt-1">
-              <span class="badge badge-terracotta text-[10px]">{{ town.date.split('-').reverse().join('/') }}</span>
+              <span class="badge badge-terracotta text-[10px]">{{ getPatronSaintDisplayDate(town) }}</span>
               <span class="text-xs text-(--aegean-600)">{{ town.saintGreek }}</span>
             </span>
           </button>
