@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - `useAnnualPlan` composable now exports `addDirectToPlan` for URL-loaded state
 - Custom holidays list max height increased from 128px to 256px
+- **Year Selector Animation**: Redesigned year picker with sliding indicator animation
+  - Smooth sliding effect when changing years (indicator slides from previous position)
+  - Carousel-style design with gradient fades at edges
+  - Responsive sizing for mobile devices
 
 ### Fixed
 - **Greek Language**: Town search and patron saints now display in Greek

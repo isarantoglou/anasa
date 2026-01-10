@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, watch, nextTick } from 'vue'
 import { format } from 'date-fns'
 import { el } from 'date-fns/locale'
 import type { SchoolBreak } from '../data/schoolHolidays'
@@ -34,13 +34,50 @@ const emit = defineEmits<{
   'toggle-year-comparison': []
 }>()
 
-// Year range for picker - CENTERED on current selection
+// Extended year range for carousel effect (7 years for smooth scrolling)
 const yearRange = computed(() => {
   const years: number[] = []
-  for (let y = props.currentYear - 2; y <= props.currentYear + 2; y++) {
+  for (let y = props.currentYear - 3; y <= props.currentYear + 3; y++) {
     years.push(y)
   }
   return years
+})
+
+// Simple year selection
+const selectYear = (year: number) => {
+  if (year !== props.currentYear) {
+    emit('update:currentYear', year)
+  }
+}
+
+// Navigate using arrow buttons
+const navigateYear = (direction: 'prev' | 'next') => {
+  emit('update:currentYear', props.currentYear + (direction === 'prev' ? -1 : 1))
+}
+
+// Sliding indicator animation
+const indicatorTransform = ref('')
+const indicatorTransition = ref('none')
+
+watch(() => props.currentYear, (newYear, oldYear) => {
+  if (newYear === oldYear) return
+
+  // Calculate direction: positive = moved right (clicked a year to the right)
+  const diff = newYear - oldYear
+  // Start offset in opposite direction (e.g., if moved right, start from left)
+  const offsetPx = diff * -44 // Approximate button width + gap
+
+  // Disable transition, jump to offset position
+  indicatorTransition.value = 'none'
+  indicatorTransform.value = `translateX(${offsetPx}px)`
+
+  // After a frame, enable transition and animate to center
+  nextTick(() => {
+    requestAnimationFrame(() => {
+      indicatorTransition.value = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+      indicatorTransform.value = 'translateX(0)'
+    })
+  })
 })
 
 // Computed: warning when search days exceed remaining
@@ -78,36 +115,58 @@ const searchExceedsRemaining = computed(() => {
             Σύγκριση
           </button>
         </div>
+        <!-- Year Carousel -->
         <div class="flex items-center gap-2">
+          <!-- Previous button -->
           <button
-            @click="emit('update:currentYear', currentYear - 1)"
-            class="w-10 h-10 rounded-xl border border-(--marble-200) bg-(--marble-white) flex items-center justify-center hover:bg-(--marble-100) hover:border-(--aegean-300) transition-all"
+            @click="navigateYear('prev')"
+            class="w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-full bg-(--aegean-50) border border-(--aegean-200) flex items-center justify-center hover:bg-(--aegean-100) hover:border-(--aegean-300) transition-all active:scale-95"
             aria-label="Προηγούμενο έτος"
           >
-            <svg class="w-5 h-5 text-(--marble-500)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-(--aegean-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <!-- Year chips - selected year is ALWAYS in the center -->
-          <div class="flex-1 flex gap-1 justify-center">
-            <button
-              v-for="year in yearRange"
-              :key="year"
-              @click="emit('update:currentYear', year)"
-              class="px-3 py-2 text-sm font-semibold rounded-lg transition-all stat-number"
-              :class="currentYear === year
-                ? 'bg-(--aegean-600) text-white shadow-md scale-110'
-                : 'bg-(--marble-100) text-(--marble-600) hover:bg-(--marble-200)'"
-            >
-              {{ year }}
-            </button>
+
+          <!-- Year strip with fade edges -->
+          <div class="relative flex-1 overflow-hidden">
+            <!-- Gradient fade on left -->
+            <div class="absolute left-0 top-0 bottom-0 w-6 sm:w-8 year-carousel-fade-left z-20 pointer-events-none"></div>
+            <!-- Gradient fade on right -->
+            <div class="absolute right-0 top-0 bottom-0 w-6 sm:w-8 year-carousel-fade-right z-20 pointer-events-none"></div>
+
+            <!-- Year buttons container -->
+            <div class="relative flex items-center justify-center gap-1 py-1.5">
+              <!-- Sliding indicator (behind buttons) -->
+              <div
+                class="year-indicator"
+                :style="{
+                  transform: `translateX(-50%) translateY(-50%) ${indicatorTransform}`,
+                  transition: indicatorTransition
+                }"
+              ></div>
+              <!-- Year buttons -->
+              <button
+                v-for="(year, index) in yearRange"
+                :key="year"
+                @click="selectYear(year)"
+                class="px-2 sm:px-3 py-1.5 text-sm font-semibold rounded-lg stat-number whitespace-nowrap shrink-0 transition-colors duration-200"
+                :class="index === 3
+                  ? 'text-white z-10'
+                  : 'text-(--marble-400) hover:text-(--marble-600)'"
+              >
+                {{ year }}
+              </button>
+            </div>
           </div>
+
+          <!-- Next button -->
           <button
-            @click="emit('update:currentYear', currentYear + 1)"
-            class="w-10 h-10 rounded-xl border border-(--marble-200) bg-(--marble-white) flex items-center justify-center hover:bg-(--marble-100) hover:border-(--aegean-300) transition-all"
+            @click="navigateYear('next')"
+            class="w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-full bg-(--aegean-50) border border-(--aegean-200) flex items-center justify-center hover:bg-(--aegean-100) hover:border-(--aegean-300) transition-all active:scale-95"
             aria-label="Επόμενο έτος"
           >
-            <svg class="w-5 h-5 text-(--marble-500)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-(--aegean-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
           </button>

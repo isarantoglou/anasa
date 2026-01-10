@@ -90,7 +90,7 @@ npm run test:coverage # Run tests with coverage report
 **App.vue** (~500 lines) - Main application shell, orchestrates child components
 
 **Settings & Configuration:**
-- `SettingsCard.vue` - Year picker, toggles (Holy Spirit, Parent Mode), leave day inputs, year stats
+- `SettingsCard.vue` - Year carousel with sliding indicator animation, toggles (Holy Spirit, Parent Mode), leave day inputs, year stats
 - `CustomHolidaysCard.vue` - Town search for patron saints, manual holiday form, holiday list
 - `PublicHolidaysCard.vue` - Public holidays list with weekend warnings
 
@@ -123,9 +123,12 @@ npm run test:coverage # Run tests with coverage report
 - Color palette: Aegean blues, terracotta accents, marble neutrals
 - Fonts: Cormorant Garamond (title only), Inter (body/numbers)
 - Dark mode via `.dark` class on `<html>`
+- Year carousel: `.year-indicator` (sliding selection), `.year-carousel-fade-left/right` (gradient fades)
 - Use the frontend-design plugin for the design
 
 **Important**: Tailwind CSS 4 uses `oklch` color functions which html2canvas doesn't support. The share card uses inline hex colors to work around this.
+
+**Year Carousel Animation**: The year selector uses a sliding indicator that animates when changing years. The indicator is positioned at center (`left: 50%`) and uses JavaScript-driven transforms to create a sliding effect - when a year is clicked, the indicator starts offset in the opposite direction and animates to center using CSS transitions.
 
 ### Key Types (src/types.ts)
 

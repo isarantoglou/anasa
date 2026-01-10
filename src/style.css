@@ -795,6 +795,56 @@ body {
   transform: translateX(-50%) translateY(20px);
 }
 
+/* Year carousel slide animations */
+@keyframes slideLeft {
+  0% { transform: translateX(10%); opacity: 0.7; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideRight {
+  0% { transform: translateX(-10%); opacity: 0.7; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+.animate-slide-left {
+  animation: slideLeft 0.3s var(--ease-out-expo) forwards;
+}
+
+.animate-slide-right {
+  animation: slideRight 0.3s var(--ease-out-expo) forwards;
+}
+
+/* Year carousel gradient fades - adapts to dark mode */
+.year-carousel-fade-left {
+  background: linear-gradient(to right, var(--marble-white), transparent);
+}
+
+.year-carousel-fade-right {
+  background: linear-gradient(to left, var(--marble-white), transparent);
+}
+
+/* Year indicator - sliding selection background */
+.year-indicator {
+  position: absolute;
+  /* Center position (4th button out of 7) */
+  left: 50%;
+  top: 50%;
+  /* transform is set via inline style to enable animation */
+  width: 52px;
+  height: 32px;
+  background: var(--aegean-600);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  z-index: 0;
+}
+
+@media (min-width: 640px) {
+  .year-indicator {
+    width: 56px;
+    height: 34px;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    BADGE & TAG STYLES
    ═══════════════════════════════════════════════════════════════════════════ */
