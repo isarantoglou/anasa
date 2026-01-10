@@ -130,6 +130,26 @@ describe('searchTown', () => {
 
     expect(results).toHaveLength(0)
   })
+
+  it('should ignore Greek accents in search (accent-insensitive)', () => {
+    // Search without accent should find town with accent
+    const resultsNoAccent = searchTown('Ηρακλειο')
+    const resultsWithAccent = searchTown('Ηράκλειο')
+
+    expect(resultsNoAccent.length).toBeGreaterThan(0)
+    expect(resultsNoAccent.some(r => r.townGreek === 'Ηράκλειο')).toBe(true)
+    expect(resultsNoAccent.length).toEqual(resultsWithAccent.length)
+  })
+
+  it('should match regardless of accent placement', () => {
+    // Test various accent combinations
+    const results1 = searchTown('Αθηνα')  // no accent
+    const results2 = searchTown('Αθήνα')  // with accent
+
+    expect(results1.length).toBeGreaterThan(0)
+    expect(results1.some(r => r.townGreek === 'Αθήνα')).toBe(true)
+    expect(results1.length).toEqual(results2.length)
+  })
 })
 
 describe('getPatronSaintByTown', () => {

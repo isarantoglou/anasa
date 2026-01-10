@@ -1108,15 +1108,24 @@ export const patronSaints: PatronSaint[] = [
 ]
 
 /**
+ * Remove Greek accents (diacritics) from text for fuzzy matching
+ * e.g., "Ηράκλειο" → "ηρακλειο"
+ */
+function removeAccents(text: string): string {
+  return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+}
+
+/**
  * Search for a town and return matching patron saints
+ * Supports accent-insensitive search (e.g., "Ηρακλειο" matches "Ηράκλειο")
  */
 export function searchTown(query: string): PatronSaint[] {
-  const normalizedQuery = query.toLowerCase().trim()
+  const normalizedQuery = removeAccents(query.trim())
   if (normalizedQuery.length < 2) return []
 
   return patronSaints.filter(ps =>
     ps.town.toLowerCase().includes(normalizedQuery) ||
-    ps.townGreek.toLowerCase().includes(normalizedQuery)
+    removeAccents(ps.townGreek).includes(normalizedQuery)
   ).slice(0, 10) // Limit results for dropdown
 }
 
