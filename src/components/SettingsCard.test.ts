@@ -293,4 +293,219 @@ describe('SettingsCard', () => {
       expect(wrapper.text()).toContain('Υπόλοιπο 2026')
     })
   })
+
+  describe('Input Validation', () => {
+    describe('Total Annual Leave Days Input', () => {
+      it('should have min attribute set to 1', () => {
+        const wrapper = mount(SettingsCard, { props: defaultProps })
+        const input = wrapper.find('#totalLeaveDays')
+        expect(input.attributes('min')).toBe('1')
+      })
+
+      it('should have max attribute set to 50', () => {
+        const wrapper = mount(SettingsCard, { props: defaultProps })
+        const input = wrapper.find('#totalLeaveDays')
+        expect(input.attributes('max')).toBe('50')
+      })
+
+      it('should emit event when input value changes', async () => {
+        const wrapper = mount(SettingsCard, { props: defaultProps })
+        const input = wrapper.find('#totalLeaveDays')
+
+        await input.setValue('30')
+
+        expect(wrapper.emitted('update:totalAnnualLeaveDays')).toBeTruthy()
+      })
+
+      it('should display current value from props', () => {
+        const wrapper = mount(SettingsCard, {
+          props: { ...defaultProps, totalAnnualLeaveDays: 22 }
+        })
+        const input = wrapper.find('#totalLeaveDays')
+        expect((input.element as HTMLInputElement).value).toBe('22')
+      })
+
+      it('should handle value of 1 (minimum)', () => {
+        const wrapper = mount(SettingsCard, {
+          props: { ...defaultProps, totalAnnualLeaveDays: 1 }
+        })
+        const input = wrapper.find('#totalLeaveDays')
+        expect((input.element as HTMLInputElement).value).toBe('1')
+      })
+
+      it('should handle max value (50)', () => {
+        const wrapper = mount(SettingsCard, {
+          props: { ...defaultProps, totalAnnualLeaveDays: 50 }
+        })
+        const input = wrapper.find('#totalLeaveDays')
+        expect((input.element as HTMLInputElement).value).toBe('50')
+      })
+    })
+
+    describe('Search Leave Days Input', () => {
+      it('should have min attribute set to 1', () => {
+        const wrapper = mount(SettingsCard, { props: defaultProps })
+        const input = wrapper.find('#searchDays')
+        expect(input.attributes('min')).toBe('1')
+      })
+
+      it('should have max attribute set to 30', () => {
+        const wrapper = mount(SettingsCard, { props: defaultProps })
+        const input = wrapper.find('#searchDays')
+        expect(input.attributes('max')).toBe('30')
+      })
+
+      it('should emit event when input value changes', async () => {
+        const wrapper = mount(SettingsCard, { props: defaultProps })
+        const input = wrapper.find('#searchDays')
+
+        await input.setValue('10')
+
+        expect(wrapper.emitted('update:searchLeaveDays')).toBeTruthy()
+      })
+
+      it('should display current value from props', () => {
+        const wrapper = mount(SettingsCard, {
+          props: { ...defaultProps, searchLeaveDays: 7 }
+        })
+        const input = wrapper.find('#searchDays')
+        expect((input.element as HTMLInputElement).value).toBe('7')
+      })
+
+      it('should handle value of 1 (minimum)', () => {
+        const wrapper = mount(SettingsCard, {
+          props: { ...defaultProps, searchLeaveDays: 1 }
+        })
+        const input = wrapper.find('#searchDays')
+        expect((input.element as HTMLInputElement).value).toBe('1')
+      })
+
+      it('should handle value of 30 (maximum)', () => {
+        const wrapper = mount(SettingsCard, {
+          props: { ...defaultProps, searchLeaveDays: 30 }
+        })
+        const input = wrapper.find('#searchDays')
+        expect((input.element as HTMLInputElement).value).toBe('30')
+      })
+    })
+
+    describe('Input Type Validation', () => {
+      it('total leave days input should be type number', () => {
+        const wrapper = mount(SettingsCard, { props: defaultProps })
+        const input = wrapper.find('#totalLeaveDays')
+        expect(input.attributes('type')).toBe('number')
+      })
+
+      it('search leave days input should be type number', () => {
+        const wrapper = mount(SettingsCard, { props: defaultProps })
+        const input = wrapper.find('#searchDays')
+        expect(input.attributes('type')).toBe('number')
+      })
+    })
+  })
+
+  describe('Edge Cases', () => {
+    it('should handle zero remaining days', () => {
+      const wrapper = mount(SettingsCard, {
+        props: { ...defaultProps, remainingLeaveDays: 0, annualPlanLength: 5 }
+      })
+      // Should render without error
+      expect(wrapper.text()).toContain('Ρυθμίσεις')
+    })
+
+    it('should handle empty school breaks array', () => {
+      const wrapper = mount(SettingsCard, {
+        props: { ...defaultProps, parentMode: true, schoolBreaks: [] }
+      })
+      // Should render without error in parent mode with no breaks
+      expect(wrapper.text()).toContain('Λειτουργία Γονέα')
+    })
+
+    it('should handle stats with zero values', () => {
+      const wrapper = mount(SettingsCard, {
+        props: {
+          ...defaultProps,
+          stats: { workdays: 0, weekendDays: 0, holidayDays: 0, freeDays: 0 }
+        }
+      })
+      expect(wrapper.text()).toContain('0')
+    })
+
+    it('should not emit year change when clicking current year', async () => {
+      const wrapper = mount(SettingsCard, { props: defaultProps })
+
+      const currentYearButton = wrapper.findAll('button').find(b => b.text() === '2026')
+      await currentYearButton?.trigger('click')
+
+      // Should not emit since it's already the current year
+      expect(wrapper.emitted('update:currentYear')).toBeFalsy()
+    })
+
+    it('should handle very long effective start label', () => {
+      const wrapper = mount(SettingsCard, {
+        props: {
+          ...defaultProps,
+          showingFromToday: true,
+          effectiveStartLabel: 'Πολύ μεγάλη ημερομηνία που είναι δύσκολο να χωρέσει'
+        }
+      })
+      expect(wrapper.text()).toContain('Πολύ μεγάλη ημερομηνία')
+    })
+  })
+
+  describe('Year Navigation', () => {
+    it('should emit previous year when prev button clicked', async () => {
+      const wrapper = mount(SettingsCard, { props: defaultProps })
+
+      const prevButton = wrapper.find('button[aria-label="Προηγούμενο έτος"]')
+      await prevButton.trigger('click')
+
+      expect(wrapper.emitted('update:currentYear')?.[0]).toEqual([2025])
+    })
+
+    it('should emit next year when next button clicked', async () => {
+      const wrapper = mount(SettingsCard, { props: defaultProps })
+
+      const nextButton = wrapper.find('button[aria-label="Επόμενο έτος"]')
+      await nextButton.trigger('click')
+
+      expect(wrapper.emitted('update:currentYear')?.[0]).toEqual([2027])
+    })
+
+    it('should display years in correct range (current ± 3)', () => {
+      const wrapper = mount(SettingsCard, {
+        props: { ...defaultProps, currentYear: 2030 }
+      })
+
+      expect(wrapper.text()).toContain('2027')
+      expect(wrapper.text()).toContain('2028')
+      expect(wrapper.text()).toContain('2029')
+      expect(wrapper.text()).toContain('2030')
+      expect(wrapper.text()).toContain('2031')
+      expect(wrapper.text()).toContain('2032')
+      expect(wrapper.text()).toContain('2033')
+    })
+  })
+
+  describe('Accessibility', () => {
+    it('should have accessible labels for navigation buttons', () => {
+      const wrapper = mount(SettingsCard, { props: defaultProps })
+
+      const prevButton = wrapper.find('button[aria-label="Προηγούμενο έτος"]')
+      const nextButton = wrapper.find('button[aria-label="Επόμενο έτος"]')
+
+      expect(prevButton.exists()).toBe(true)
+      expect(nextButton.exists()).toBe(true)
+    })
+
+    it('should have labels for input fields', () => {
+      const wrapper = mount(SettingsCard, { props: defaultProps })
+
+      const totalLabel = wrapper.find('label[for="totalLeaveDays"]')
+      const searchLabel = wrapper.find('label[for="searchDays"]')
+
+      expect(totalLabel.exists()).toBe(true)
+      expect(searchLabel.exists()).toBe(true)
+    })
+  })
 })

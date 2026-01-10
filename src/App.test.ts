@@ -268,6 +268,97 @@ describe('App.vue', () => {
 
       expect(wrapper.text()).not.toContain('Οικογένεια')
     })
+
+    it('should deactivate efficiency sort when date sort is clicked', async () => {
+      const wrapper = mount(App)
+
+      const efficiencyButton = wrapper.findAll('.toggle-switch-option').find(b => b.text() === 'Απόδοση')
+      const dateButton = wrapper.findAll('.toggle-switch-option').find(b => b.text() === 'Ημερομηνία')
+
+      // Initially efficiency is active
+      expect(efficiencyButton?.classes()).toContain('active')
+
+      // Click date sort
+      await dateButton?.trigger('click')
+
+      // Now date should be active, efficiency should not
+      expect(dateButton?.classes()).toContain('active')
+      expect(efficiencyButton?.classes()).not.toContain('active')
+    })
+
+    it('should switch back to efficiency sort when clicked', async () => {
+      const wrapper = mount(App)
+
+      const efficiencyButton = wrapper.findAll('.toggle-switch-option').find(b => b.text() === 'Απόδοση')
+      const dateButton = wrapper.findAll('.toggle-switch-option').find(b => b.text() === 'Ημερομηνία')
+
+      // Switch to date
+      await dateButton?.trigger('click')
+      expect(dateButton?.classes()).toContain('active')
+
+      // Switch back to efficiency
+      await efficiencyButton?.trigger('click')
+      expect(efficiencyButton?.classes()).toContain('active')
+      expect(dateButton?.classes()).not.toContain('active')
+    })
+
+    it('should show toggle switch container', () => {
+      const wrapper = mount(App)
+
+      const toggleSwitch = wrapper.find('.toggle-switch-container')
+      expect(toggleSwitch.exists()).toBe(true)
+    })
+
+    it('should have correct number of sort options (2 without parent mode)', () => {
+      const wrapper = mount(App)
+
+      // Find sort container and its buttons
+      const sortContainer = wrapper.find('.toggle-switch-container')
+      const buttons = sortContainer.findAll('.toggle-switch-option')
+      expect(buttons.length).toBe(2) // Απόδοση and Ημερομηνία
+    })
+  })
+
+  describe('Sorting with Parent Mode', () => {
+    it('should show family sort option when parent mode is enabled', async () => {
+      localStorageMock._store['anasa-parent-mode'] = 'true'
+
+      const wrapper = mount(App)
+      await flushPromises()
+
+      expect(wrapper.text()).toContain('Οικογένεια')
+    })
+
+    it('should render family sort button in sort container when parent mode is enabled', async () => {
+      localStorageMock._store['anasa-parent-mode'] = 'true'
+
+      const wrapper = mount(App)
+      await flushPromises()
+
+      // Find sort buttons
+      const sortButtons = wrapper.findAll('.toggle-switch-option')
+
+      // When parent mode is on, family sort button text should be present
+      const hasFamily = sortButtons.some(b => b.text() === 'Οικογένεια')
+      expect(hasFamily).toBe(true)
+    })
+
+    it('should hide family sort when parent mode is disabled', async () => {
+      // Start with parent mode enabled
+      localStorageMock._store['anasa-parent-mode'] = 'true'
+
+      const wrapper = mount(App)
+      await flushPromises()
+
+      expect(wrapper.text()).toContain('Οικογένεια')
+
+      // Find the parent mode toggle in SettingsCard and disable it
+      const settingsCard = wrapper.findComponent({ name: 'SettingsCard' })
+      await settingsCard.vm.$emit('update:parentMode', false)
+      await flushPromises()
+
+      expect(wrapper.text()).not.toContain('Οικογένεια')
+    })
   })
 
   describe('Empty state', () => {
