@@ -113,7 +113,8 @@ function addCustomHoliday() {
           v-model="townSearch"
           type="text"
           placeholder="Αναζήτηση πόλης..."
-          class="input-elegant pl-11 pr-10"
+          class="input-elegant"
+          style="padding-left: 2.75rem"
           @focus="showTownDropdown = townResults.length > 0"
         />
         <button
