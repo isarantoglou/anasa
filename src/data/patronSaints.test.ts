@@ -73,13 +73,31 @@ describe('patronSaints data', () => {
     expect(andros?.isMovable).toBe(true)
   })
 
-  it('should have easterOffset for movable feasts', () => {
-    const movableEntries = patronSaints.filter(ps => ps.isMovable === true)
+  it('should have easterOffset for movable feasts (excluding conditionally movable)', () => {
+    // Movable feasts that are NOT conditionally movable (like Saint George)
+    // should have easterOffset defined
+    const movableEntries = patronSaints.filter(
+      ps => ps.isMovable === true && !ps.movesIfBeforeEaster
+    )
 
-    // All movable feasts should have easterOffset defined
+    // All Easter-offset movable feasts should have easterOffset defined
     movableEntries.forEach(ps => {
       expect(ps.easterOffset).toBeDefined()
       expect(typeof ps.easterOffset).toBe('number')
+    })
+  })
+
+  it('should have movesIfBeforeEaster for conditionally movable feasts', () => {
+    // Conditionally movable feasts (like Saint George) use movesIfBeforeEaster
+    const conditionallyMovable = patronSaints.filter(
+      ps => ps.isMovable === true && ps.movesIfBeforeEaster === true
+    )
+
+    expect(conditionallyMovable.length).toBeGreaterThan(0)
+
+    // These should NOT have easterOffset (they use fixed date unless it conflicts)
+    conditionallyMovable.forEach(ps => {
+      expect(ps.movesIfBeforeEaster).toBe(true)
     })
   })
 
@@ -107,6 +125,31 @@ describe('patronSaints data', () => {
     // Παναγία Χρυσοπηγή - Ascension = Easter + 39
     const sifnos = patronSaints.find(ps => ps.town === 'Sifnos')
     expect(sifnos?.easterOffset).toBe(39)
+  })
+
+  it('should have Saint George entries with movesIfBeforeEaster flag', () => {
+    // Find all Saint George entries (April 23)
+    const stGeorgeEntries = patronSaints.filter(
+      ps => ps.saint === 'Saint George' && ps.date === '04-23'
+    )
+
+    expect(stGeorgeEntries.length).toBeGreaterThan(10) // Should have many towns
+
+    // All should have movesIfBeforeEaster: true
+    stGeorgeEntries.forEach(ps => {
+      expect(ps.isMovable).toBe(true)
+      expect(ps.movesIfBeforeEaster).toBe(true)
+    })
+  })
+
+  it('should have Ierapetra with Saint George correctly configured', () => {
+    const ierapetra = patronSaints.find(ps => ps.town === 'Ierapetra')
+
+    expect(ierapetra).toBeDefined()
+    expect(ierapetra?.saintGreek).toBe('Άγιος Γεώργιος')
+    expect(ierapetra?.date).toBe('04-23')
+    expect(ierapetra?.isMovable).toBe(true)
+    expect(ierapetra?.movesIfBeforeEaster).toBe(true)
   })
 })
 

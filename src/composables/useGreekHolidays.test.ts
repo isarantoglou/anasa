@@ -298,6 +298,86 @@ describe('useGreekHolidays', () => {
       year.value = 2027
       expect(converted.value[0]!.date.getFullYear()).toBe(2026) // Still 2026
     })
+
+    it('should move Saint George to Easter Monday when April 23 is before Easter', () => {
+      // 2027: Easter is May 2, so April 23 is before Easter
+      const year = ref(2027)
+      const customHolidays = ref<CustomHoliday[]>([
+        {
+          id: '1',
+          name: 'Άγιος Γεώργιος (Ιεράπετρα)',
+          date: '2027-04-23',
+          isRecurring: true,
+          recurringDate: '04-23',
+          isMovable: true,
+          movesIfBeforeEaster: true
+        }
+      ])
+      const { customHolidays: converted, orthodoxEaster } = useGreekHolidays(year, customHolidays)
+
+      // Easter 2027 is May 2
+      expect(orthodoxEaster.value.getMonth()).toBe(4) // May
+      expect(orthodoxEaster.value.getDate()).toBe(2)
+
+      // Saint George should move to Easter Monday (May 3)
+      expect(converted.value[0]!.date.getMonth()).toBe(4) // May
+      expect(converted.value[0]!.date.getDate()).toBe(3) // Easter Monday
+    })
+
+    it('should celebrate Saint George on April 23 when Easter is before April 23', () => {
+      // 2026: Easter is April 12, so April 23 is after Easter
+      const year = ref(2026)
+      const customHolidays = ref<CustomHoliday[]>([
+        {
+          id: '1',
+          name: 'Άγιος Γεώργιος (Ιεράπετρα)',
+          date: '2026-04-23',
+          isRecurring: true,
+          recurringDate: '04-23',
+          isMovable: true,
+          movesIfBeforeEaster: true
+        }
+      ])
+      const { customHolidays: converted, orthodoxEaster } = useGreekHolidays(year, customHolidays)
+
+      // Easter 2026 is April 12
+      expect(orthodoxEaster.value.getMonth()).toBe(3) // April
+      expect(orthodoxEaster.value.getDate()).toBe(12)
+
+      // Saint George should be on April 23 (after Easter)
+      expect(converted.value[0]!.date.getMonth()).toBe(3) // April
+      expect(converted.value[0]!.date.getDate()).toBe(23)
+    })
+
+    it('should recalculate Saint George date when year changes', () => {
+      const year = ref(2026)
+      const customHolidays = ref<CustomHoliday[]>([
+        {
+          id: '1',
+          name: 'Άγιος Γεώργιος (Ιεράπετρα)',
+          date: '2026-04-23',
+          isRecurring: true,
+          recurringDate: '04-23',
+          isMovable: true,
+          movesIfBeforeEaster: true
+        }
+      ])
+      const { customHolidays: converted } = useGreekHolidays(year, customHolidays)
+
+      // 2026: Easter April 12, Saint George on April 23
+      expect(converted.value[0]!.date.getMonth()).toBe(3)
+      expect(converted.value[0]!.date.getDate()).toBe(23)
+
+      // Change to 2027: Easter May 2, Saint George moves to May 3
+      year.value = 2027
+      expect(converted.value[0]!.date.getMonth()).toBe(4) // May
+      expect(converted.value[0]!.date.getDate()).toBe(3)
+
+      // Change to 2028: Easter April 16, Saint George on April 23
+      year.value = 2028
+      expect(converted.value[0]!.date.getMonth()).toBe(3) // April
+      expect(converted.value[0]!.date.getDate()).toBe(23)
+    })
   })
 
   describe('allHolidays', () => {

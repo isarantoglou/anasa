@@ -46,6 +46,7 @@ export interface CustomHoliday {
   recurringDate?: string // MM-DD format for recurring holidays (e.g., "10-26")
   isMovable?: boolean // True if Easter-dependent (e.g., Ζωοδόχος Πηγή)
   easterOffset?: number // Days from Easter for movable feasts (e.g., 5 for Ζωοδόχος Πηγή)
+  movesIfBeforeEaster?: boolean // True for saints like St. George (April 23) that move to Easter Monday if their date falls before Easter
 }
 
 /** Configuration for the optimizer */

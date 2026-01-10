@@ -21,6 +21,18 @@ function getDisplayDate(holiday: CustomHoliday): Date {
   if (holiday.isMovable && holiday.easterOffset !== undefined) {
     // Movable feast: calculate from Easter
     return addDays(easterDate.value, holiday.easterOffset)
+  } else if (holiday.movesIfBeforeEaster && holiday.recurringDate) {
+    // Conditionally movable feast (e.g., Saint George):
+    // If fixed date falls on/before Easter, move to Bright Monday
+    const parts = holiday.recurringDate.split('-')
+    const month = parts[0] ?? '01'
+    const day = parts[1] ?? '01'
+    const fixedDate = new Date(props.currentYear, parseInt(month) - 1, parseInt(day))
+
+    if (fixedDate <= easterDate.value) {
+      return addDays(easterDate.value, 1) // Bright Monday
+    }
+    return fixedDate
   } else if (holiday.isRecurring && holiday.recurringDate) {
     // Recurring holiday: use recurringDate with current year
     const parts = holiday.recurringDate.split('-')
@@ -100,7 +112,8 @@ function selectTown(town: PatronSaint) {
       isRecurring: true,
       recurringDate: town.date, // MM-DD format
       isMovable: town.isMovable,
-      easterOffset: town.easterOffset
+      easterOffset: town.easterOffset,
+      movesIfBeforeEaster: town.movesIfBeforeEaster
     })
   }
 }

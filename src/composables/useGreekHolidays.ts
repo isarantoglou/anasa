@@ -139,6 +139,21 @@ function convertCustomHolidays(
       if (ch.isMovable && ch.easterOffset !== undefined) {
         // Movable feast: calculate from Easter
         date = addDays(easterDate, ch.easterOffset)
+      } else if (ch.movesIfBeforeEaster && ch.recurringDate) {
+        // Conditionally movable feast (e.g., Saint George):
+        // If fixed date falls on/before Easter, move to Bright Monday (Easter + 1)
+        const parts = ch.recurringDate.split('-')
+        const month = parts[0] ?? '01'
+        const day = parts[1] ?? '01'
+        const fixedDate = new Date(year, parseInt(month) - 1, parseInt(day))
+
+        if (fixedDate <= easterDate) {
+          // Move to Bright Monday (Easter Monday)
+          date = addDays(easterDate, 1)
+        } else {
+          // Celebrate on fixed date
+          date = fixedDate
+        }
       } else if (ch.isRecurring && ch.recurringDate) {
         // Recurring holiday: use recurringDate with current year
         const parts = ch.recurringDate.split('-')

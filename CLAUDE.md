@@ -194,7 +194,7 @@ All under `anasa-*` prefix:
 
 ## Testing
 
-Unit tests use Vitest with jsdom environment. **628 tests** with 84%+ overall coverage (95%+ for composables/data).
+Unit tests use Vitest with jsdom environment. **634 tests** with 84%+ overall coverage (95%+ for composables/data).
 
 ### Test Files
 

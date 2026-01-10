@@ -23,6 +23,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Movable feasts (Κινητές εορτές) calculate correct date from Easter
   - Supports: Ζωοδόχος Πηγή, Αγία Τριάδα, Παναγία Χρυσοπηγή, and more
   - One-time custom holidays remain year-specific
+- **Saint George Algorithm**: Correct calculation for Άγιος Γεώργιος feast day
+  - If April 23 falls on or before Easter, celebration moves to Bright Monday (Easter + 1)
+  - Applies to all Saint George patron saints (12+ towns)
+  - Shows "Κινητή εορτή" badge for these entries
 
 ### Fixed
 - **Mobile Layout for Annual Plan**: Improved responsive design

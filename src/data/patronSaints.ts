@@ -17,6 +17,7 @@ export interface PatronSaint {
   date: string // MM-DD format (fallback date for movable feasts)
   isMovable?: boolean // True if Easter-dependent
   easterOffset?: number // Days from Easter for movable feasts
+  movesIfBeforeEaster?: boolean // True for saints like St. George that move to Easter Monday if date falls before Easter
 }
 
 export const patronSaints: PatronSaint[] = [
@@ -54,7 +55,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Αμυγδαλεώνας Καβάλας',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Andros',
@@ -151,7 +154,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Ασπροβάλτα',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   // === Β ===
   {
@@ -195,7 +200,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Γουμένισσα',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Grevena',
@@ -253,7 +260,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Ελευσίνα',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Elafonissos',
@@ -267,7 +276,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Εράτυρα',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   // === Ζ ===
   {
@@ -320,7 +331,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Ιεράπετρα',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Ikaria',
@@ -489,7 +502,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Κομοτηνή',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Koroni',
@@ -503,7 +518,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Κως',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Koufalia',
@@ -588,7 +605,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Λιβαδειά',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Loutraki',
@@ -698,21 +717,27 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Νεάπολη Θεσσαλονίκης',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Nemea',
     townGreek: 'Νεμέα',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Nigrita',
     townGreek: 'Νιγρίτα',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Nisyros',
@@ -798,7 +823,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Πόρος',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Preveza',
@@ -891,7 +918,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Σιδηρόκαστρο',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Sikinos',
@@ -937,7 +966,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Σουφλί',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Sparta',
@@ -994,7 +1025,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Τρόπαια Αρκαδίας',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Tyrnavos',
@@ -1096,7 +1129,9 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Κιλκίς',
     saint: 'Saint George',
     saintGreek: 'Άγιος Γεώργιος',
-    date: '04-23'
+    date: '04-23',
+    isMovable: true,
+    movesIfBeforeEaster: true // Moves to Easter Monday if April 23 falls before Easter
   },
   {
     town: 'Amfissa',
