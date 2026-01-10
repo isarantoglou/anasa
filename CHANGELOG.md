@@ -18,7 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Styled card showing year, stats, and all planned periods
 - New `useShareableState` composable for URL-based state encoding/decoding
 - New `AnnualPlanShareCard` component for annual plan image generation
-- 24 new tests for URL sharing functionality (total: 520 tests)
+- 98 new tests including App.vue and AnnualPlanShareCard component tests (total: 618 tests)
+- Expanded test coverage configuration to include components and utils
 
 ### Changed
 - `useAnnualPlan` composable now exports `addDirectToPlan` for URL-loaded state

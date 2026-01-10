@@ -194,7 +194,7 @@ All under `anasa-*` prefix:
 
 ## Testing
 
-Unit tests use Vitest with jsdom environment. **520 tests** with 95%+ coverage.
+Unit tests use Vitest with jsdom environment. **618 tests** with 84%+ overall coverage (95%+ for composables/data).
 
 ### Test Files
 
@@ -225,6 +225,10 @@ Unit tests use Vitest with jsdom environment. **520 tests** with 95%+ coverage.
 - `src/components/modals/LeaveRequestModal.test.ts` - Request generation, clipboard
 - `src/components/modals/YearComparisonModal.test.ts` - Year selection, comparison
 - `src/components/modals/ShareCard.test.ts` - Card structure, stats
+- `src/components/modals/AnnualPlanShareCard.test.ts` - Annual plan image card, date formatting, custom badges
+
+**App:**
+- `src/App.test.ts` - Dark mode, sorting, modals, footer, localStorage, component integration
 
 **Utils:**
 - `src/utils/easterCalculation.test.ts` - Orthodox Easter algorithm, Julian-Gregorian offset
@@ -233,7 +237,7 @@ Unit tests use Vitest with jsdom environment. **520 tests** with 95%+ coverage.
 ### Configuration
 
 - `vitest.config.ts` - Test configuration with Vue plugin and jsdom
-- Coverage includes `src/composables/**` and `src/data/**`
+- Coverage includes `src/composables/**`, `src/data/**`, `src/components/**`, `src/utils/**`, and `src/App.vue`
 - Tests use `toBeCloseTo()` for date calculations to handle DST/timezone edge cases
 
 ## Versioning
