@@ -30,6 +30,7 @@ import LeaveRequestModal from './components/modals/LeaveRequestModal.vue'
 import YearComparisonModal from './components/modals/YearComparisonModal.vue'
 import ShareCard from './components/modals/ShareCard.vue'
 import AnnualPlanShareCard from './components/modals/AnnualPlanShareCard.vue'
+import HelpDrawer from './components/HelpDrawer.vue'
 import { version } from '../package.json'
 
 // Persisted state (auto-syncs with localStorage)
@@ -718,5 +719,8 @@ async function shareAnnualPlanAsImage() {
         <span class="font-medium">Ο σύνδεσμος αντιγράφηκε στο πρόχειρο!</span>
       </div>
     </Transition>
+
+    <!-- Help Drawer -->
+    <HelpDrawer />
   </div>
 </template>
