@@ -15,6 +15,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Instructions cover: settings, exploring opportunities, creating plans
   - Tips for Parent Mode and Holy Spirit toggle
   - State persisted in localStorage (`anasa-help-seen`)
+- **Accent-Insensitive Town Search**: Search now ignores Greek diacritics
+  - "Ηρακλειο" now matches "Ηράκλειο"
+  - Uses Unicode normalization (NFD) to strip accents
+
+### Fixed
+- **Mobile Layout for Annual Plan**: Improved responsive design
+  - Header stats use smaller padding and text on mobile
+  - Clear button shows icon-only on mobile, full text on desktop
+  - Action buttons arranged in 2x2 grid on mobile with shorter labels
+- **Search Input Spacing**: Added proper spacing between magnifying glass icon and placeholder text
 
 ## [1.3.0] - 2026-01-10
 
