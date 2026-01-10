@@ -297,9 +297,9 @@ describe('HelpDrawer', () => {
 
       const stepNumbers = wrapper.findAll('.help-section-number')
       expect(stepNumbers.length).toBe(3)
-      expect(stepNumbers[0].text()).toBe('1')
-      expect(stepNumbers[1].text()).toBe('2')
-      expect(stepNumbers[2].text()).toBe('3')
+      expect(stepNumbers[0]!.text()).toBe('1')
+      expect(stepNumbers[1]!.text()).toBe('2')
+      expect(stepNumbers[2]!.text()).toBe('3')
     })
 
     it('displays tips section with parent mode and Holy Spirit info', async () => {
