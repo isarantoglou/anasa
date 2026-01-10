@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Playwright E2E Testing**: Cross-browser E2E test suite
+  - 44 tests across Chromium, Firefox, and WebKit
+  - `e2e/app.spec.ts`: Core app smoke tests (13 tests)
+  - `e2e/workflows.spec.ts`: User workflow tests (31 tests)
+  - Covers: optimization workflow, sorting, custom holidays, custom periods, conflict detection, annual plan, URL sharing, dark mode persistence, accessibility, responsive design
+- **GitHub Actions E2E Job**: E2E tests now run in CI pipeline
+  - Parallel job alongside unit tests
+  - Playwright report artifacts uploaded on failure
+- **HelpDrawer Unit Tests**: 20+ tests for help drawer component
+  - FAB button, notification dot, pulse animation
+  - Drawer open/close, backdrop click, escape key
+  - localStorage persistence, accessibility attributes
 - **Help Drawer**: Floating help button with instructions for new users
   - Persistent FAB (Floating Action Button) in bottom-right corner
   - Bottom sheet drawer with step-by-step guide in Greek
@@ -28,6 +40,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Applies to all Saint George patron saints (12+ towns)
   - Shows "Κινητή εορτή" badge for these entries
 
+### Changed
+- Unit test count increased from 618 to 688 tests
+- Expanded SettingsCard tests with input validation and edge cases
+- Expanded App.vue tests with sorting behavior and parent mode integration
+
 ### Fixed
 - **Mobile Layout for Annual Plan**: Improved responsive design
   - Header stats use smaller padding and text on mobile
@@ -37,6 +54,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Movable Feast Dropdown Date**: Search dropdown now shows the calculated date for movable feasts
   - Previously showed raw date (e.g., 20/04 for Αίγιο)
   - Now calculates correct Easter-based date (e.g., 17/04 for 2026)
+
+### Dependencies
+- Added `@playwright/test` package for E2E testing
 
 ## [1.3.0] - 2026-01-10
 

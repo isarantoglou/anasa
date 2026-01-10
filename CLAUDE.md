@@ -12,9 +12,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev           # Start development server (Vite)
 npm run build         # Type-check with vue-tsc, then build for production
 npm run preview       # Preview production build locally
-npm run test          # Run tests in watch mode
-npm run test:run      # Run tests once (CI mode)
-npm run test:coverage # Run tests with coverage report
+npm run test          # Run unit tests in watch mode
+npm run test:run      # Run unit tests once (CI mode)
+npm run test:coverage # Run unit tests with coverage report
+npm run test:e2e      # Run Playwright E2E tests
+npm run test:e2e:ui   # Run E2E tests with interactive UI
+npm run test:e2e:headed  # Run E2E tests in headed browser mode
+npm run test:e2e:debug   # Run E2E tests in debug mode
 ```
 
 ## Architecture
@@ -26,7 +30,8 @@ npm run test:coverage # Run tests with coverage report
 - date-fns for date manipulation (with Greek locale `el`)
 - html2canvas for image generation
 - Vite 7 as build tool
-- Vitest + Vue Test Utils for testing
+- Vitest + Vue Test Utils for unit testing
+- Playwright for E2E testing (Chromium, Firefox, WebKit)
 
 ### Core Composables
 
@@ -194,9 +199,11 @@ All under `anasa-*` prefix:
 
 ## Testing
 
-Unit tests use Vitest with jsdom environment. **636 tests** with 84%+ overall coverage (95%+ for composables/data).
+### Unit Tests (Vitest)
 
-### Test Files
+Unit tests use Vitest with jsdom environment. **688 tests** with 84%+ overall coverage (95%+ for composables/data).
+
+### Unit Test Files
 
 **Composables:**
 - `src/composables/useAnnualPlan.test.ts` - Annual plan management, conflict detection, custom periods with labels, localStorage
@@ -212,13 +219,14 @@ Unit tests use Vitest with jsdom environment. **636 tests** with 84%+ overall co
 - `src/data/patronSaints.test.ts` - Patron saints database, search functions, accent-insensitive search, data integrity
 
 **Components:**
-- `src/components/SettingsCard.test.ts` - Year picker, toggles, inputs, stats
+- `src/components/SettingsCard.test.ts` - Year picker, toggles, inputs, stats, input validation
 - `src/components/CustomHolidaysCard.test.ts` - Town search, manual form, list
 - `src/components/PublicHolidaysCard.test.ts` - Holiday display, badges
 - `src/components/AnnualPlanSection.test.ts` - Plan items, stats, actions, custom badges and labels
 - `src/components/CustomPeriodForm.test.ts` - Date inputs, validation, preview, label input, events
 - `src/components/HolidayTable.test.ts` - Table structure, formatting
 - `src/components/OpportunityCard.test.ts` - Card rendering, rank display, parent mode, events
+- `src/components/HelpDrawer.test.ts` - FAB button, notification dot, pulse animation, drawer open/close, localStorage persistence, accessibility
 
 **Modals:**
 - `src/components/modals/ConflictWarningModal.test.ts` - Warning display, events
@@ -234,11 +242,25 @@ Unit tests use Vitest with jsdom environment. **636 tests** with 84%+ overall co
 - `src/utils/easterCalculation.test.ts` - Orthodox Easter algorithm, Julian-Gregorian offset
 - `src/utils/labels.test.ts` - Greek efficiency label generation
 
-### Configuration
+### Unit Test Configuration
 
 - `vitest.config.ts` - Test configuration with Vue plugin and jsdom
 - Coverage includes `src/composables/**`, `src/data/**`, `src/components/**`, `src/utils/**`, and `src/App.vue`
 - Tests use `toBeCloseTo()` for date calculations to handle DST/timezone edge cases
+
+### E2E Tests (Playwright)
+
+E2E tests use Playwright with cross-browser support. **44 tests** across Chromium, Firefox, and WebKit.
+
+**E2E Test Files:**
+- `e2e/app.spec.ts` - Core app functionality: title, heading, year selector, dark mode, inputs, opportunity cards, settings toggles, holidays display
+- `e2e/workflows.spec.ts` - User workflows: optimization workflow, sorting behavior, custom holidays, custom periods, conflict detection, annual plan management, URL sharing, dark mode persistence, accessibility, responsive design
+
+**E2E Configuration:**
+- `playwright.config.ts` - Cross-browser configuration (Chromium, Firefox, WebKit)
+- Tests run against dev server on `http://localhost:5173`
+- CI runs tests headless with 2 retries
+- Artifacts: HTML report, screenshots on failure, traces on first retry
 
 ## Versioning
 

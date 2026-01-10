@@ -49,6 +49,8 @@ A Vue 3 application by [Oxygen](https://www.oxygen.gr) that helps users maximize
 - **Vite 7**
 - **date-fns** with Greek locale
 - **html2canvas** for image generation
+- **Vitest** for unit testing
+- **Playwright** for E2E testing (Chromium, Firefox, WebKit)
 
 ## Getting Started
 
@@ -74,14 +76,21 @@ npm run dev
 ### Available Scripts
 
 ```bash
-npm run dev      # Start development server
-npm run build    # Type-check and build for production
-npm run preview  # Preview production build locally
+npm run dev           # Start development server
+npm run build         # Type-check and build for production
+npm run preview       # Preview production build locally
+npm run test          # Run unit tests in watch mode
+npm run test:run      # Run unit tests once
+npm run test:e2e      # Run Playwright E2E tests
+npm run test:e2e:ui   # Run E2E tests with interactive UI
 ```
 
 ## Project Structure
 
 ```
+e2e/                         # Playwright E2E tests
+├── app.spec.ts              # Core app smoke tests
+└── workflows.spec.ts        # User workflow tests
 src/
 ├── components/              # Vue components
 │   ├── modals/              # Modal dialogs

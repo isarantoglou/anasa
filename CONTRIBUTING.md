@@ -54,11 +54,42 @@ Before contributing, please familiarize yourself with the project structure:
   - `schoolHolidays.ts` - School calendar data
 - **Types** (`src/types.ts`) - TypeScript interfaces
 
+## Testing
+
+Before submitting a PR, ensure all tests pass.
+
+### Unit Tests
+
+```bash
+npm run test:run     # Run unit tests once
+npm run test         # Run in watch mode during development
+```
+
+### E2E Tests
+
+```bash
+npm run test:e2e     # Run Playwright E2E tests (requires browsers installed)
+npm run test:e2e:ui  # Run with interactive UI for debugging
+```
+
+If you haven't installed Playwright browsers yet:
+```bash
+npx playwright install
+```
+
+### Writing Tests
+
+- Add unit tests for new composables and utilities
+- Add component tests for new Vue components
+- Consider adding E2E tests for new user workflows
+
 ## Submitting Changes
 
-1. Ensure your code passes type-checking:
+1. Ensure your code passes type-checking and all tests:
    ```bash
    npm run build
+   npm run test:run
+   npm run test:e2e
    ```
 
 2. Commit your changes following [Conventional Commits](https://www.conventionalcommits.org/):
