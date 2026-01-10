@@ -108,7 +108,7 @@ npm run test:coverage # Run tests with coverage report
 
 ### Data Layer
 
-**`patronSaints.ts`** - Database of 130+ Greek towns and their patron saints with feast dates. Users can search by town to add local holidays.
+**`patronSaints.ts`** - Database of 130+ Greek towns and their patron saints with feast dates. Users can search by town to add local holidays. Some patron saints have movable feasts (Easter-dependent) with `easterOffset` for accurate date calculation.
 
 **`schoolHolidays.ts`** - Greek school calendar for Parent Mode:
 - `getSchoolBreaks(year)` - Returns Christmas (Dec 24 - Jan 7) and Easter breaks
@@ -136,7 +136,7 @@ npm run test:coverage # Run tests with coverage report
 - `DayInfo` - Calendar day with cost (0=free, 1=workday)
 - `OptimizationResult` - Leave period with efficiency metrics
 - `SavedOpportunity` - A saved period in the annual plan (includes `isCustom` flag and optional `label` for custom periods)
-- `CustomHoliday` - User-added custom holiday
+- `CustomHoliday` - User-added custom holiday (supports recurring patron saints and movable feasts)
 
 ## App Features
 
@@ -194,13 +194,13 @@ All under `anasa-*` prefix:
 
 ## Testing
 
-Unit tests use Vitest with jsdom environment. **620 tests** with 84%+ overall coverage (95%+ for composables/data).
+Unit tests use Vitest with jsdom environment. **628 tests** with 84%+ overall coverage (95%+ for composables/data).
 
 ### Test Files
 
 **Composables:**
 - `src/composables/useAnnualPlan.test.ts` - Annual plan management, conflict detection, custom periods with labels, localStorage
-- `src/composables/useGreekHolidays.test.ts` - Orthodox Easter calculation (2020-2030), fixed/movable holidays
+- `src/composables/useGreekHolidays.test.ts` - Orthodox Easter calculation (2020-2030), fixed/movable holidays, recurring patron saints
 - `src/composables/useLeaveOptimizer.test.ts` - Calendar generation, optimization algorithm, statistics
 - `src/composables/useYearComparison.test.ts` - Easter/holiday calculations, weekend detection
 - `src/composables/usePersistedState.test.ts` - localStorage persistence for all data types

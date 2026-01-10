@@ -1,14 +1,48 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { format } from 'date-fns'
+import { ref, watch, computed } from 'vue'
+import { format, addDays } from 'date-fns'
 import { el } from 'date-fns/locale'
 import { searchTown, type PatronSaint } from '../data/patronSaints'
+import { calculateOrthodoxEaster } from '../composables/useGreekHolidays'
 import type { CustomHoliday } from '../types'
 
 const props = defineProps<{
   customHolidays: CustomHoliday[]
   currentYear: number
 }>()
+
+// Calculate Easter for current year (needed for movable feasts)
+const easterDate = computed(() => calculateOrthodoxEaster(props.currentYear))
+
+/**
+ * Get the display date for a holiday, recalculated for the current year
+ */
+function getDisplayDate(holiday: CustomHoliday): Date {
+  if (holiday.isMovable && holiday.easterOffset !== undefined) {
+    // Movable feast: calculate from Easter
+    return addDays(easterDate.value, holiday.easterOffset)
+  } else if (holiday.isRecurring && holiday.recurringDate) {
+    // Recurring holiday: use recurringDate with current year
+    const parts = holiday.recurringDate.split('-')
+    const month = parts[0] ?? '01'
+    const day = parts[1] ?? '01'
+    return new Date(props.currentYear, parseInt(month) - 1, parseInt(day))
+  }
+  // One-time holiday: use stored date
+  return new Date(holiday.date)
+}
+
+/**
+ * Format the date for display - without year for recurring holidays
+ */
+function formatDisplayDate(holiday: CustomHoliday): string {
+  const date = getDisplayDate(holiday)
+  if (holiday.isRecurring) {
+    // Recurring holidays don't show year
+    return format(date, 'd MMM', { locale: el })
+  }
+  return format(date, 'd MMM yyyy', { locale: el })
+}
 
 const emit = defineEmits<{
   'add-holiday': [holiday: CustomHoliday]
@@ -48,10 +82,6 @@ function selectTown(town: PatronSaint) {
   townSearch.value = town.townGreek
   showTownDropdown.value = false
 
-  // Add patron saint as custom holiday
-  const [month, day] = town.date.split('-')
-  const holidayDate = `${props.currentYear}-${month}-${day}`
-
   // Check if already added (check both Greek and English names for backwards compatibility)
   const exists = props.customHolidays.some(
     h => h.name === `${town.saintGreek} (${town.townGreek})` ||
@@ -59,10 +89,18 @@ function selectTown(town: PatronSaint) {
   )
 
   if (!exists) {
+    // Add patron saint as recurring holiday
+    const [month, day] = town.date.split('-')
+    const holidayDate = `${props.currentYear}-${month}-${day}`
+
     emit('add-holiday', {
       id: crypto.randomUUID(),
       name: `${town.saintGreek} (${town.townGreek})`,
-      date: holidayDate
+      date: holidayDate, // Display date for current year (will be recalculated)
+      isRecurring: true,
+      recurringDate: town.date, // MM-DD format
+      isMovable: town.isMovable,
+      easterOffset: town.easterOffset
     })
   }
 }
@@ -201,7 +239,10 @@ function addCustomHoliday() {
           <div class="flex-1 min-w-0">
             <span class="font-semibold text-(--marble-700) text-sm truncate block">{{ holiday.name }}</span>
             <span class="text-xs text-(--marble-500)">
-              {{ format(new Date(holiday.date), 'd MMM yyyy', { locale: el }) }}
+              {{ formatDisplayDate(holiday) }}
+            </span>
+            <span v-if="holiday.isMovable" class="text-[10px] text-(--terracotta-500) font-medium">
+              Κινητή εορτή
             </span>
           </div>
           <button

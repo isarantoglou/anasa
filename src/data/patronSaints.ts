@@ -14,8 +14,9 @@ export interface PatronSaint {
   townGreek: string
   saint: string
   saintGreek: string
-  date: string // MM-DD format
+  date: string // MM-DD format (fallback date for movable feasts)
   isMovable?: boolean // True if Easter-dependent
+  easterOffset?: number // Days from Easter for movable feasts
 }
 
 export const patronSaints: PatronSaint[] = [
@@ -61,7 +62,8 @@ export const patronSaints: PatronSaint[] = [
     saint: 'Panagia Theoskepasti',
     saintGreek: 'Παναγία Θεοσκέπαστη',
     date: '03-07',
-    isMovable: true
+    isMovable: true,
+    easterOffset: -41 // Monday of Apokreos (Carnival)
   },
   {
     town: 'Agioi Anargyroi Attikis',
@@ -83,7 +85,8 @@ export const patronSaints: PatronSaint[] = [
     saint: 'Zoodochos Pigi (Life-giving Spring)',
     saintGreek: 'Ζωοδόχος Πηγή',
     date: '04-20',
-    isMovable: true
+    isMovable: true,
+    easterOffset: 5 // Bright Friday (Friday after Easter)
   },
   {
     town: 'Aigina',
@@ -98,7 +101,8 @@ export const patronSaints: PatronSaint[] = [
     saint: 'Panagia Trypiti',
     saintGreek: 'Παναγία Τρυπητή',
     date: '04-20',
-    isMovable: true
+    isMovable: true,
+    easterOffset: 5 // Bright Friday (Friday after Easter)
   },
   {
     town: 'Aitoliko',
@@ -614,7 +618,8 @@ export const patronSaints: PatronSaint[] = [
     saint: 'Holy Trinity',
     saintGreek: 'Αγία Τριάδα',
     date: '06-16',
-    isMovable: true
+    isMovable: true,
+    easterOffset: 49 // Pentecost Sunday
   },
   {
     town: 'Mykonos',
@@ -657,8 +662,8 @@ export const patronSaints: PatronSaint[] = [
     townGreek: 'Νέα Φιλαδέλφεια Αττικής',
     saint: 'Panagia Vourliotissa',
     saintGreek: 'Παναγία η Βουρλιώτισσα',
-    date: '10-07',
-    isMovable: true
+    date: '10-07'
+    // Note: October 7 is a fixed date, not Easter-dependent
   },
   {
     town: 'Nea Ionia Attikis',
@@ -894,7 +899,8 @@ export const patronSaints: PatronSaint[] = [
     saint: 'Panagia Pantanassa',
     saintGreek: 'Παναγία Παντάνασσα',
     date: '03-14',
-    isMovable: true
+    isMovable: true,
+    easterOffset: -42 // Sunday of Orthodoxy (1st Sunday of Lent)
   },
   {
     town: 'Sifnos',
@@ -902,7 +908,8 @@ export const patronSaints: PatronSaint[] = [
     saint: 'Panagia Chrysopigi',
     saintGreek: 'Παναγία Χρυσοπηγή',
     date: '05-30',
-    isMovable: true
+    isMovable: true,
+    easterOffset: 39 // Ascension Thursday
   },
   {
     town: 'Sitia',

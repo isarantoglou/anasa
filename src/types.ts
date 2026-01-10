@@ -41,7 +41,11 @@ export interface OptimizationResult {
 export interface CustomHoliday {
   id: string
   name: string
-  date: string // ISO date string for form binding
+  date: string // ISO date string - for one-time holidays, or calculated date for display
+  isRecurring?: boolean // True for patron saints that recur every year
+  recurringDate?: string // MM-DD format for recurring holidays (e.g., "10-26")
+  isMovable?: boolean // True if Easter-dependent (e.g., Ζωοδόχος Πηγή)
+  easterOffset?: number // Days from Easter for movable feasts (e.g., 5 for Ζωοδόχος Πηγή)
 }
 
 /** Configuration for the optimizer */

@@ -18,6 +18,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Accent-Insensitive Town Search**: Search now ignores Greek diacritics
   - "Ηρακλειο" now matches "Ηράκλειο"
   - Uses Unicode normalization (NFD) to strip accents
+- **Recurring Patron Saints**: Patron saint holidays now persist across years
+  - Added to any year will appear in all years automatically
+  - Movable feasts (Κινητές εορτές) calculate correct date from Easter
+  - Supports: Ζωοδόχος Πηγή, Αγία Τριάδα, Παναγία Χρυσοπηγή, and more
+  - One-time custom holidays remain year-specific
 
 ### Fixed
 - **Mobile Layout for Annual Plan**: Improved responsive design

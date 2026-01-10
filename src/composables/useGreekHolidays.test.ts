@@ -181,6 +181,123 @@ describe('useGreekHolidays', () => {
       expect(converted.value).toHaveLength(1)
       expect(converted.value[0]!.name).toBe('Valid')
     })
+
+    it('should calculate date for recurring holidays based on current year', () => {
+      const year = ref(2026)
+      const customHolidays = ref<CustomHoliday[]>([
+        {
+          id: '1',
+          name: 'Άγιος Διονύσιος (Αθήνα)',
+          date: '2025-10-03', // Old date from previous year
+          isRecurring: true,
+          recurringDate: '10-03' // October 3rd
+        }
+      ])
+      const { customHolidays: converted } = useGreekHolidays(year, customHolidays)
+
+      expect(converted.value).toHaveLength(1)
+      // Should use 2026 year, not the stored 2025 date
+      expect(converted.value[0]!.date.getFullYear()).toBe(2026)
+      expect(converted.value[0]!.date.getMonth()).toBe(9) // October (0-indexed)
+      expect(converted.value[0]!.date.getDate()).toBe(3)
+    })
+
+    it('should recalculate recurring holiday date when year changes', () => {
+      const year = ref(2026)
+      const customHolidays = ref<CustomHoliday[]>([
+        {
+          id: '1',
+          name: 'Πατρόν Σεϊντ',
+          date: '2026-08-15',
+          isRecurring: true,
+          recurringDate: '08-15'
+        }
+      ])
+      const { customHolidays: converted } = useGreekHolidays(year, customHolidays)
+
+      expect(converted.value[0]!.date.getFullYear()).toBe(2026)
+
+      // Change year
+      year.value = 2027
+      expect(converted.value[0]!.date.getFullYear()).toBe(2027)
+      expect(converted.value[0]!.date.getMonth()).toBe(7) // August
+      expect(converted.value[0]!.date.getDate()).toBe(15)
+    })
+
+    it('should calculate movable feast date from Easter offset', () => {
+      const year = ref(2026)
+      const customHolidays = ref<CustomHoliday[]>([
+        {
+          id: '1',
+          name: 'Ζωοδόχος Πηγή (Αγία Παρασκευή)',
+          date: '2026-04-20', // Fallback date
+          isRecurring: true,
+          recurringDate: '04-20',
+          isMovable: true,
+          easterOffset: 5 // Bright Friday (Easter + 5)
+        }
+      ])
+      const { customHolidays: converted, orthodoxEaster } = useGreekHolidays(year, customHolidays)
+
+      // Easter 2026 is April 12
+      expect(orthodoxEaster.value.getDate()).toBe(12)
+      expect(orthodoxEaster.value.getMonth()).toBe(3) // April
+
+      // Bright Friday should be Easter + 5 = April 17
+      expect(converted.value[0]!.date.getDate()).toBe(17)
+      expect(converted.value[0]!.date.getMonth()).toBe(3) // April
+    })
+
+    it('should recalculate movable feast when year changes', () => {
+      const year = ref(2026)
+      const customHolidays = ref<CustomHoliday[]>([
+        {
+          id: '1',
+          name: 'Αγία Τριάδα (Μήλος)',
+          date: '2026-06-16',
+          isRecurring: true,
+          recurringDate: '06-16',
+          isMovable: true,
+          easterOffset: 49 // Pentecost Sunday
+        }
+      ])
+      const { customHolidays: converted, orthodoxEaster } = useGreekHolidays(year, customHolidays)
+
+      // Easter 2026 is April 12, Pentecost is May 31
+      expect(orthodoxEaster.value.getMonth()).toBe(3) // April
+      expect(orthodoxEaster.value.getDate()).toBe(12)
+      const pentecost2026 = converted.value[0]!.date
+      expect(pentecost2026.getMonth()).toBe(4) // May
+      expect(pentecost2026.getDate()).toBe(31)
+
+      // Change to 2027 - Easter is May 2
+      year.value = 2027
+      const pentecost2027 = converted.value[0]!.date
+      // May 2 + 49 = June 20
+      expect(pentecost2027.getMonth()).toBe(5) // June
+      expect(pentecost2027.getDate()).toBe(20)
+    })
+
+    it('should handle one-time holidays (not recurring)', () => {
+      const year = ref(2026)
+      const customHolidays = ref<CustomHoliday[]>([
+        {
+          id: '1',
+          name: 'Special Event 2026',
+          date: '2026-07-20'
+          // No isRecurring, so it's a one-time holiday
+        }
+      ])
+      const { customHolidays: converted } = useGreekHolidays(year, customHolidays)
+
+      expect(converted.value[0]!.date.getFullYear()).toBe(2026)
+      expect(converted.value[0]!.date.getMonth()).toBe(6) // July
+      expect(converted.value[0]!.date.getDate()).toBe(20)
+
+      // When year changes, one-time holiday keeps original date
+      year.value = 2027
+      expect(converted.value[0]!.date.getFullYear()).toBe(2026) // Still 2026
+    })
   })
 
   describe('allHolidays', () => {

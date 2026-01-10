@@ -123,18 +123,41 @@ function getMovableHolidays(easterDate: Date): Holiday[] {
 }
 
 /**
- * Convert custom holidays to Holiday objects
+ * Convert custom holidays to Holiday objects for the given year
+ * Handles recurring holidays (patron saints) and movable feasts (Easter-dependent)
  */
-function convertCustomHolidays(customHolidays: CustomHoliday[]): Holiday[] {
+function convertCustomHolidays(
+  customHolidays: CustomHoliday[],
+  year: number,
+  easterDate: Date
+): Holiday[] {
   return customHolidays
-    .filter(ch => ch.date && ch.name)
-    .map(ch => ({
-      date: new Date(ch.date),
-      name: ch.name,
-      nameGreek: ch.name,
-      isMovable: false,
-      isCustom: true
-    }))
+    .filter(ch => ch.name && (ch.date || ch.recurringDate))
+    .map(ch => {
+      let date: Date
+
+      if (ch.isMovable && ch.easterOffset !== undefined) {
+        // Movable feast: calculate from Easter
+        date = addDays(easterDate, ch.easterOffset)
+      } else if (ch.isRecurring && ch.recurringDate) {
+        // Recurring holiday: use recurringDate with current year
+        const parts = ch.recurringDate.split('-')
+        const month = parts[0] ?? '01'
+        const day = parts[1] ?? '01'
+        date = new Date(year, parseInt(month) - 1, parseInt(day))
+      } else {
+        // One-time holiday: use stored date
+        date = new Date(ch.date)
+      }
+
+      return {
+        date,
+        name: ch.name,
+        nameGreek: ch.name,
+        isMovable: ch.isMovable ?? false,
+        isCustom: true
+      }
+    })
 }
 
 /**
@@ -174,9 +197,9 @@ export function useGreekHolidays(
     return holidays
   })
 
-  // Convert custom holidays
+  // Convert custom holidays (recalculates dates for recurring/movable holidays)
   const convertedCustomHolidays = computed(() =>
-    convertCustomHolidays(customHolidays.value)
+    convertCustomHolidays(customHolidays.value, year.value, orthodoxEaster.value)
   )
 
   // Combine all holidays

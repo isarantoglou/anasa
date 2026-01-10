@@ -72,6 +72,42 @@ describe('patronSaints data', () => {
     const andros = patronSaints.find(ps => ps.town === 'Andros')
     expect(andros?.isMovable).toBe(true)
   })
+
+  it('should have easterOffset for movable feasts', () => {
+    const movableEntries = patronSaints.filter(ps => ps.isMovable === true)
+
+    // All movable feasts should have easterOffset defined
+    movableEntries.forEach(ps => {
+      expect(ps.easterOffset).toBeDefined()
+      expect(typeof ps.easterOffset).toBe('number')
+    })
+  })
+
+  it('should have Aigio with correct movable feast data', () => {
+    const aigio = patronSaints.find(ps => ps.town === 'Aigio')
+
+    expect(aigio).toBeDefined()
+    expect(aigio?.townGreek).toBe('Αίγιο')
+    expect(aigio?.saintGreek).toBe('Παναγία Τρυπητή')
+    expect(aigio?.isMovable).toBe(true)
+    expect(aigio?.easterOffset).toBe(5) // Bright Friday (Easter + 5)
+  })
+
+  it('should have correct Easter offsets for known movable feasts', () => {
+    // Ζωοδόχος Πηγή (Life-giving Spring) - Bright Friday = Easter + 5
+    const agiaParaskevi = patronSaints.find(
+      ps => ps.town === 'Agia Paraskevi Thessalonikis'
+    )
+    expect(agiaParaskevi?.easterOffset).toBe(5)
+
+    // Αγία Τριάδα (Holy Trinity) - Pentecost = Easter + 49
+    const milos = patronSaints.find(ps => ps.town === 'Milos')
+    expect(milos?.easterOffset).toBe(49)
+
+    // Παναγία Χρυσοπηγή - Ascension = Easter + 39
+    const sifnos = patronSaints.find(ps => ps.town === 'Sifnos')
+    expect(sifnos?.easterOffset).toBe(39)
+  })
 })
 
 describe('searchTown', () => {
