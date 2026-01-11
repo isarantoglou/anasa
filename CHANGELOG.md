@@ -7,19 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-01-11
+
 ### Added
-- **Playwright E2E Testing**: Cross-browser E2E test suite
-  - 44 tests across Chromium, Firefox, and WebKit
-  - `e2e/app.spec.ts`: Core app smoke tests (13 tests)
-  - `e2e/workflows.spec.ts`: User workflow tests (31 tests)
-  - Covers: optimization workflow, sorting, custom holidays, custom periods, conflict detection, annual plan, URL sharing, dark mode persistence, accessibility, responsive design
-- **GitHub Actions E2E Job**: E2E tests now run in CI pipeline
-  - Parallel job alongside unit tests
-  - Playwright report artifacts uploaded on failure
-- **HelpDrawer Unit Tests**: 20+ tests for help drawer component
-  - FAB button, notification dot, pulse animation
-  - Drawer open/close, backdrop click, escape key
-  - localStorage persistence, accessibility attributes
 - **Help Drawer**: Floating help button with instructions for new users
   - Persistent FAB (Floating Action Button) in bottom-right corner
   - Bottom sheet drawer with step-by-step guide in Greek
@@ -29,7 +19,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - State persisted in localStorage (`anasa-help-seen`)
 - **Accent-Insensitive Town Search**: Search now ignores Greek diacritics
   - "Ηρακλειο" now matches "Ηράκλειο"
-  - Uses Unicode normalization (NFD) to strip accents
 - **Recurring Patron Saints**: Patron saint holidays now persist across years
   - Added to any year will appear in all years automatically
   - Movable feasts (Κινητές εορτές) calculate correct date from Easter
@@ -39,11 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - If April 23 falls on or before Easter, celebration moves to Bright Monday (Easter + 1)
   - Applies to all Saint George patron saints (12+ towns)
   - Shows "Κινητή εορτή" badge for these entries
-
-### Changed
-- Unit test count increased from 618 to 688 tests
-- Expanded SettingsCard tests with input validation and edge cases
-- Expanded App.vue tests with sorting behavior and parent mode integration
 
 ### Fixed
 - **Mobile Layout for Annual Plan**: Improved responsive design
@@ -55,8 +39,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Previously showed raw date (e.g., 20/04 for Αίγιο)
   - Now calculates correct Easter-based date (e.g., 17/04 for 2026)
 
-### Dependencies
-- Added `@playwright/test` package for E2E testing
+### Technical
+- **Playwright E2E Testing**: Cross-browser E2E test suite (44 tests)
+  - Covers Chromium, Firefox, and WebKit
+  - Tests: optimization workflow, sorting, custom holidays, custom periods, conflict detection, annual plan, URL sharing, dark mode, accessibility, responsive design
+- **GitHub Actions E2E Job**: E2E tests now run in CI pipeline
+- **Expanded Test Coverage**: Unit tests increased from 618 to 688
+  - Added HelpDrawer component tests
+  - Expanded SettingsCard and App.vue tests
+- Added `@playwright/test` package
 
 ## [1.3.0] - 2026-01-10
 
@@ -69,18 +60,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Annual Plan Image Export**: Download annual plan as PNG image
   - "Λήψη ως Εικόνα" button in Annual Plan section
   - Styled card showing year, stats, and all planned periods
-- New `useShareableState` composable for URL-based state encoding/decoding
-- New `AnnualPlanShareCard` component for annual plan image generation
-- 98 new tests including App.vue and AnnualPlanShareCard component tests (total: 618 tests)
-- Expanded test coverage configuration to include components and utils
 
 ### Changed
-- `useAnnualPlan` composable now exports `addDirectToPlan` for URL-loaded state
-- Custom holidays list max height increased from 128px to 256px
 - **Year Selector Animation**: Redesigned year picker with sliding indicator animation
   - Smooth sliding effect when changing years (indicator slides from previous position)
   - Carousel-style design with gradient fades at edges
   - Responsive sizing for mobile devices
+- Custom holidays list max height increased from 128px to 256px
 
 ### Fixed
 - **Greek Language**: Town search and patron saints now display in Greek
@@ -88,7 +74,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Patron saint names in Greek (e.g., "Άγιος Γεώργιος" instead of "Saint George")
   - Added holidays use Greek format: "Άγιος Γεώργιος (Ιεράπετρα)"
 
-### Dependencies
+### Technical
+- New `useShareableState` composable for URL-based state encoding/decoding
+- New `AnnualPlanShareCard` component for annual plan image generation
+- 98 new tests including App.vue and AnnualPlanShareCard (total: 618 tests)
+- Expanded test coverage configuration to include components and utils
 - Added `lz-string` package for URL compression
 
 ## [1.2.0] - 2026-01-09
@@ -97,16 +87,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Copy Success Alert**: Toast notification "Αντιγράφηκε!" when copying leave request text
 - **Version Display**: App version shown in footer
 - **Social Links**: Footer now includes links to Facebook, Instagram, LinkedIn, YouTube, and GitHub
-- 54 new tests for utils and OpportunityCard (total: 496 tests)
 
 ### Changed
 - **Annual Plan Always Visible**: Section now always shows, allowing users to add custom periods before selecting optimizer suggestions
 
-### Refactored
+### Technical
 - **Shared Utilities**: Extracted duplicate code to `src/utils/` directory
   - `easterCalculation.ts`: Orthodox Easter calculation (was duplicated in useGreekHolidays and schoolHolidays)
   - `labels.ts`: Greek efficiency label generation (was duplicated in useLeaveOptimizer and useCustomPeriod)
 - **Consistent Weekend Detection**: All files now use `date-fns` `isWeekend()` instead of manual checks
+- 54 new tests for utils and OpportunityCard (total: 496 tests)
 
 ## [1.1.0] - 2026-01-09
 
@@ -114,14 +104,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Custom Leave Periods**: Users can now add custom leave periods to their annual plan beyond optimizer suggestions
 - **Period Labels**: Optional description labels for custom periods (e.g., "Ταξίδι στην Αμερική")
 - **Custom Period Badge**: Custom periods display "Προσαρμοσμένο" badge to distinguish from optimizer suggestions
+
+### Technical
 - New `CustomPeriodForm` component with date picker and label input
 - New `useCustomPeriod` composable for custom period creation and validation
-- 61 new tests for custom period functionality (total: 442 tests)
-
-### Changed
 - `SavedOpportunity` type now includes `isCustom` and `label` optional fields
 - `useAnnualPlan` composable updated to handle custom periods with labels
 - `AnnualPlanSection` component displays labels and custom badges
+- 61 new tests for custom period functionality (total: 442 tests)
 - Updated documentation in CLAUDE.md and README.md
 
 ## [1.0.0] - 2026-01-07
@@ -142,7 +132,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Dark Mode**: Full dark mode support with localStorage persistence
 - **Sort Options**: Sort opportunities by efficiency or chronologically
 - **Responsive Design**: "Modern Aegean" design system with Tailwind CSS 4
-- Complete test suite with 381 tests and 95%+ coverage
 
 ### Technical
 - Vue 3 with Composition API and TypeScript
@@ -150,8 +139,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tailwind CSS 4 with custom design tokens
 - date-fns with Greek locale support
 - Vitest + Vue Test Utils for testing
+- Complete test suite with 381 tests and 95%+ coverage
 
-[Unreleased]: https://github.com/isarantoglou/anasa/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/isarantoglou/anasa/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/isarantoglou/anasa/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/isarantoglou/anasa/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/isarantoglou/anasa/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/isarantoglou/anasa/compare/v1.0.0...v1.1.0
