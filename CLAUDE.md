@@ -110,6 +110,7 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 - `modals/YearComparisonModal.vue` - Compare holidays across 3 years
 - `modals/ShareCard.vue` - Hidden card for opportunity image generation (uses inline hex colors for html2canvas)
 - `modals/AnnualPlanShareCard.vue` - Hidden card for annual plan image generation
+- `modals/ShareOptionsModal.vue` - Modal for sharing plan via social media (Viber, WhatsApp, Telegram, Email) or copying link
 
 ### Data Layer
 

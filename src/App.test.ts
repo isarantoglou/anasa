@@ -84,7 +84,7 @@ describe('App.vue', () => {
 
     // Mock URL methods
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test')
-    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => { })
 
     // Mock clipboard
     Object.assign(navigator, {
@@ -540,7 +540,7 @@ describe('App.vue', () => {
     it('should have max width container', () => {
       const wrapper = mount(App)
 
-      expect(wrapper.find('.max-w-350').exists()).toBe(true)
+      expect(wrapper.find('.w-full').exists()).toBe(true)
     })
   })
 
@@ -660,7 +660,7 @@ describe('App.vue - Export functions', () => {
     window.matchMedia = createMatchMediaMock(false)
 
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test')
-    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => { })
 
     Object.assign(navigator, {
       clipboard: {

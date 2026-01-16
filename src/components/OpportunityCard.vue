@@ -4,6 +4,7 @@ import { format } from 'date-fns'
 import { el } from 'date-fns/locale'
 import type { OptimizationResult, DayInfo } from '../types'
 import { calculateSchoolOverlap } from '../data/schoolHolidays'
+import Tooltip from './ui/Tooltip.vue'
 
 const props = defineProps<{
   opportunity: OptimizationResult
@@ -74,7 +75,7 @@ const schoolOverlapInfo = computed(() => {
   <div class="card-elevated overflow-hidden group flex flex-col">
     <!-- Card Header with Rank -->
     <div
-      class="px-6 py-5 text-white"
+      class="px-4 sm:px-6 py-4 sm:py-5 text-white"
       :class="sortByDate ? 'rank-default' : getRankClass(index)"
     >
       <div class="flex items-center justify-between">
@@ -82,7 +83,7 @@ const schoolOverlapInfo = computed(() => {
           <span class="text-white/70 text-xs font-semibold uppercase tracking-wider">
             {{ sortByDate ? format(opportunity.range.startDate, 'MMMM', { locale: el }) : getRankLabel(index) }}
           </span>
-          <p class="text-xl font-semibold mt-1">
+          <p class="text-lg sm:text-xl font-semibold mt-1">
             {{ formatDateRange(opportunity.range) }}
           </p>
         </div>
@@ -101,23 +102,23 @@ const schoolOverlapInfo = computed(() => {
     </div>
 
     <!-- Card Body -->
-    <div class="p-6 flex-1 flex flex-col">
+    <div class="p-4 sm:p-6 flex-1 flex flex-col">
       <!-- Key Stats -->
-      <div class="grid grid-cols-3 gap-4 mb-6">
+      <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
         <div class="text-center p-3 rounded-xl bg-(--warning-100)">
-          <div class="stat-number text-2xl font-bold text-(--warning-700)">
+          <div class="stat-number text-xl sm:text-2xl font-bold text-(--warning-700)">
             {{ opportunity.leaveDaysRequired }}
           </div>
           <div class="text-[10px] font-semibold text-(--warning-700) uppercase tracking-wider mt-1">Άδεια</div>
         </div>
         <div class="text-center p-3 rounded-xl bg-(--success-100)">
-          <div class="stat-number text-2xl font-bold text-(--success-700)">
+          <div class="stat-number text-xl sm:text-2xl font-bold text-(--success-700)">
             {{ opportunity.totalDays }}
           </div>
           <div class="text-[10px] font-semibold text-(--success-700) uppercase tracking-wider mt-1">Σύνολο</div>
         </div>
         <div class="text-center p-3 rounded-xl bg-(--aegean-100)">
-          <div class="stat-number text-2xl font-bold text-(--aegean-700)">
+          <div class="stat-number text-xl sm:text-2xl font-bold text-(--aegean-700)">
             {{ opportunity.freeDays }}
           </div>
           <div class="text-[10px] font-semibold text-(--aegean-700) uppercase tracking-wider mt-1">Δωρεάν</div>
@@ -126,7 +127,7 @@ const schoolOverlapInfo = computed(() => {
 
       <!-- Efficiency Label -->
       <div class="text-center py-3 px-4 rounded-xl bg-(--marble-100) border border-(--marble-200)">
-        <span class="text-lg font-semibold text-(--aegean-800)">
+        <span class="text-base sm:text-lg font-semibold text-(--aegean-800)">
           {{ opportunity.efficiencyLabel }}
         </span>
       </div>
@@ -153,18 +154,23 @@ const schoolOverlapInfo = computed(() => {
       </div>
 
       <!-- Day Timeline -->
-      <div class="mt-6 pt-6 border-t border-(--marble-200)">
+      <div class="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-(--marble-200)">
         <h4 class="text-xs font-semibold text-(--marble-500) uppercase tracking-wider mb-4">Ανάλυση Ημερών</h4>
         <div class="flex flex-wrap gap-1.5">
-          <div
+          <Tooltip
             v-for="(day, dayIndex) in opportunity.days"
             :key="dayIndex"
-            :title="day.holidayName || format(day.date, 'EEEE, d MMMM', { locale: el })"
-            class="day-indicator cursor-default"
-            :class="getDayClass(day)"
+            :content="day.holidayName 
+              ? `${format(day.date, 'EEEE, d MMMM', { locale: el })} • ${day.holidayName}`
+              : format(day.date, 'EEEE, d MMMM', { locale: el })"
           >
-            {{ format(day.date, 'd') }}
-          </div>
+            <div
+              class="day-indicator cursor-default"
+              :class="getDayClass(day)"
+            >
+              {{ format(day.date, 'd') }}
+            </div>
+          </Tooltip>
         </div>
 
         <!-- Legend -->
@@ -188,7 +194,7 @@ const schoolOverlapInfo = computed(() => {
       <div class="flex-1 min-h-6"></div>
 
       <!-- Action Buttons -->
-      <div class="mt-auto pt-6 border-t border-(--marble-200) flex items-stretch gap-3">
+      <div class="mt-auto pt-4 sm:pt-6 border-t border-(--marble-200) flex items-stretch gap-2 sm:gap-3">
         <button
           v-if="!isInPlan"
           @click="emit('addToPlan', opportunity)"

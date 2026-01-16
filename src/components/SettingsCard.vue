@@ -87,7 +87,7 @@ const searchExceedsRemaining = computed(() => {
 </script>
 
 <template>
-  <div class="card-elevated p-6">
+  <div class="card-elevated p-4 sm:p-6">
     <div class="flex items-center gap-3 mb-6">
       <div class="w-10 h-10 rounded-xl bg-(--aegean-600) flex items-center justify-center">
         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,7 +107,7 @@ const searchExceedsRemaining = computed(() => {
           </label>
           <button
             @click="emit('toggle-year-comparison')"
-            class="text-xs font-semibold text-(--aegean-600) hover:text-(--aegean-700) flex items-center gap-1"
+            class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-(--aegean-200) bg-(--aegean-50) text-xs font-semibold text-(--aegean-700) hover:bg-(--aegean-100) hover:border-(--aegean-300) transition-all shadow-sm"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -207,11 +207,11 @@ const searchExceedsRemaining = computed(() => {
           </label>
           <button
             @click="emit('update:includeHolySpirit', !includeHolySpirit)"
-            class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+            class="relative inline-flex h-7 w-12 sm:h-6 sm:w-11 items-center rounded-full transition-colors"
             :class="includeHolySpirit ? 'bg-(--aegean-600)' : 'bg-(--marble-300)'"
           >
             <span
-              class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+              class="inline-block h-5 w-5 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform"
               :class="includeHolySpirit ? 'translate-x-6' : 'translate-x-1'"
             />
           </button>
@@ -229,11 +229,11 @@ const searchExceedsRemaining = computed(() => {
           </label>
           <button
             @click="emit('update:parentMode', !parentMode)"
-            class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
+            class="relative inline-flex h-7 w-12 sm:h-6 sm:w-11 items-center rounded-full transition-colors"
             :class="parentMode ? 'bg-(--aegean-600)' : 'bg-(--marble-300)'"
           >
             <span
-              class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
+              class="inline-block h-5 w-5 sm:h-4 sm:w-4 transform rounded-full bg-white transition-transform"
               :class="parentMode ? 'translate-x-6' : 'translate-x-1'"
             />
           </button>
@@ -336,22 +336,22 @@ const searchExceedsRemaining = computed(() => {
       <h3 class="text-sm font-semibold text-(--marble-500) uppercase tracking-wider mb-4">
         {{ showingFromToday ? 'Υπόλοιπο ' + currentYear : 'Επισκόπηση Έτους' }}
       </h3>
-      <div class="grid grid-cols-2 gap-3">
-        <div class="p-4 rounded-xl bg-(--marble-100) border border-(--marble-200)">
-          <div class="text-xs font-semibold text-(--marble-500) uppercase">Εργάσιμες</div>
-          <div class="stat-number text-3xl font-semibold text-(--marble-700) mt-1">{{ stats.workdays }}</div>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-3">
+        <div class="p-3 sm:p-4 rounded-xl bg-(--marble-100) border border-(--marble-200)">
+          <div class="text-[10px] sm:text-xs font-semibold text-(--marble-500) uppercase tracking-tight">Εργάσιμες</div>
+          <div class="stat-number text-2xl sm:text-3xl font-semibold text-(--marble-700) mt-1">{{ stats.workdays }}</div>
         </div>
-        <div class="p-4 rounded-xl bg-(--aegean-50) border border-(--aegean-200)">
-          <div class="text-xs font-semibold text-(--aegean-700) uppercase">Σαββατοκύριακα</div>
-          <div class="stat-number text-3xl font-semibold text-(--aegean-700) mt-1">{{ stats.weekendDays }}</div>
+        <div class="p-3 sm:p-4 rounded-xl bg-(--aegean-50) border border-(--aegean-200)">
+          <div class="text-[10px] sm:text-xs font-semibold text-(--aegean-700) uppercase tracking-tight">Σ/Κ</div>
+          <div class="stat-number text-2xl sm:text-3xl font-semibold text-(--aegean-700) mt-1">{{ stats.weekendDays }}</div>
         </div>
-        <div class="p-4 rounded-xl bg-(--terracotta-100) border border-(--terracotta-200)">
-          <div class="text-xs font-semibold text-(--terracotta-600) uppercase">Αργίες</div>
-          <div class="stat-number text-3xl font-semibold text-(--terracotta-700) mt-1">{{ stats.holidayDays }}</div>
+        <div class="p-3 sm:p-4 rounded-xl bg-(--terracotta-100) border border-(--terracotta-200)">
+          <div class="text-[10px] sm:text-xs font-semibold text-(--terracotta-600) uppercase tracking-tight">Αργίες</div>
+          <div class="stat-number text-2xl sm:text-3xl font-semibold text-(--terracotta-700) mt-1">{{ stats.holidayDays }}</div>
         </div>
-        <div class="p-4 rounded-xl bg-(--success-50) border border-(--success-200)">
-          <div class="text-xs font-semibold text-(--success-700) uppercase">Ελεύθερες</div>
-          <div class="stat-number text-3xl font-semibold text-(--success-700) mt-1">{{ stats.freeDays }}</div>
+        <div class="p-3 sm:p-4 rounded-xl bg-(--success-50) border border-(--success-200)">
+          <div class="text-[10px] sm:text-xs font-semibold text-(--success-700) uppercase tracking-tight">Ελεύθερες</div>
+          <div class="stat-number text-2xl sm:text-3xl font-semibold text-(--success-700) mt-1">{{ stats.freeDays }}</div>
         </div>
       </div>
     </div>

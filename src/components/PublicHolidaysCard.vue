@@ -15,7 +15,7 @@ const weekendHolidaysExpanded = ref(false)
 </script>
 
 <template>
-  <div class="card-elevated p-6">
+  <div class="card-elevated p-4 sm:p-6">
     <div class="flex items-center gap-3 mb-6">
       <div class="w-10 h-10 rounded-xl bg-(--aegean-600) flex items-center justify-center">
         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
