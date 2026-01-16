@@ -30,3 +30,7 @@ coverage
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# MCP (Model Context Protocol)
+.mcp.json
+.playwright-mcp/
