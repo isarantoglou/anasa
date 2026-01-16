@@ -1,0 +1,61 @@
+name: Claude PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+# Restrict permissions for security
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  auto-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Claude Code Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_args: "--model claude-opus-4-5-20251101"
+          prompt: |
+            Review this pull request for the Ανάσα (Anasa) Vue 3 + TypeScript project.
+
+            IMPORTANT: First read CLAUDE.md to understand the project guidelines and conventions.
+
+            ## Review Checklist
+            Please check for:
+
+            ### 1. Code Quality
+            - [ ] Follows Vue 3 Composition API with `<script setup>`
+            - [ ] TypeScript types are properly defined
+            - [ ] No unused imports or variables
+            - [ ] Code is readable and maintainable
+
+            ### 2. Testing
+            - [ ] Unit tests are updated for changed code
+            - [ ] E2E tests are updated if UI changed
+            - [ ] All existing tests should still pass
+
+            ### 3. Security
+            - [ ] No hardcoded secrets or API keys
+            - [ ] No XSS vulnerabilities in templates
+            - [ ] User input is properly sanitized
+
+            ### 4. Project Standards
+            - [ ] Commit message follows Conventional Commits (feat/fix/docs/test/chore)
+            - [ ] Greek text/labels are spelled correctly
+            - [ ] Uses date-fns with Greek locale for dates
+
+            ### 5. Performance
+            - [ ] No unnecessary re-renders
+            - [ ] Large lists use virtualization if needed
+            - [ ] Images are optimized
+
+            Provide specific feedback with file paths and line numbers where possible.
+            If tests need to be updated, explain exactly what selectors or assertions need to change.
