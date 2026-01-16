@@ -30,6 +30,7 @@ import LeaveRequestModal from './components/modals/LeaveRequestModal.vue'
 import YearComparisonModal from './components/modals/YearComparisonModal.vue'
 import ShareCard from './components/modals/ShareCard.vue'
 import AnnualPlanShareCard from './components/modals/AnnualPlanShareCard.vue'
+import ShareOptionsModal from './components/modals/ShareOptionsModal.vue'
 import HelpDrawer from './components/HelpDrawer.vue'
 import { version } from '../package.json'
 
@@ -237,11 +238,16 @@ function toggleYearComparison() {
 // Leave Request Modal
 const showLeaveRequest = ref(false)
 
+// Holiday Calendar Modal
+const isHolidayCalendarOpen = ref(false)
+
 // Share opportunity as image
 const isGeneratingImage = ref(false)
 const opportunityToShare = ref<OptimizationResult | null>(null)
 
 // URL sharing state
+const showShareOptions = ref(false)
+const shareUrl = ref('')
 const shareUrlCopied = ref(false)
 const loadedFromUrl = ref(false)
 const pendingUrlState = ref<AppState | null>(null)
@@ -292,7 +298,7 @@ function applySharedState() {
 }
 
 // Generate shareable URL and copy to clipboard
-async function copyShareUrl() {
+async function openShareModal() {
   const state: AppState = {
     year: currentYear.value,
     includeHolySpirit: includeHolySpirit.value,
@@ -302,27 +308,8 @@ async function copyShareUrl() {
     annualPlan: annualPlan.value
   }
 
-  const url = generateShareUrl(state)
-
-  try {
-    await navigator.clipboard.writeText(url)
-    shareUrlCopied.value = true
-    setTimeout(() => {
-      shareUrlCopied.value = false
-    }, 3000)
-  } catch (err) {
-    // Fallback for older browsers
-    const textArea = document.createElement('textarea')
-    textArea.value = url
-    document.body.appendChild(textArea)
-    textArea.select()
-    document.execCommand('copy')
-    document.body.removeChild(textArea)
-    shareUrlCopied.value = true
-    setTimeout(() => {
-      shareUrlCopied.value = false
-    }, 3000)
-  }
+  shareUrl.value = generateShareUrl(state)
+  showShareOptions.value = true
 }
 
 async function shareAsImage(opportunity: OptimizationResult) {
@@ -406,30 +393,33 @@ async function shareAnnualPlanAsImage() {
     <div class="fixed inset-0 bg-waves pointer-events-none opacity-50"></div>
 
     <!-- Header -->
-    <header class="relative bg-(--marble-white)/80 backdrop-blur-md border-b border-(--marble-200) top-0 z-50">
-      <div class="max-w-350 mx-auto px-6 lg:px-8 py-5">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div class="animate-fade-in-up">
-            <h1 class="heading-hero">
-              <span class="text-(--aegean-800)">Ανάσα</span>
-            </h1>
-            <p class="mt-2 text-(--marble-500) text-lg font-body">
-              Πάρε ανάσα από τη δουλειά
-            </p>
+    <header class="relative bg-(--marble-white)/90 backdrop-blur-xl border-b border-(--marble-200)/50 top-0 z-50">
+      <div class="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24 py-4 sm:py-5">
+        <div class="flex items-center justify-between gap-4">
+          <!-- Logo & Tagline -->
+          <div class="animate-fade-in-up flex items-center gap-4">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-(--aegean-500) to-(--aegean-700) flex items-center justify-center shadow-lg">
+              <span class="text-white font-display text-xl sm:text-2xl font-semibold">Α</span>
+            </div>
+            <div>
+              <h1 class="text-xl sm:text-2xl font-bold text-(--aegean-800) tracking-tight">Ανάσα</h1>
+              <p class="text-xs sm:text-sm text-(--marble-500) hidden sm:block">Πάρε ανάσα από τη δουλειά</p>
+            </div>
           </div>
 
-          <div class="flex items-center gap-4">
-            <!-- Easter Badge -->
-            <div class="animate-fade-in-up delay-200 flex items-center gap-3 px-5 py-3 rounded-2xl bg-(--terracotta-100) border border-(--terracotta-200)">
-              <div class="w-10 h-10 rounded-full bg-(--terracotta-500) flex items-center justify-center">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <!-- Right Section -->
+          <div class="flex items-center gap-3 sm:gap-4">
+            <!-- Easter Badge - More Modern -->
+            <div class="animate-fade-in-up delay-200 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-gradient-to-r from-(--terracotta-50) to-(--terracotta-100) border border-(--terracotta-200)/50 shadow-sm">
+              <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-(--terracotta-400) to-(--terracotta-600) flex items-center justify-center shadow-md">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
               <div>
-                <div class="text-xs font-semibold text-(--terracotta-600) uppercase tracking-wider">Ορθόδοξο Πάσχα {{ currentYear }}</div>
-                <div class="stat-number text-xl font-semibold text-(--terracotta-700)">
-                  {{ format(orthodoxEaster, 'd MMMM', { locale: el }) }}
+                <div class="text-[10px] sm:text-xs font-medium text-(--terracotta-600) uppercase tracking-wider">Πάσχα {{ currentYear }}</div>
+                <div class="stat-number text-sm sm:text-base font-bold text-(--terracotta-700)">
+                  {{ format(orthodoxEaster, 'd MMM', { locale: el }) }}
                 </div>
               </div>
             </div>
@@ -437,13 +427,13 @@ async function shareAnnualPlanAsImage() {
             <!-- Dark Mode Toggle -->
             <button
               @click="toggleDarkMode"
-              class="dark-mode-toggle"
+              class="w-10 h-10 rounded-xl bg-(--marble-100) border border-(--marble-200)/50 flex items-center justify-center hover:bg-(--marble-200) transition-colors shadow-sm"
               :aria-label="isDarkMode ? 'Αλλαγή σε φωτεινή λειτουργία' : 'Αλλαγή σε σκοτεινή λειτουργία'"
             >
-              <svg v-if="isDarkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg v-if="isDarkMode" class="w-5 h-5 text-(--warning-500)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
               </svg>
-              <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg v-else class="w-5 h-5 text-(--marble-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
               </svg>
             </button>
@@ -451,14 +441,14 @@ async function shareAnnualPlanAsImage() {
         </div>
       </div>
 
-      <!-- Decorative border -->
-      <div class="greek-key-border"></div>
+      <!-- Subtle gradient accent line -->
+      <div class="h-0.5 bg-gradient-to-r from-transparent via-(--aegean-400) to-transparent opacity-30"></div>
     </header>
 
-    <main class="relative max-w-350 mx-auto px-6 lg:px-8 py-10">
+    <main class="relative w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24 py-10">
       <!-- Configuration Section -->
       <section class="mb-12 animate-fade-in-up delay-100">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <SettingsCard
             :current-year="currentYear"
             :calculate-from-today="calculateFromToday"
@@ -509,7 +499,7 @@ async function shareAnnualPlanAsImage() {
         @export-to-calendar="exportToCalendar"
         @show-leave-request="showLeaveRequest = true"
         @add-custom-period="addCustomPeriod"
-        @share-url="copyShareUrl"
+        @share-url="openShareModal"
         @share-as-image="shareAnnualPlanAsImage"
       />
 
@@ -562,7 +552,7 @@ async function shareAnnualPlanAsImage() {
           </p>
         </div>
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+        <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           <OpportunityCard
             v-for="(opportunity, index) in sortedOpportunities"
             :key="`${opportunity.range.startDate.getTime()}-${opportunity.range.endDate.getTime()}`"
@@ -579,11 +569,47 @@ async function shareAnnualPlanAsImage() {
         </div>
       </section>
 
-      <!-- Full Holiday Table -->
-      <HolidayTable
-        :current-year="currentYear"
-        :all-holidays="allHolidays"
-      />
+      <!-- Full Holiday Calendar Button -->
+      <section class="mb-12 animate-fade-in-up delay-300">
+        <div class="rounded-2xl bg-gradient-to-r from-(--aegean-50) to-(--marble-50) border border-(--aegean-200) transition-all overflow-hidden" :class="{ 'ring-2 ring-(--aegean-200) shadow-lg': isHolidayCalendarOpen }">
+          <button
+            @click="isHolidayCalendarOpen = !isHolidayCalendarOpen"
+            class="w-full flex items-center justify-between p-4 sm:p-6 group hover:bg-white/50 transition-colors"
+          >
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-xl bg-(--aegean-600) flex items-center justify-center shadow-sm">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div class="text-left">
+                <h3 class="text-lg font-semibold text-(--aegean-800)">Πλήρες Ημερολόγιο Αργιών {{ currentYear }}</h3>
+                <p class="text-sm text-(--marble-500)">{{ isHolidayCalendarOpen ? 'Κλείσιμο πίνακα' : 'Δείτε όλες τις αργίες σε έναν πίνακα' }}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 text-(--aegean-600) group-hover:text-(--aegean-700)">
+              <span class="text-sm font-medium hidden sm:inline">{{ isHolidayCalendarOpen ? 'Κλείσιμο' : 'Άνοιγμα' }}</span>
+              <svg 
+                class="w-5 h-5 transition-transform duration-300" 
+                :class="{ 'rotate-180': isHolidayCalendarOpen }"
+                fill="none" 
+                stroke="currentColor" 
+                viewBox="0 0 24 24"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </button>
+
+          <!-- Accordion Content -->
+          <div 
+            v-show="isHolidayCalendarOpen"
+            class="border-t border-(--aegean-200) bg-white/50 backdrop-blur-sm"
+          >
+            <HolidayTable :holidays="allHolidays" />
+          </div>
+        </div>
+      </section>
     </main>
 
     <!-- Modals -->
@@ -610,61 +636,86 @@ async function shareAnnualPlanAsImage() {
       @close="showYearComparison = false"
     />
 
+    <ShareOptionsModal
+      :show="showShareOptions"
+      :url="shareUrl"
+      @close="showShareOptions = false"
+    />
+
+  
+
     <!-- Footer -->
-    <footer class="relative mt-16 border-t border-(--marble-200) bg-(--marble-50)">
-      <div class="greek-key-border"></div>
-      <div class="max-w-350 mx-auto px-6 lg:px-8 py-8">
-        <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-          <div class="text-center md:text-left">
-            <div class="flex items-center justify-center md:justify-start gap-2">
-              <span class="font-display text-xl font-semibold text-(--aegean-800)">Ανάσα</span>
-              <a
-                href="https://github.com/isarantoglou/anasa/blob/master/CHANGELOG.md"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-xs px-1.5 py-0.5 rounded bg-(--marble-200) text-(--marble-500) hover:bg-(--aegean-100) hover:text-(--aegean-600) font-mono transition-colors"
-              >v{{ version }}</a>
+    <footer class="relative mt-16 bg-(--marble-50)/80 backdrop-blur-sm">
+      <!-- Subtle gradient accent line -->
+      <div class="h-0.5 bg-gradient-to-r from-transparent via-(--aegean-400) to-transparent opacity-30"></div>
+      
+      <div class="w-full px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-24 py-8 sm:py-10">
+        <div class="flex flex-col gap-8">
+          <!-- Top Row -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <!-- Logo & Info -->
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-(--aegean-500) to-(--aegean-700) flex items-center justify-center shadow-md">
+                <span class="text-white font-display text-lg font-semibold">Α</span>
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-lg text-(--aegean-800)">Ανάσα</span>
+                  <a
+                    href="https://github.com/isarantoglou/anasa/blob/master/CHANGELOG.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-[10px] px-2 py-0.5 rounded-full bg-(--aegean-100) text-(--aegean-600) hover:bg-(--aegean-200) font-mono transition-colors"
+                  >v{{ version }}</a>
+                </div>
+                <p class="text-xs text-(--marble-500)">
+                  Βελτιστοποίηση αδειών για Έλληνες εργαζόμενους
+                </p>
+              </div>
             </div>
-            <p class="text-sm text-(--marble-500) mt-1">
-              Υπολογισμός Ορθόδοξου Πάσχα με τον αλγόριθμο Meeus/Jones/Butcher
+
+            <!-- Social Links - More Modern -->
+            <div class="flex items-center gap-2">
+              <a href="https://www.facebook.com/pelatologio" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-(--marble-100) border border-(--marble-200)/50 flex items-center justify-center text-(--marble-500) hover:text-(--aegean-600) hover:bg-(--aegean-50) hover:border-(--aegean-200) transition-all" aria-label="Facebook">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+              <a href="https://www.instagram.com/oxygenpelatologio" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-(--marble-100) border border-(--marble-200)/50 flex items-center justify-center text-(--marble-500) hover:text-(--terracotta-500) hover:bg-(--terracotta-50) hover:border-(--terracotta-200) transition-all" aria-label="Instagram">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
+                </svg>
+              </a>
+              <a href="https://www.linkedin.com/company/pelatologio/" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-(--marble-100) border border-(--marble-200)/50 flex items-center justify-center text-(--marble-500) hover:text-(--aegean-600) hover:bg-(--aegean-50) hover:border-(--aegean-200) transition-all" aria-label="LinkedIn">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+              </a>
+              <a href="https://www.youtube.com/@oxygensuite" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-(--marble-100) border border-(--marble-200)/50 flex items-center justify-center text-(--marble-500) hover:text-(--terracotta-500) hover:bg-(--terracotta-50) hover:border-(--terracotta-200) transition-all" aria-label="YouTube">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+              </a>
+              <a href="https://github.com/isarantoglou/anasa" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-lg bg-(--marble-100) border border-(--marble-200)/50 flex items-center justify-center text-(--marble-500) hover:text-(--marble-700) hover:bg-(--marble-200) transition-all" aria-label="GitHub">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Bottom Row -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-(--marble-200)/50">
+            <p class="text-xs text-(--marble-400) text-center sm:text-left">
+              © {{ currentYear }} Ανάσα. Υπολογισμός Ορθόδοξου Πάσχα με τον αλγόριθμο Meeus/Jones/Butcher.
             </p>
-          </div>
-
-          <!-- Social Links -->
-          <div class="flex items-center gap-4">
-            <a href="https://www.facebook.com/pelatologio" target="_blank" rel="noopener noreferrer" class="text-(--marble-400) hover:text-(--aegean-600) transition-colors" aria-label="Facebook">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            <div class="flex items-center gap-2 text-xs text-(--marble-400)">
+              <span>Φτιαγμένο με</span>
+              <svg class="w-3.5 h-3.5 text-(--terracotta-500)" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
               </svg>
-            </a>
-            <a href="https://www.instagram.com/oxygenpelatologio" target="_blank" rel="noopener noreferrer" class="text-(--marble-400) hover:text-(--terracotta-500) transition-colors" aria-label="Instagram">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
-              </svg>
-            </a>
-            <a href="https://www.linkedin.com/company/pelatologio/" target="_blank" rel="noopener noreferrer" class="text-(--marble-400) hover:text-(--aegean-600) transition-colors" aria-label="LinkedIn">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-              </svg>
-            </a>
-            <a href="https://www.youtube.com/@oxygensuite" target="_blank" rel="noopener noreferrer" class="text-(--marble-400) hover:text-(--terracotta-500) transition-colors" aria-label="YouTube">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-              </svg>
-            </a>
-            <a href="https://github.com/isarantoglou/anasa" target="_blank" rel="noopener noreferrer" class="text-(--marble-400) hover:text-(--marble-700) transition-colors" aria-label="GitHub">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/>
-              </svg>
-            </a>
-          </div>
-
-          <div class="flex items-center gap-3 text-sm text-(--marble-400)">
-            <span>Φτιαγμένο με</span>
-            <svg class="w-4 h-4 text-(--terracotta-500)" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-            </svg>
-            <span>από την <a href="https://www.oxygen.gr" class="hover:text-(--aegean-600) transition-colors">Oxygen</a></span>
+              <span>από την <a href="https://www.oxygen.gr" class="font-medium text-(--aegean-600) hover:text-(--aegean-700) transition-colors">Oxygen</a></span>
+            </div>
           </div>
         </div>
       </div>

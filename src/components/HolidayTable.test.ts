@@ -17,20 +17,13 @@ function createMockHoliday(overrides: Partial<Holiday> = {}): Holiday {
 
 describe('HolidayTable', () => {
   const defaultProps = {
-    currentYear: 2026,
-    allHolidays: [
+    holidays: [
       createMockHoliday({ date: new Date(2026, 0, 1), nameGreek: 'Πρωτοχρονιά' }),
       createMockHoliday({ date: new Date(2026, 0, 6), nameGreek: 'Θεοφάνεια' }),
       createMockHoliday({ date: new Date(2026, 3, 10), nameGreek: 'Μεγάλη Παρασκευή', isMovable: true }),
       createMockHoliday({ date: new Date(2026, 6, 15), nameGreek: 'Τοπική Αργία', isCustom: true })
     ]
   }
-
-  it('should render table with current year in title', () => {
-    const wrapper = mount(HolidayTable, { props: defaultProps })
-
-    expect(wrapper.text()).toContain('Πλήρες Ημερολόγιο Αργιών 2026')
-  })
 
   it('should render table headers', () => {
     const wrapper = mount(HolidayTable, { props: defaultProps })
@@ -65,8 +58,7 @@ describe('HolidayTable', () => {
   it('should show weekend vs workday value', () => {
     // Create holidays on different days
     const propsWithWeekend = {
-      currentYear: 2026,
-      allHolidays: [
+      holidays: [
         // Thursday (workday)
         createMockHoliday({ date: new Date(2026, 0, 1), nameGreek: 'Πρωτοχρονιά' }),
         // Saturday (weekend) - Aug 15, 2026 is Saturday

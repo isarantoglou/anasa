@@ -5,6 +5,7 @@ import { el } from 'date-fns/locale'
 import { searchTown, type PatronSaint } from '../data/patronSaints'
 import { calculateOrthodoxEaster } from '../composables/useGreekHolidays'
 import type { CustomHoliday } from '../types'
+import DatePicker from './ui/DatePicker.vue'
 
 const props = defineProps<{
   customHolidays: CustomHoliday[]
@@ -173,7 +174,7 @@ function addCustomHoliday() {
 </script>
 
 <template>
-  <div class="card-elevated p-6">
+  <div class="card-elevated p-4 sm:p-6">
     <div class="flex items-center gap-3 mb-6">
       <div class="w-10 h-10 rounded-xl bg-(--terracotta-500) flex items-center justify-center">
         <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -252,13 +253,12 @@ function addCustomHoliday() {
         <label for="holidayDate" class="block text-sm font-semibold text-(--marble-600) mb-2">
           Ημερομηνία
         </label>
-        <input
+        <DatePicker
           id="holidayDate"
           v-model="newHolidayDate"
-          type="date"
-          :min="`${currentYear}-01-01`"
-          :max="`${currentYear}-12-31`"
-          class="input-elegant"
+          :min-date="`${currentYear}-01-01`"
+          :max-date="`${currentYear}-12-31`"
+          placeholder="Επιλέξτε ημερομηνία"
         />
       </div>
 

@@ -76,31 +76,31 @@ function handleBackdropClick(e: MouseEvent) {
         @keydown="handleKeydown"
       >
         <div class="help-drawer" role="dialog" aria-modal="true" aria-labelledby="help-title">
-          <!-- Drag Handle -->
-          <div class="help-drawer-handle">
-            <div class="help-drawer-handle-bar"></div>
-          </div>
-
           <!-- Header -->
           <div class="help-drawer-header">
-            <div class="help-drawer-icon">
-              <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
-              </svg>
+            <div class="help-drawer-icon-container">
+              <div class="help-drawer-icon-bg">
+                <svg class="w-8 h-8 text-(--aegean-600)" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+                </svg>
+              </div>
             </div>
-            <div>
+            <div class="help-drawer-title-group">
               <h2 id="help-title" class="help-drawer-title">Πώς να χρησιμοποιήσετε το Ανάσα</h2>
               <p class="help-drawer-subtitle">Μεγιστοποιήστε τις διακοπές σας με έξυπνο προγραμματισμό</p>
             </div>
-            <button @click="closeHelp" class="help-drawer-close" aria-label="Κλείσιμο">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button @click="closeHelp" class="help-drawer-close-btn" aria-label="Κλείσιμο">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
 
+
+
+
           <!-- Scrollable Content -->
-          <div class="help-drawer-content">
+          <div class="help-drawer-content relative">
             <!-- Welcome -->
             <div class="help-section help-welcome">
               <p>
@@ -117,21 +117,27 @@ function handleBackdropClick(e: MouseEvent) {
               </h3>
               <ul class="help-list">
                 <li>
-                  <svg class="help-list-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
+                  <div class="help-icon-box">
+                    <svg class="help-list-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
                   <span>Επιλέξτε <strong>έτος</strong> με τα βελάκια</span>
                 </li>
                 <li>
-                  <svg class="help-list-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                  </svg>
+                  <div class="help-icon-box">
+                    <svg class="help-list-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                  </div>
                   <span>Ορίστε τις <strong>ημέρες άδειας</strong> που έχετε</span>
                 </li>
                 <li>
-                  <svg class="help-list-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
+                  <div class="help-icon-box">
+                    <svg class="help-list-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  </div>
                   <span>Προσθέστε <strong>τοπικές αργίες</strong> (π.χ. πολιούχος)</span>
                 </li>
               </ul>
@@ -144,21 +150,27 @@ function handleBackdropClick(e: MouseEvent) {
               </h3>
               <ul class="help-list">
                 <li>
-                  <svg class="help-list-icon text-(--success-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                  </svg>
+                  <div class="help-icon-box">
+                    <svg class="help-list-icon text-(--success-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                  </div>
                   <span>Οι κάρτες δείχνουν πόσες <strong>ημέρες κερδίζετε</strong></span>
                 </li>
                 <li>
-                  <svg class="help-list-icon text-(--warning-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
-                  </svg>
+                  <div class="help-icon-box">
+                    <svg class="help-list-icon text-(--warning-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+                    </svg>
+                  </div>
                   <span>Ταξινομήστε κατά <strong>απόδοση</strong> ή <strong>ημερομηνία</strong></span>
                 </li>
                 <li>
-                  <svg class="help-list-icon text-(--aegean-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
+                  <div class="help-icon-box">
+                    <svg class="help-list-icon text-(--aegean-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                  </div>
                   <span>Κάθε κάρτα δείχνει <strong>ανάλυση ημερών</strong> (αργίες, Σ/Κ, εργάσιμες)</span>
                 </li>
               </ul>
@@ -171,21 +183,27 @@ function handleBackdropClick(e: MouseEvent) {
               </h3>
               <ul class="help-list">
                 <li>
-                  <svg class="help-list-icon text-(--terracotta-500)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-                  </svg>
+                  <div class="help-icon-box">
+                    <svg class="help-list-icon text-(--terracotta-500)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                  </div>
                   <span>Πατήστε <strong>«Προσθήκη»</strong> για να κρατήσετε περιόδους</span>
                 </li>
                 <li>
-                  <svg class="help-list-icon text-(--aegean-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-                  </svg>
+                  <div class="help-icon-box">
+                    <svg class="help-list-icon text-(--aegean-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                  </div>
                   <span><strong>Μοιραστείτε</strong> το πλάνο με σύνδεσμο ή εικόνα</span>
                 </li>
                 <li>
-                  <svg class="help-list-icon text-(--success-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                  </svg>
+                  <div class="help-icon-box">
+                    <svg class="help-list-icon text-(--success-600)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                  </div>
                   <span><strong>Εξαγωγή</strong> σε ημερολόγιο (.ics)</span>
                 </li>
               </ul>
@@ -228,11 +246,12 @@ function handleBackdropClick(e: MouseEvent) {
 
           <!-- Footer -->
           <div class="help-drawer-footer">
-            <button @click="closeHelp" class="btn-primary w-full">
+            <button @click="closeHelp" class="help-drawer-action-btn">
               Κατάλαβα!
             </button>
           </div>
         </div>
+
       </div>
     </Transition>
   </Teleport>
@@ -260,8 +279,10 @@ function handleBackdropClick(e: MouseEvent) {
   justify-content: center;
   box-shadow:
     0 4px 14px rgba(13, 79, 139, 0.4),
-    0 2px 6px rgba(13, 79, 139, 0.2);
-  transition: all 0.3s var(--ease-out-expo);
+    0 2px 6px rgba(13, 79, 139, 0.2),
+    0 0 0 4px rgba(255, 255, 255, 0.2); /* Glass ring */
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  backdrop-filter: blur(4px);
 }
 
 .help-fab:hover {
@@ -330,101 +351,86 @@ function handleBackdropClick(e: MouseEvent) {
 .help-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 50;
-  background: rgba(10, 37, 64, 0.5);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-:global(.dark) .help-backdrop {
-  background: rgba(0, 0, 0, 0.6);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   DRAWER
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.help-drawer {
-  width: 100%;
-  max-width: 540px;
-  max-height: 85vh;
-  background: var(--marble-white);
-  border-radius: 1.5rem 1.5rem 0 0;
-  box-shadow: 0 -10px 40px rgba(10, 37, 64, 0.15);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-:global(.dark) .help-drawer {
-  background: var(--marble-50);
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4);
-}
-
-/* Drag handle */
-.help-drawer-handle {
-  padding: 12px 0 8px;
-  display: flex;
-  justify-content: center;
-}
-
-.help-drawer-handle-bar {
-  width: 36px;
-  height: 4px;
-  border-radius: 2px;
-  background: var(--marble-300);
-}
-
-/* Header */
-.help-drawer-header {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  padding: 0 1.5rem 1.25rem;
-  border-bottom: 1px solid var(--marble-200);
-}
-
-.help-drawer-icon {
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, var(--aegean-100) 0%, var(--aegean-50) 100%);
+  z-index: 100;
+  background: rgba(10, 37, 64, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--aegean-600);
+  padding: 1.5rem;
 }
 
-:global(.dark) .help-drawer-icon {
-  background: linear-gradient(135deg, var(--aegean-200) 0%, var(--aegean-100) 100%);
-  color: var(--aegean-400);
+.help-drawer {
+  width: 100%;
+  max-width: 800px;
+  background: var(--marble-white);
+  border-radius: 2rem;
+  box-shadow: 0 25px 50px -12px rgba(10, 37, 64, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalScaleUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleUp {
+  from { transform: scale(0.95) translateY(10px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+  /* Header */
+.help-drawer-header {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  gap: 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--marble-200);
+}
+
+.help-drawer-icon-container {
+  flex-shrink: 0;
+}
+
+.help-drawer-icon-bg {
+  width: 60px;
+  height: 60px;
+  border-radius: 1.25rem;
+  background: linear-gradient(135deg, var(--aegean-50) 0%, var(--aegean-100) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.8), 0 4px 6px -1px rgba(13, 79, 139, 0.1);
+}
+
+.help-drawer-title-group {
+  flex: 1;
 }
 
 .help-drawer-title {
   font-family: var(--font-body);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--aegean-800);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--aegean-900);
   margin: 0;
-  line-height: 1.3;
+  letter-spacing: -0.02em;
 }
 
 .help-drawer-subtitle {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: var(--marble-500);
   margin: 0.25rem 0 0;
 }
 
-.help-drawer-close {
-  flex-shrink: 0;
-  margin-left: auto;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
+.help-drawer-close-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
   background: var(--marble-100);
   border: none;
   cursor: pointer;
@@ -435,248 +441,224 @@ function handleBackdropClick(e: MouseEvent) {
   transition: all 0.2s ease;
 }
 
-.help-drawer-close:hover {
+.help-drawer-close-btn:hover {
   background: var(--marble-200);
-  color: var(--marble-700);
+  color: var(--marble-800);
 }
 
 /* Content */
 .help-drawer-content {
-  flex: 1;
   overflow-y: auto;
-  padding: 1.5rem;
+  padding: 0 2rem 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-}
-
-/* Sections */
-.help-section {
-  /* Default section styling */
+  gap: 2rem;
+  max-height: 70vh;
 }
 
 .help-welcome {
-  padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, var(--aegean-50) 0%, var(--marble-50) 100%);
-  border-radius: 12px;
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: var(--aegean-50)/50;
+  border-radius: 1.25rem;
   border-left: 4px solid var(--aegean-500);
+  text-align: left;
 }
 
 .help-welcome p {
   margin: 0;
-  font-size: 0.9375rem;
-  color: var(--marble-600);
+  font-size: 1.05rem;
+  color: var(--aegean-800);
   line-height: 1.6;
 }
 
-.help-welcome strong {
-  color: var(--aegean-700);
-}
-
-:global(.dark) .help-welcome {
-  background: linear-gradient(135deg, var(--aegean-100) 0%, var(--marble-100) 100%);
-}
-
-:global(.dark) .help-welcome strong {
-  color: var(--aegean-400);
+.help-section {
+  position: relative; /* For timeline z-index */
+  z-index: 1;
+  background: var(--marble-50); /* Card effect */
+  padding: 1.5rem;
+  border-radius: 1.5rem;
+  border: 1px solid var(--marble-100);
 }
 
 .help-section-title {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-family: var(--font-body);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--marble-700);
-  margin: 0 0 0.875rem;
+  gap: 1rem;
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--aegean-900);
+  margin: 0 0 1.25rem;
+  text-align: left;
 }
 
 .help-section-number {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: var(--aegean-600);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%; /* Fully round */
+  background: linear-gradient(135deg, var(--aegean-500) 0%, var(--aegean-700) 100%);
+  box-shadow: 0 4px 6px -1px rgba(13, 79, 139, 0.3);
   color: white;
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-size: 1rem;
+  font-weight: 800;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-:global(.dark) .help-section-number {
-  background: var(--aegean-500);
-}
-
-/* List */
 .help-list {
   list-style: none;
-  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .help-list li {
   display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  font-size: 0.9375rem;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1rem;
   color: var(--marble-600);
-  line-height: 1.5;
+  text-align: left;
 }
 
-.help-list li strong {
-  color: var(--marble-700);
-}
-
-:global(.dark) .help-list li strong {
-  color: var(--marble-300);
+.help-icon-box {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .help-list-icon {
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  margin-top: 2px;
+  width: 1.25rem;
+  height: 1.25rem;
   color: var(--marble-400);
 }
 
-/* Tips section */
 .help-tips {
-  padding: 1.25rem;
-  background: var(--terracotta-100);
-  border-radius: 12px;
-}
-
-:global(.dark) .help-tips {
-  background: rgba(214, 104, 83, 0.15);
+  padding: 1.5rem;
+  background: var(--terracotta-50)/50;
+  border-radius: 1.5rem;
+  border: 1px solid var(--terracotta-100);
 }
 
 .help-tips-title {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-family: var(--font-body);
-  font-size: 0.9375rem;
-  font-weight: 700;
+  gap: 0.75rem;
+  font-size: 1.125rem;
+  font-weight: 800;
   color: var(--terracotta-700);
-  margin: 0 0 1rem;
-}
-
-:global(.dark) .help-tips-title {
-  color: var(--terracotta-400);
+  margin: 0 0 1.5rem;
 }
 
 .help-tips-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.875rem;
+  display: grid;
+  grid-template-cols: 1fr;
+  gap: 1.5rem;
 }
 
 .help-tip {
   display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
+  gap: 1rem;
+  text-align: left;
 }
 
 .help-tip-icon {
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--marble-white);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--terracotta-600);
-}
-
-:global(.dark) .help-tip-icon {
-  background: var(--marble-200);
-  color: var(--terracotta-400);
+  color: var(--terracotta-500);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .help-tip strong {
   display: block;
-  font-size: 0.875rem;
-  color: var(--terracotta-700);
-  margin-bottom: 0.125rem;
-}
-
-:global(.dark) .help-tip strong {
-  color: var(--terracotta-300);
+  font-size: 1rem;
+  color: var(--terracotta-800);
+  margin-bottom: 0.25rem;
 }
 
 .help-tip p {
   margin: 0;
-  font-size: 0.8125rem;
+  font-size: 0.9rem;
   color: var(--terracotta-600);
   line-height: 1.4;
 }
 
-:global(.dark) .help-tip p {
-  color: var(--marble-400);
-}
-
 /* Footer */
 .help-drawer-footer {
-  padding: 1rem 1.5rem 1.5rem;
+  padding: 1.5rem 2rem 2rem;
+  background: var(--marble-white);
   border-top: 1px solid var(--marble-200);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   TRANSITIONS
-   ═══════════════════════════════════════════════════════════════════════════ */
+.help-drawer-action-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--aegean-600);
+  color: white;
+  font-size: 1.125rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(13, 79, 139, 0.2);
+}
 
-.help-drawer-enter-active,
-.help-drawer-leave-active {
+.help-drawer-action-btn:hover {
+  background: var(--aegean-700);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 15px -3px rgba(13, 79, 139, 0.3);
+}
+
+/* Transitions */
+.help-drawer-enter-active, .help-drawer-leave-active {
   transition: opacity 0.3s ease;
 }
 
-.help-drawer-enter-active .help-drawer,
-.help-drawer-leave-active .help-drawer {
-  transition: transform 0.4s var(--ease-out-expo);
-}
-
-.help-drawer-enter-from,
-.help-drawer-leave-to {
+.help-drawer-enter-from, .help-drawer-leave-to {
   opacity: 0;
 }
 
-.help-drawer-enter-from .help-drawer,
-.help-drawer-leave-to .help-drawer {
-  transform: translateY(100%);
+/* Dark Mode */
+:global(.dark) .help-drawer {
+  background: var(--marble-100);
+  border: 1px solid var(--marble-200);
 }
 
-/* ═══════════════════════════════════════════════════════════════════════════
-   RESPONSIVE
-   ═══════════════════════════════════════════════════════════════════════════ */
+:global(.dark) .help-drawer-title { color: white; }
+:global(.dark) .help-drawer-icon-bg { background: var(--aegean-900)/30; }
+:global(.dark) .help-welcome { background: var(--aegean-900)/20; }
+:global(.dark) .help-welcome p { color: var(--aegean-200); }
+:global(.dark) .help-list li { color: var(--marble-400); }
+:global(.dark) .help-tips { background: var(--terracotta-900)/20; }
+:global(.dark) .help-tip-icon { background: var(--marble-200); }
+:global(.dark) .help-drawer-footer { background: var(--marble-100); }
 
-@media (min-width: 640px) {
-  .help-fab {
-    bottom: 2rem;
-    right: 2rem;
+@media (max-width: 640px) {
+  .help-backdrop {
+    padding: 0;
+    align-items: flex-end;
   }
-
+  
   .help-drawer {
-    margin: 0 1rem 1rem;
-    border-radius: 1.5rem;
-    max-height: 80vh;
+    border-radius: 2rem 2rem 0 0;
+    max-height: 90vh;
   }
 }
 
 @media (min-width: 768px) {
   .help-tips-grid {
-    flex-direction: row;
-    gap: 1rem;
-  }
-
-  .help-tip {
-    flex: 1;
+    grid-template-cols: 1fr 1fr;
   }
 }
 </style>
