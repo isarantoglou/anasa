@@ -49,8 +49,9 @@ test.describe('Optimization Workflow', () => {
     const opportunityCards = page.locator('text=/Κάντε \\d+ ημέρες?/')
     await expect(opportunityCards.first()).toBeVisible({ timeout: 10000 })
 
-    // Change to 2027
-    const year2027Button = page.getByRole('button', { name: '2027' })
+    // Find year carousel section and change to 2027
+    const yearCarousel = page.locator('.year-carousel, [class*="year"]').filter({ hasText: 'Ρυθμίσεις' }).first()
+    const year2027Button = yearCarousel.getByRole('button', { name: '2027', exact: true })
     await year2027Button.click()
     await page.waitForTimeout(1000) // Longer wait for recalculation
 
@@ -58,7 +59,7 @@ test.describe('Optimization Workflow', () => {
     await expect(opportunityCards.first()).toBeVisible({ timeout: 10000 })
 
     // Change back to 2026
-    const year2026Button = page.getByRole('button', { name: '2026' })
+    const year2026Button = yearCarousel.getByRole('button', { name: '2026', exact: true })
     await year2026Button.click()
     await page.waitForTimeout(1000)
 

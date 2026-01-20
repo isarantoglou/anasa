@@ -3,6 +3,27 @@ import { mount, flushPromises } from '@vue/test-utils'
 import CustomPeriodForm from './CustomPeriodForm.vue'
 import type { Holiday } from '../types'
 
+// Mock DatePicker component to avoid flatpickr complexity in tests
+vi.mock('./ui/DatePicker.vue', () => ({
+  default: {
+    name: 'DatePicker',
+    props: ['modelValue', 'minDate', 'maxDate', 'placeholder', 'id', 'dataTestid'],
+    emits: ['update:modelValue'],
+    template: `
+      <input
+        :id="id"
+        type="date"
+        :value="modelValue"
+        :min="minDate"
+        :max="maxDate"
+        :placeholder="placeholder"
+        :data-testid="dataTestid"
+        @input="$emit('update:modelValue', $event.target.value)"
+      />
+    `
+  }
+}))
+
 // Mock holidays
 const mockHolidays: Holiday[] = [
   {

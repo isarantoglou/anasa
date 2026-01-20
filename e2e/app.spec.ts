@@ -15,12 +15,13 @@ test.describe('Anasa App', () => {
   })
 
   test('year selector is visible and functional', async ({ page }) => {
-    // Check that year buttons are visible
-    const currentYearButton = page.getByRole('button', { name: '2026' })
+    // Check that year buttons are visible in the year carousel section
+    const yearCarousel = page.locator('.year-carousel, [class*="year"]').filter({ hasText: 'Ρυθμίσεις' }).first()
+    const currentYearButton = yearCarousel.getByRole('button', { name: '2026', exact: true })
     await expect(currentYearButton).toBeVisible()
 
     // Click a different year
-    const year2027Button = page.getByRole('button', { name: '2027' })
+    const year2027Button = yearCarousel.getByRole('button', { name: '2027', exact: true })
     await year2027Button.click()
 
     // Wait for the UI to update - the clicked year should now be styled differently
@@ -28,12 +29,12 @@ test.describe('Anasa App', () => {
     await page.waitForTimeout(500) // Wait for animation
 
     // Click 2026 again to go back
-    const year2026Button = page.getByRole('button', { name: '2026' })
+    const year2026Button = yearCarousel.getByRole('button', { name: '2026', exact: true })
     await year2026Button.click()
     await page.waitForTimeout(500)
 
     // Both years should still be visible
-    await expect(page.getByRole('button', { name: '2026' })).toBeVisible()
+    await expect(yearCarousel.getByRole('button', { name: '2026', exact: true })).toBeVisible()
   })
 
   test('dark mode toggle works', async ({ page }) => {

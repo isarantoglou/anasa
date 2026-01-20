@@ -10,6 +10,7 @@ const props = defineProps<{
   maxDate?: string
   placeholder?: string
   id?: string
+  dataTestid?: string
 }>()
 
 const emit = defineEmits<{
@@ -84,6 +85,7 @@ onBeforeUnmount(() => {
       :placeholder="placeholder || 'Επιλέξτε ημερομηνία'"
       class="datepicker-input input-elegant"
       style="padding-left: 3.5rem !important;"
+      :data-testid="dataTestid"
       readonly
     />
   </div>

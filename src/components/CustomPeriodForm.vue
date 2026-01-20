@@ -133,6 +133,7 @@ function formatDate(dateStr: string): string {
             :min-date="todayISO"
             :max-date="`${currentYear}-12-31`"
             placeholder="Επιλέξτε ημερομηνία"
+            data-testid="start-date-input"
           />
         </div>
         <div>
@@ -145,6 +146,7 @@ function formatDate(dateStr: string): string {
             :min-date="startDate || todayISO"
             :max-date="`${currentYear}-12-31`"
             placeholder="Επιλέξτε ημερομηνία"
+            data-testid="end-date-input"
           />
         </div>
       </div>

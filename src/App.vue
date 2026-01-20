@@ -427,7 +427,7 @@ async function shareAnnualPlanAsImage() {
             <!-- Dark Mode Toggle -->
             <button
               @click="toggleDarkMode"
-              class="w-10 h-10 rounded-xl bg-(--marble-100) border border-(--marble-200)/50 flex items-center justify-center hover:bg-(--marble-200) transition-colors shadow-sm"
+              class="dark-mode-toggle w-10 h-10 rounded-xl bg-(--marble-100) border border-(--marble-200)/50 flex items-center justify-center hover:bg-(--marble-200) transition-colors shadow-sm"
               :aria-label="isDarkMode ? 'Αλλαγή σε φωτεινή λειτουργία' : 'Αλλαγή σε σκοτεινή λειτουργία'"
             >
               <svg v-if="isDarkMode" class="w-5 h-5 text-(--warning-500)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
