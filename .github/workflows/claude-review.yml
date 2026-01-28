@@ -1,15 +1,12 @@
 name: Claude PR Review
 
 on:
+  # Auto-review for PRs from the same repo (not forks)
   pull_request:
     types: [opened, synchronize, reopened]
-  # Manual trigger for trusted fork PRs
-  workflow_dispatch:
-    inputs:
-      pr_number:
-        description: 'PR number to review'
-        required: true
-        type: number
+  # Manual trigger via comment for fork PRs (maintainer comments "@claude review")
+  issue_comment:
+    types: [created]
 
 # Permissions required for Claude to comment on PRs
 permissions:
@@ -20,6 +17,14 @@ permissions:
 
 jobs:
   auto-review:
+    # Run for:
+    # 1. pull_request events (auto-review, but secrets only work for non-fork PRs)
+    # 2. issue_comment with "@claude" on a PR (manual trigger, works for fork PRs)
+    if: >
+      github.event_name == 'pull_request' ||
+      (github.event_name == 'issue_comment' &&
+       github.event.issue.pull_request &&
+       contains(github.event.comment.body, '@claude'))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -27,19 +32,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Checkout PR (manual trigger)
-        if: github.event_name == 'workflow_dispatch'
-        run: gh pr checkout ${{ inputs.pr_number }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Claude Code Review
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           claude_args: '--model claude-opus-4-5-20251101'
-          pr_number: ${{ inputs.pr_number || github.event.pull_request.number }}
+          trigger_phrase: '@claude'
           prompt: |
             Review this pull request for the Ανάσα (Anasa) Vue 3 + TypeScript project.
 
