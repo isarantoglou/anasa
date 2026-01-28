@@ -10,15 +10,15 @@ const mockHolidays: Holiday[] = [
     name: "New Year's Day",
     nameGreek: 'Πρωτοχρονιά',
     isMovable: false,
-    isCustom: false
+    isCustom: false,
   },
   {
     date: new Date(2026, 0, 6),
     name: 'Epiphany',
     nameGreek: 'Θεοφάνια',
     isMovable: false,
-    isCustom: false
-  }
+    isCustom: false,
+  },
 ]
 
 describe('CustomPeriodForm', () => {
@@ -34,7 +34,7 @@ describe('CustomPeriodForm', () => {
   const defaultProps = {
     currentYear: 2026,
     holidays: mockHolidays,
-    remainingLeaveDays: 20
+    remainingLeaveDays: 20,
   }
 
   it('should render collapsed by default', () => {
@@ -106,7 +106,9 @@ describe('CustomPeriodForm', () => {
       await flushPromises()
 
       expect(wrapper.find('[data-testid="validation-error"]').exists()).toBe(true)
-      expect(wrapper.text()).toContain('Η ημερομηνία έναρξης πρέπει να είναι πριν την ημερομηνία λήξης')
+      expect(wrapper.text()).toContain(
+        'Η ημερομηνία έναρξης πρέπει να είναι πριν την ημερομηνία λήξης'
+      )
     })
 
     it('should not show error when dates are empty', async () => {
@@ -177,8 +179,8 @@ describe('CustomPeriodForm', () => {
       const wrapper = mount(CustomPeriodForm, {
         props: {
           ...defaultProps,
-          remainingLeaveDays: 2
-        }
+          remainingLeaveDays: 2,
+        },
       })
       await wrapper.find('[data-testid="custom-period-toggle"]').trigger('click')
 
@@ -259,7 +261,9 @@ describe('CustomPeriodForm', () => {
       const wrapper = mount(CustomPeriodForm, { props: defaultProps })
       await wrapper.find('[data-testid="custom-period-toggle"]').trigger('click')
 
-      expect(wrapper.find('[data-testid="add-period-button"]').text()).toContain('Προσθήκη στο Πλάνο')
+      expect(wrapper.find('[data-testid="add-period-button"]').text()).toContain(
+        'Προσθήκη στο Πλάνο'
+      )
     })
   })
 

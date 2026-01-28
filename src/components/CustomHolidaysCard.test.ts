@@ -5,7 +5,7 @@ import type { CustomHoliday } from '../types'
 
 // Mock crypto.randomUUID
 vi.stubGlobal('crypto', {
-  randomUUID: () => 'test-uuid-123'
+  randomUUID: () => 'test-uuid-123',
 })
 
 describe('CustomHolidaysCard', () => {
@@ -15,7 +15,7 @@ describe('CustomHolidaysCard', () => {
 
   const defaultProps = {
     customHolidays: [] as CustomHoliday[],
-    currentYear: 2026
+    currentYear: 2026,
   }
 
   it('should render card title', () => {
@@ -130,7 +130,7 @@ describe('CustomHolidaysCard', () => {
     it('should disable add button when form is empty', () => {
       const wrapper = mount(CustomHolidaysCard, { props: defaultProps })
 
-      const addButton = wrapper.findAll('button').find(b => b.text().includes('Προσθήκη Αργίας'))
+      const addButton = wrapper.findAll('button').find((b) => b.text().includes('Προσθήκη Αργίας'))
       expect(addButton?.attributes('disabled')).toBeDefined()
     })
 
@@ -140,7 +140,7 @@ describe('CustomHolidaysCard', () => {
       await wrapper.find('#holidayName').setValue('Test Holiday')
       await wrapper.find('#holidayDate').setValue('2026-05-15')
 
-      const addButton = wrapper.findAll('button').find(b => b.text().includes('Προσθήκη Αργίας'))
+      const addButton = wrapper.findAll('button').find((b) => b.text().includes('Προσθήκη Αργίας'))
       expect(addButton?.attributes('disabled')).toBeUndefined()
     })
 
@@ -150,12 +150,12 @@ describe('CustomHolidaysCard', () => {
       await wrapper.find('#holidayName').setValue('Test Holiday')
       await wrapper.find('#holidayDate').setValue('2026-05-15')
 
-      const addButton = wrapper.findAll('button').find(b => b.text().includes('Προσθήκη Αργίας'))
+      const addButton = wrapper.findAll('button').find((b) => b.text().includes('Προσθήκη Αργίας'))
       await addButton?.trigger('click')
 
       expect(wrapper.emitted('add-holiday')).toBeTruthy()
       expect(wrapper.emitted('add-holiday')?.[0]).toEqual([
-        { id: 'test-uuid-123', name: 'Test Holiday', date: '2026-05-15' }
+        { id: 'test-uuid-123', name: 'Test Holiday', date: '2026-05-15' },
       ])
     })
 
@@ -165,7 +165,7 @@ describe('CustomHolidaysCard', () => {
       await wrapper.find('#holidayName').setValue('Test Holiday')
       await wrapper.find('#holidayDate').setValue('2026-05-15')
 
-      const addButton = wrapper.findAll('button').find(b => b.text().includes('Προσθήκη Αργίας'))
+      const addButton = wrapper.findAll('button').find((b) => b.text().includes('Προσθήκη Αργίας'))
       await addButton?.trigger('click')
 
       expect((wrapper.find('#holidayName').element as HTMLInputElement).value).toBe('')
@@ -194,9 +194,9 @@ describe('CustomHolidaysCard', () => {
           ...defaultProps,
           customHolidays: [
             { id: '1', name: 'Test Holiday 1', date: '2026-05-15' },
-            { id: '2', name: 'Test Holiday 2', date: '2026-08-20' }
-          ]
-        }
+            { id: '2', name: 'Test Holiday 2', date: '2026-08-20' },
+          ],
+        },
       })
 
       expect(wrapper.text()).toContain('Προστιθέμενες Αργίες')
@@ -208,10 +208,8 @@ describe('CustomHolidaysCard', () => {
       const wrapper = mount(CustomHolidaysCard, {
         props: {
           ...defaultProps,
-          customHolidays: [
-            { id: '1', name: 'Test Holiday', date: '2026-05-15' }
-          ]
-        }
+          customHolidays: [{ id: '1', name: 'Test Holiday', date: '2026-05-15' }],
+        },
       })
 
       // Greek date format should show month name
@@ -222,10 +220,8 @@ describe('CustomHolidaysCard', () => {
       const wrapper = mount(CustomHolidaysCard, {
         props: {
           ...defaultProps,
-          customHolidays: [
-            { id: 'holiday-1', name: 'Test Holiday', date: '2026-05-15' }
-          ]
-        }
+          customHolidays: [{ id: 'holiday-1', name: 'Test Holiday', date: '2026-05-15' }],
+        },
       })
 
       const deleteButton = wrapper.find('button[class*="hover:text-(--terracotta-500)"]')

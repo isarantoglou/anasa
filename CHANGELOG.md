@@ -7,11 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_No changes yet._
+### Added
+
+- **SEO Improvements**: Enhanced search engine optimization and social sharing
+  - Meta tags: title, description, keywords, author, canonical URL
+  - Open Graph tags for Facebook/LinkedIn sharing previews
+  - Twitter Card tags for Twitter sharing previews
+  - JSON-LD structured data (WebApplication schema) with features list
+  - Social sharing image (og-image.png) with app branding
+  - GitHub repository linked in structured data
+- **Code Quality Tools**: ESLint and Prettier integration
+  - ESLint flat config with TypeScript and Vue support
+  - Prettier with Tailwind CSS class sorting plugin
+  - New npm scripts: `lint`, `lint:fix`, `format`, `format:check`
+  - EditorConfig for consistent editor settings
+
+### Fixed
+
+- **Prop Mutation in LeaveRequestModal**: Fixed ESLint error where `annualPlan` prop was mutated in computed property (now uses spread operator to create copy before sorting)
 
 ## [1.4.0] - 2026-01-11
 
 ### Added
+
 - **Help Drawer**: Floating help button with instructions for new users
   - Persistent FAB (Floating Action Button) in bottom-right corner
   - Bottom sheet drawer with step-by-step guide in Greek
@@ -32,6 +50,7 @@ _No changes yet._
   - Shows "Κινητή εορτή" badge for these entries
 
 ### Fixed
+
 - **Mobile Layout for Annual Plan**: Improved responsive design
   - Header stats use smaller padding and text on mobile
   - Clear button shows icon-only on mobile, full text on desktop
@@ -42,6 +61,7 @@ _No changes yet._
   - Now calculates correct Easter-based date (e.g., 17/04 for 2026)
 
 ### Technical
+
 - **Playwright E2E Testing**: Cross-browser E2E test suite (44 tests)
   - Covers Chromium, Firefox, and WebKit
   - Tests: optimization workflow, sorting, custom holidays, custom periods, conflict detection, annual plan, URL sharing, dark mode, accessibility, responsive design
@@ -54,6 +74,7 @@ _No changes yet._
 ## [1.3.0] - 2026-01-10
 
 ### Added
+
 - **URL Sharing**: Share your complete leave plan setup via URL
   - Generates compressed shareable URLs using LZ-String compression
   - Shared links include: year, settings, custom holidays, and annual plan
@@ -64,6 +85,7 @@ _No changes yet._
   - Styled card showing year, stats, and all planned periods
 
 ### Changed
+
 - **Year Selector Animation**: Redesigned year picker with sliding indicator animation
   - Smooth sliding effect when changing years (indicator slides from previous position)
   - Carousel-style design with gradient fades at edges
@@ -71,12 +93,14 @@ _No changes yet._
 - Custom holidays list max height increased from 128px to 256px
 
 ### Fixed
+
 - **Greek Language**: Town search and patron saints now display in Greek
   - Search dropdown shows Greek town names (e.g., "Ιεράπετρα" instead of "Ierapetra")
   - Patron saint names in Greek (e.g., "Άγιος Γεώργιος" instead of "Saint George")
   - Added holidays use Greek format: "Άγιος Γεώργιος (Ιεράπετρα)"
 
 ### Technical
+
 - New `useShareableState` composable for URL-based state encoding/decoding
 - New `AnnualPlanShareCard` component for annual plan image generation
 - 98 new tests including App.vue and AnnualPlanShareCard (total: 618 tests)
@@ -86,14 +110,17 @@ _No changes yet._
 ## [1.2.0] - 2026-01-09
 
 ### Added
+
 - **Copy Success Alert**: Toast notification "Αντιγράφηκε!" when copying leave request text
 - **Version Display**: App version shown in footer
 - **Social Links**: Footer now includes links to Facebook, Instagram, LinkedIn, YouTube, and GitHub
 
 ### Changed
+
 - **Annual Plan Always Visible**: Section now always shows, allowing users to add custom periods before selecting optimizer suggestions
 
 ### Technical
+
 - **Shared Utilities**: Extracted duplicate code to `src/utils/` directory
   - `easterCalculation.ts`: Orthodox Easter calculation (was duplicated in useGreekHolidays and schoolHolidays)
   - `labels.ts`: Greek efficiency label generation (was duplicated in useLeaveOptimizer and useCustomPeriod)
@@ -103,11 +130,13 @@ _No changes yet._
 ## [1.1.0] - 2026-01-09
 
 ### Added
+
 - **Custom Leave Periods**: Users can now add custom leave periods to their annual plan beyond optimizer suggestions
 - **Period Labels**: Optional description labels for custom periods (e.g., "Ταξίδι στην Αμερική")
 - **Custom Period Badge**: Custom periods display "Προσαρμοσμένο" badge to distinguish from optimizer suggestions
 
 ### Technical
+
 - New `CustomPeriodForm` component with date picker and label input
 - New `useCustomPeriod` composable for custom period creation and validation
 - `SavedOpportunity` type now includes `isCustom` and `label` optional fields
@@ -119,6 +148,7 @@ _No changes yet._
 ## [1.0.0] - 2026-01-07
 
 ### Added
+
 - **Leave Optimization Engine**: Smart algorithm to find optimal leave periods based on efficiency ratio
 - **Orthodox Easter Calculation**: Accurate calculation using Meeus/Jones/Butcher algorithm with Julian to Gregorian conversion
 - **Greek Public Holidays**: Complete support for all Greek public holidays (fixed and movable)
@@ -136,6 +166,7 @@ _No changes yet._
 - **Responsive Design**: "Modern Aegean" design system with Tailwind CSS 4
 
 ### Technical
+
 - Vue 3 with Composition API and TypeScript
 - Vite 7 build system
 - Tailwind CSS 4 with custom design tokens

@@ -73,6 +73,7 @@ npm run test:e2e:ui  # Run with interactive UI for debugging
 ```
 
 If you haven't installed Playwright browsers yet:
+
 ```bash
 npx playwright install
 ```
@@ -86,6 +87,7 @@ npx playwright install
 ## Submitting Changes
 
 1. Ensure your code passes type-checking and all tests:
+
    ```bash
    npm run build
    npm run test:run
@@ -102,6 +104,7 @@ npx playwright install
 We use [Conventional Commits](https://www.conventionalcommits.org/) for clear, standardized commit messages.
 
 ### Format
+
 ```
 <type>(<scope>): <description>
 
@@ -109,6 +112,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/) for clear, s
 ```
 
 ### Types
+
 - `feat` - New feature
 - `fix` - Bug fix
 - `docs` - Documentation changes
@@ -118,6 +122,7 @@ We use [Conventional Commits](https://www.conventionalcommits.org/) for clear, s
 - `chore` - Maintenance tasks (deps, build, etc.)
 
 ### Examples
+
 ```bash
 feat(optimizer): add efficiency sorting option
 fix(holidays): correct Orthodox Easter calculation for 2025
@@ -127,6 +132,7 @@ chore: update dependencies
 ```
 
 3. Push to your fork:
+
    ```bash
    git push origin feature/your-feature-name
    ```

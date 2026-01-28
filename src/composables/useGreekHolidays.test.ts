@@ -1,22 +1,27 @@
 import { describe, it, expect } from 'vitest'
 import { ref } from 'vue'
-import { calculateOrthodoxEaster, useGreekHolidays, isHoliday, isHolidayOnWeekend } from './useGreekHolidays'
+import {
+  calculateOrthodoxEaster,
+  useGreekHolidays,
+  isHoliday,
+  isHolidayOnWeekend,
+} from './useGreekHolidays'
 import type { CustomHoliday, Holiday } from '../types'
 
 describe('calculateOrthodoxEaster', () => {
   // Known Orthodox Easter dates for verification
   const knownEasterDates: [number, { month: number; day: number }][] = [
-    [2020, { month: 4, day: 19 }],  // April 19, 2020
-    [2021, { month: 5, day: 2 }],   // May 2, 2021
-    [2022, { month: 4, day: 24 }],  // April 24, 2022
-    [2023, { month: 4, day: 16 }],  // April 16, 2023
-    [2024, { month: 5, day: 5 }],   // May 5, 2024
-    [2025, { month: 4, day: 20 }],  // April 20, 2025
-    [2026, { month: 4, day: 12 }],  // April 12, 2026
-    [2027, { month: 5, day: 2 }],   // May 2, 2027
-    [2028, { month: 4, day: 16 }],  // April 16, 2028
-    [2029, { month: 4, day: 8 }],   // April 8, 2029
-    [2030, { month: 4, day: 28 }],  // April 28, 2030
+    [2020, { month: 4, day: 19 }], // April 19, 2020
+    [2021, { month: 5, day: 2 }], // May 2, 2021
+    [2022, { month: 4, day: 24 }], // April 24, 2022
+    [2023, { month: 4, day: 16 }], // April 16, 2023
+    [2024, { month: 5, day: 5 }], // May 5, 2024
+    [2025, { month: 4, day: 20 }], // April 20, 2025
+    [2026, { month: 4, day: 12 }], // April 12, 2026
+    [2027, { month: 5, day: 2 }], // May 2, 2027
+    [2028, { month: 4, day: 16 }], // April 16, 2028
+    [2029, { month: 4, day: 8 }], // April 8, 2029
+    [2030, { month: 4, day: 28 }], // April 28, 2030
   ]
 
   it.each(knownEasterDates)(
@@ -52,15 +57,15 @@ describe('useGreekHolidays', () => {
       const customHolidays = ref<CustomHoliday[]>([])
       const { fixedHolidays } = useGreekHolidays(year, customHolidays)
 
-      const holidayNames = fixedHolidays.value.map(h => h.nameGreek)
+      const holidayNames = fixedHolidays.value.map((h) => h.nameGreek)
 
-      expect(holidayNames).toContain('Πρωτοχρονιά')        // New Year
-      expect(holidayNames).toContain('Θεοφάνια')           // Epiphany
+      expect(holidayNames).toContain('Πρωτοχρονιά') // New Year
+      expect(holidayNames).toContain('Θεοφάνια') // Epiphany
       expect(holidayNames).toContain('Εικοστή Πέμπτη Μαρτίου') // Independence Day
-      expect(holidayNames).toContain('Πρωτομαγιά')         // Labour Day
+      expect(holidayNames).toContain('Πρωτομαγιά') // Labour Day
       expect(holidayNames).toContain('Κοίμηση της Θεοτόκου') // Assumption
-      expect(holidayNames).toContain('Επέτειος του Όχι')   // Ohi Day
-      expect(holidayNames).toContain('Χριστούγεννα')       // Christmas
+      expect(holidayNames).toContain('Επέτειος του Όχι') // Ohi Day
+      expect(holidayNames).toContain('Χριστούγεννα') // Christmas
       expect(holidayNames).toContain('Σύναξη της Θεοτόκου') // Dec 26
     })
 
@@ -69,8 +74,7 @@ describe('useGreekHolidays', () => {
       const customHolidays = ref<CustomHoliday[]>([])
       const { fixedHolidays } = useGreekHolidays(year, customHolidays)
 
-      const findHoliday = (name: string) =>
-        fixedHolidays.value.find(h => h.nameGreek === name)
+      const findHoliday = (name: string) => fixedHolidays.value.find((h) => h.nameGreek === name)
 
       expect(findHoliday('Πρωτοχρονιά')?.date).toEqual(new Date(2026, 0, 1))
       expect(findHoliday('Θεοφάνια')?.date).toEqual(new Date(2026, 0, 6))
@@ -106,7 +110,7 @@ describe('useGreekHolidays', () => {
       const customHolidays = ref<CustomHoliday[]>([])
       const { orthodoxEaster, movableHolidays } = useGreekHolidays(year, customHolidays)
 
-      const cleanMonday = movableHolidays.value.find(h => h.nameGreek === 'Καθαρά Δευτέρα')
+      const cleanMonday = movableHolidays.value.find((h) => h.nameGreek === 'Καθαρά Δευτέρα')
       const easterTime = orthodoxEaster.value.getTime()
       const cleanMondayTime = cleanMonday!.date.getTime()
 
@@ -120,7 +124,7 @@ describe('useGreekHolidays', () => {
       const customHolidays = ref<CustomHoliday[]>([])
       const { orthodoxEaster, movableHolidays } = useGreekHolidays(year, customHolidays)
 
-      const goodFriday = movableHolidays.value.find(h => h.nameGreek === 'Μεγάλη Παρασκευή')
+      const goodFriday = movableHolidays.value.find((h) => h.nameGreek === 'Μεγάλη Παρασκευή')
       const easterTime = orthodoxEaster.value.getTime()
       const goodFridayTime = goodFriday!.date.getTime()
 
@@ -133,7 +137,7 @@ describe('useGreekHolidays', () => {
       const customHolidays = ref<CustomHoliday[]>([])
       const { orthodoxEaster, movableHolidays } = useGreekHolidays(year, customHolidays)
 
-      const easterMonday = movableHolidays.value.find(h => h.nameGreek === 'Δευτέρα του Πάσχα')
+      const easterMonday = movableHolidays.value.find((h) => h.nameGreek === 'Δευτέρα του Πάσχα')
       const easterTime = orthodoxEaster.value.getTime()
       const easterMondayTime = easterMonday!.date.getTime()
 
@@ -145,9 +149,13 @@ describe('useGreekHolidays', () => {
       const year = ref(2026)
       const customHolidays = ref<CustomHoliday[]>([])
       const includeHolySpirit = ref(true)
-      const { orthodoxEaster, movableHolidays } = useGreekHolidays(year, customHolidays, includeHolySpirit)
+      const { orthodoxEaster, movableHolidays } = useGreekHolidays(
+        year,
+        customHolidays,
+        includeHolySpirit
+      )
 
-      const holySpirit = movableHolidays.value.find(h => h.nameGreek === 'Αγίου Πνεύματος')
+      const holySpirit = movableHolidays.value.find((h) => h.nameGreek === 'Αγίου Πνεύματος')
       const easterTime = orthodoxEaster.value.getTime()
       const holySpiritTime = holySpirit!.date.getTime()
 
@@ -160,11 +168,11 @@ describe('useGreekHolidays', () => {
     it('should include custom holidays in allHolidays', () => {
       const year = ref(2026)
       const customHolidays = ref<CustomHoliday[]>([
-        { id: '1', name: 'Local Festival', date: '2026-06-15' }
+        { id: '1', name: 'Local Festival', date: '2026-06-15' },
       ])
       const { allHolidays } = useGreekHolidays(year, customHolidays)
 
-      const customHoliday = allHolidays.value.find(h => h.name === 'Local Festival')
+      const customHoliday = allHolidays.value.find((h) => h.name === 'Local Festival')
       expect(customHoliday).toBeDefined()
       expect(customHoliday?.isCustom).toBe(true)
     })
@@ -172,9 +180,9 @@ describe('useGreekHolidays', () => {
     it('should filter out invalid custom holidays', () => {
       const year = ref(2026)
       const customHolidays = ref<CustomHoliday[]>([
-        { id: '1', name: '', date: '2026-06-15' },     // Empty name
+        { id: '1', name: '', date: '2026-06-15' }, // Empty name
         { id: '2', name: 'Valid', date: '2026-06-16' }, // Valid
-        { id: '3', name: 'No Date', date: '' },        // Empty date
+        { id: '3', name: 'No Date', date: '' }, // Empty date
       ])
       const { customHolidays: converted } = useGreekHolidays(year, customHolidays)
 
@@ -190,8 +198,8 @@ describe('useGreekHolidays', () => {
           name: 'Άγιος Διονύσιος (Αθήνα)',
           date: '2025-10-03', // Old date from previous year
           isRecurring: true,
-          recurringDate: '10-03' // October 3rd
-        }
+          recurringDate: '10-03', // October 3rd
+        },
       ])
       const { customHolidays: converted } = useGreekHolidays(year, customHolidays)
 
@@ -210,8 +218,8 @@ describe('useGreekHolidays', () => {
           name: 'Πατρόν Σεϊντ',
           date: '2026-08-15',
           isRecurring: true,
-          recurringDate: '08-15'
-        }
+          recurringDate: '08-15',
+        },
       ])
       const { customHolidays: converted } = useGreekHolidays(year, customHolidays)
 
@@ -234,8 +242,8 @@ describe('useGreekHolidays', () => {
           isRecurring: true,
           recurringDate: '04-20',
           isMovable: true,
-          easterOffset: 5 // Bright Friday (Easter + 5)
-        }
+          easterOffset: 5, // Bright Friday (Easter + 5)
+        },
       ])
       const { customHolidays: converted, orthodoxEaster } = useGreekHolidays(year, customHolidays)
 
@@ -258,8 +266,8 @@ describe('useGreekHolidays', () => {
           isRecurring: true,
           recurringDate: '06-16',
           isMovable: true,
-          easterOffset: 49 // Pentecost Sunday
-        }
+          easterOffset: 49, // Pentecost Sunday
+        },
       ])
       const { customHolidays: converted, orthodoxEaster } = useGreekHolidays(year, customHolidays)
 
@@ -284,9 +292,9 @@ describe('useGreekHolidays', () => {
         {
           id: '1',
           name: 'Special Event 2026',
-          date: '2026-07-20'
+          date: '2026-07-20',
           // No isRecurring, so it's a one-time holiday
-        }
+        },
       ])
       const { customHolidays: converted } = useGreekHolidays(year, customHolidays)
 
@@ -310,8 +318,8 @@ describe('useGreekHolidays', () => {
           isRecurring: true,
           recurringDate: '04-23',
           isMovable: true,
-          movesIfBeforeEaster: true
-        }
+          movesIfBeforeEaster: true,
+        },
       ])
       const { customHolidays: converted, orthodoxEaster } = useGreekHolidays(year, customHolidays)
 
@@ -335,8 +343,8 @@ describe('useGreekHolidays', () => {
           isRecurring: true,
           recurringDate: '04-23',
           isMovable: true,
-          movesIfBeforeEaster: true
-        }
+          movesIfBeforeEaster: true,
+        },
       ])
       const { customHolidays: converted, orthodoxEaster } = useGreekHolidays(year, customHolidays)
 
@@ -359,8 +367,8 @@ describe('useGreekHolidays', () => {
           isRecurring: true,
           recurringDate: '04-23',
           isMovable: true,
-          movesIfBeforeEaster: true
-        }
+          movesIfBeforeEaster: true,
+        },
       ])
       const { customHolidays: converted } = useGreekHolidays(year, customHolidays)
 
@@ -388,8 +396,9 @@ describe('useGreekHolidays', () => {
 
       // Check that holidays are sorted
       for (let i = 1; i < allHolidays.value.length; i++) {
-        expect(allHolidays.value[i]!.date.getTime())
-          .toBeGreaterThanOrEqual(allHolidays.value[i - 1]!.date.getTime())
+        expect(allHolidays.value[i]!.date.getTime()).toBeGreaterThanOrEqual(
+          allHolidays.value[i - 1]!.date.getTime()
+        )
       }
     })
 
@@ -411,14 +420,15 @@ describe('useGreekHolidays', () => {
       const { weekendHolidays, allHolidays } = useGreekHolidays(year, customHolidays)
 
       // All weekend holidays should be on Saturday (6) or Sunday (0)
-      weekendHolidays.value.forEach(h => {
+      weekendHolidays.value.forEach((h) => {
         const day = h.date.getDay()
         expect([0, 6]).toContain(day)
       })
 
       // Weekend holidays + effective holidays should equal all holidays
-      expect(weekendHolidays.value.length +
-        allHolidays.value.filter(h => ![0, 6].includes(h.date.getDay())).length
+      expect(
+        weekendHolidays.value.length +
+          allHolidays.value.filter((h) => ![0, 6].includes(h.date.getDay())).length
       ).toBe(allHolidays.value.length)
     })
   })
@@ -430,7 +440,7 @@ describe('useGreekHolidays', () => {
       const { effectiveHolidays } = useGreekHolidays(year, customHolidays)
 
       // All effective holidays should be on weekdays (Mon-Fri: 1-5)
-      effectiveHolidays.value.forEach(h => {
+      effectiveHolidays.value.forEach((h) => {
         const day = h.date.getDay()
         expect(day).toBeGreaterThan(0)
         expect(day).toBeLessThan(6)
@@ -440,11 +450,15 @@ describe('useGreekHolidays', () => {
     it('should exclude weekend holidays from effective count', () => {
       const year = ref(2026)
       const customHolidays = ref<CustomHoliday[]>([])
-      const { effectiveHolidays, weekendHolidays, allHolidays } = useGreekHolidays(year, customHolidays)
+      const { effectiveHolidays, weekendHolidays, allHolidays } = useGreekHolidays(
+        year,
+        customHolidays
+      )
 
       // effectiveHolidays + weekendHolidays should equal allHolidays
-      expect(effectiveHolidays.value.length + weekendHolidays.value.length)
-        .toBe(allHolidays.value.length)
+      expect(effectiveHolidays.value.length + weekendHolidays.value.length).toBe(
+        allHolidays.value.length
+      )
     })
 
     it('should have fewer effective holidays than total in 2026', () => {
@@ -482,7 +496,7 @@ describe('useGreekHolidays', () => {
     it('should find custom holidays via composable isHoliday', () => {
       const year = ref(2026)
       const customHolidays = ref<CustomHoliday[]>([
-        { id: '1', name: 'Local Festival', date: '2026-06-15' }
+        { id: '1', name: 'Local Festival', date: '2026-06-15' },
       ])
       const holidays = useGreekHolidays(year, customHolidays)
 
@@ -523,7 +537,13 @@ describe('useGreekHolidays', () => {
 describe('isHoliday', () => {
   it('should find holiday on matching date', () => {
     const holidays: Holiday[] = [
-      { date: new Date(2026, 0, 1), name: 'New Year', nameGreek: 'Πρωτοχρονιά', isMovable: false, isCustom: false }
+      {
+        date: new Date(2026, 0, 1),
+        name: 'New Year',
+        nameGreek: 'Πρωτοχρονιά',
+        isMovable: false,
+        isCustom: false,
+      },
     ]
 
     const result = isHoliday(new Date(2026, 0, 1), holidays)
@@ -533,7 +553,13 @@ describe('isHoliday', () => {
 
   it('should return undefined for non-holiday date', () => {
     const holidays: Holiday[] = [
-      { date: new Date(2026, 0, 1), name: 'New Year', nameGreek: 'Πρωτοχρονιά', isMovable: false, isCustom: false }
+      {
+        date: new Date(2026, 0, 1),
+        name: 'New Year',
+        nameGreek: 'Πρωτοχρονιά',
+        isMovable: false,
+        isCustom: false,
+      },
     ]
 
     const result = isHoliday(new Date(2026, 0, 2), holidays)
@@ -548,7 +574,7 @@ describe('isHolidayOnWeekend', () => {
       name: 'Test',
       nameGreek: 'Test',
       isMovable: false,
-      isCustom: false
+      isCustom: false,
     }
 
     expect(isHolidayOnWeekend(holiday)).toBe(true)
@@ -560,7 +586,7 @@ describe('isHolidayOnWeekend', () => {
       name: 'Test',
       nameGreek: 'Test',
       isMovable: false,
-      isCustom: false
+      isCustom: false,
     }
 
     expect(isHolidayOnWeekend(holiday)).toBe(true)
@@ -572,7 +598,7 @@ describe('isHolidayOnWeekend', () => {
       name: 'Test',
       nameGreek: 'Test',
       isMovable: false,
-      isCustom: false
+      isCustom: false,
     }
 
     expect(isHolidayOnWeekend(holiday)).toBe(false)
@@ -593,13 +619,13 @@ describe('edge cases', () => {
   it('should handle custom holiday with same date as fixed holiday', () => {
     const year = ref(2026)
     const customHolidays = ref<CustomHoliday[]>([
-      { id: '1', name: 'Custom New Year', date: '2026-01-01' } // Same as New Year
+      { id: '1', name: 'Custom New Year', date: '2026-01-01' }, // Same as New Year
     ])
     const { allHolidays } = useGreekHolidays(year, customHolidays)
 
     // Should include both (no deduplication by date)
     const newYearHolidays = allHolidays.value.filter(
-      h => h.date.getMonth() === 0 && h.date.getDate() === 1
+      (h) => h.date.getMonth() === 0 && h.date.getDate() === 1
     )
     expect(newYearHolidays.length).toBe(2)
   })
@@ -615,7 +641,7 @@ describe('edge cases', () => {
   it('should handle year change maintaining custom holidays', () => {
     const year = ref(2026)
     const customHolidays = ref<CustomHoliday[]>([
-      { id: '1', name: 'Annual Event', date: '2026-07-15' }
+      { id: '1', name: 'Annual Event', date: '2026-07-15' },
     ])
     const { customHolidays: converted } = useGreekHolidays(year, customHolidays)
 
@@ -630,7 +656,7 @@ describe('edge cases', () => {
     // Test boundary years
     const testYears = [2000, 2050, 2099]
 
-    testYears.forEach(testYear => {
+    testYears.forEach((testYear) => {
       const easter = calculateOrthodoxEaster(testYear)
       expect(easter).toBeInstanceOf(Date)
       expect(easter.getFullYear()).toBe(testYear)
@@ -641,7 +667,7 @@ describe('edge cases', () => {
   it('should handle custom holiday with special characters in name', () => {
     const year = ref(2026)
     const customHolidays = ref<CustomHoliday[]>([
-      { id: '1', name: 'Γιορτή του Αγίου Νικολάου', date: '2026-12-06' }
+      { id: '1', name: 'Γιορτή του Αγίου Νικολάου', date: '2026-12-06' },
     ])
     const { customHolidays: converted } = useGreekHolidays(year, customHolidays)
 

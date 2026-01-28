@@ -8,7 +8,7 @@ import {
   clearUrlState,
   recalculateOpportunity,
   recalculateAppState,
-  type AppState
+  type AppState,
 } from './useShareableState'
 import type { SavedOpportunity, Holiday } from '../types'
 
@@ -21,7 +21,7 @@ function createMockAppState(overrides: Partial<AppState> = {}): AppState {
     totalAnnualLeaveDays: 25,
     customHolidays: [],
     annualPlan: [],
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -31,7 +31,7 @@ function createMockOpportunity(overrides: Partial<SavedOpportunity> = {}): Saved
     id: 'test-id',
     range: {
       startDate: new Date(2026, 3, 10),
-      endDate: new Date(2026, 3, 15)
+      endDate: new Date(2026, 3, 15),
     },
     totalDays: 6,
     leaveDaysRequired: 4,
@@ -40,7 +40,7 @@ function createMockOpportunity(overrides: Partial<SavedOpportunity> = {}): Saved
     efficiencyLabel: 'Κάντε 4 ημέρες 6',
     days: [],
     addedAt: new Date().toISOString(),
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -51,7 +51,7 @@ function createMockHoliday(date: Date, name: string): Holiday {
     name,
     nameGreek: name,
     isMovable: false,
-    isCustom: false
+    isCustom: false,
   }
 }
 
@@ -66,7 +66,7 @@ describe('useShareableState', () => {
       ...originalLocation,
       href: 'http://localhost:5173/',
       search: '',
-      origin: 'http://localhost:5173'
+      origin: 'http://localhost:5173',
     } as Location
   })
 
@@ -86,9 +86,7 @@ describe('useShareableState', () => {
 
     it('should encode state with custom holidays', () => {
       const state = createMockAppState({
-        customHolidays: [
-          { id: '1', date: '2026-04-23', name: 'Άγιος Γεώργιος' }
-        ]
+        customHolidays: [{ id: '1', date: '2026-04-23', name: 'Άγιος Γεώργιος' }],
       })
       const encoded = encodeState(state)
 
@@ -97,7 +95,7 @@ describe('useShareableState', () => {
 
     it('should encode state with annual plan', () => {
       const state = createMockAppState({
-        annualPlan: [createMockOpportunity()]
+        annualPlan: [createMockOpportunity()],
       })
       const encoded = encodeState(state)
 
@@ -109,9 +107,9 @@ describe('useShareableState', () => {
         annualPlan: [
           createMockOpportunity({
             isCustom: true,
-            label: 'Ταξίδι στην Αμερική'
-          })
-        ]
+            label: 'Ταξίδι στην Αμερική',
+          }),
+        ],
       })
       const encoded = encodeState(state)
 
@@ -134,9 +132,7 @@ describe('useShareableState', () => {
 
     it('should decode state with custom holidays', () => {
       const originalState = createMockAppState({
-        customHolidays: [
-          { id: '1', date: '2026-04-23', name: 'Άγιος Γεώργιος' }
-        ]
+        customHolidays: [{ id: '1', date: '2026-04-23', name: 'Άγιος Γεώργιος' }],
       })
       const encoded = encodeState(originalState)
       const decoded = decodeState(encoded)
@@ -149,7 +145,7 @@ describe('useShareableState', () => {
 
     it('should decode state with annual plan', () => {
       const originalState = createMockAppState({
-        annualPlan: [createMockOpportunity()]
+        annualPlan: [createMockOpportunity()],
       })
       const encoded = encodeState(originalState)
       const decoded = decodeState(encoded)
@@ -165,9 +161,9 @@ describe('useShareableState', () => {
         annualPlan: [
           createMockOpportunity({
             isCustom: true,
-            label: 'Ταξίδι στην Αμερική'
-          })
-        ]
+            label: 'Ταξίδι στην Αμερική',
+          }),
+        ],
       })
       const encoded = encodeState(originalState)
       const decoded = decodeState(encoded)
@@ -200,7 +196,7 @@ describe('useShareableState', () => {
     it('should generate valid URL that can be decoded', () => {
       const state = createMockAppState({
         year: 2027,
-        includeHolySpirit: false
+        includeHolySpirit: false,
       })
       const url = generateShareUrl(state)
 
@@ -262,19 +258,19 @@ describe('useShareableState', () => {
       const opportunity = createMockOpportunity({
         range: {
           startDate: new Date(2026, 3, 10), // April 10, 2026 (Friday)
-          endDate: new Date(2026, 3, 13)    // April 13, 2026 (Monday - Easter Monday)
+          endDate: new Date(2026, 3, 13), // April 13, 2026 (Monday - Easter Monday)
         },
         totalDays: 0,
         leaveDaysRequired: 0,
         freeDays: 0,
         efficiency: 0,
         efficiencyLabel: '',
-        days: []
+        days: [],
       })
 
       const holidays: Holiday[] = [
         createMockHoliday(new Date(2026, 3, 10), 'Μεγάλη Παρασκευή'),
-        createMockHoliday(new Date(2026, 3, 13), 'Δευτέρα του Πάσχα')
+        createMockHoliday(new Date(2026, 3, 13), 'Δευτέρα του Πάσχα'),
       ]
 
       const recalculated = recalculateOpportunity(opportunity, holidays)
@@ -289,7 +285,7 @@ describe('useShareableState', () => {
       const opportunity = createMockOpportunity({
         id: 'my-custom-id',
         isCustom: true,
-        label: 'Test Label'
+        label: 'Test Label',
       })
 
       const recalculated = recalculateOpportunity(opportunity, [])
@@ -307,23 +303,21 @@ describe('useShareableState', () => {
           createMockOpportunity({
             range: {
               startDate: new Date(2026, 0, 1),
-              endDate: new Date(2026, 0, 4)
+              endDate: new Date(2026, 0, 4),
             },
-            days: []
+            days: [],
           }),
           createMockOpportunity({
             range: {
               startDate: new Date(2026, 3, 10),
-              endDate: new Date(2026, 3, 15)
+              endDate: new Date(2026, 3, 15),
             },
-            days: []
-          })
-        ]
+            days: [],
+          }),
+        ],
       })
 
-      const holidays: Holiday[] = [
-        createMockHoliday(new Date(2026, 0, 1), 'Πρωτοχρονιά')
-      ]
+      const holidays: Holiday[] = [createMockHoliday(new Date(2026, 0, 1), 'Πρωτοχρονιά')]
 
       const recalculated = recalculateAppState(state, holidays)
 
@@ -338,7 +332,7 @@ describe('useShareableState', () => {
         includeHolySpirit: false,
         parentMode: true,
         totalAnnualLeaveDays: 30,
-        customHolidays: [{ id: '1', date: '2027-05-01', name: 'Test' }]
+        customHolidays: [{ id: '1', date: '2027-05-01', name: 'Test' }],
       })
 
       const recalculated = recalculateAppState(state, [])
@@ -360,24 +354,24 @@ describe('useShareableState', () => {
         totalAnnualLeaveDays: 30,
         customHolidays: [
           { id: '1', date: '2027-04-23', name: 'Άγιος Γεώργιος' },
-          { id: '2', date: '2027-08-15', name: 'Κοίμηση Θεοτόκου' }
+          { id: '2', date: '2027-08-15', name: 'Κοίμηση Θεοτόκου' },
         ],
         annualPlan: [
           createMockOpportunity({
             range: {
               startDate: new Date(2027, 0, 1),
-              endDate: new Date(2027, 0, 6)
-            }
+              endDate: new Date(2027, 0, 6),
+            },
           }),
           createMockOpportunity({
             range: {
               startDate: new Date(2027, 3, 10),
-              endDate: new Date(2027, 3, 20)
+              endDate: new Date(2027, 3, 20),
             },
             isCustom: true,
-            label: 'Διακοπές Πάσχα'
-          })
-        ]
+            label: 'Διακοπές Πάσχα',
+          }),
+        ],
       })
 
       const encoded = encodeState(originalState)
@@ -396,14 +390,12 @@ describe('useShareableState', () => {
 
     it('should handle Greek characters correctly', () => {
       const originalState = createMockAppState({
-        customHolidays: [
-          { id: '1', date: '2026-04-23', name: 'Άγιος Γεώργιος του Τροπαιοφόρου' }
-        ],
+        customHolidays: [{ id: '1', date: '2026-04-23', name: 'Άγιος Γεώργιος του Τροπαιοφόρου' }],
         annualPlan: [
           createMockOpportunity({
-            label: 'Ταξίδι στην Ελλάδα με τα παιδιά'
-          })
-        ]
+            label: 'Ταξίδι στην Ελλάδα με τα παιδιά',
+          }),
+        ],
       })
 
       const encoded = encodeState(originalState)
@@ -422,19 +414,17 @@ describe('useShareableState', () => {
           createMockOpportunity({
             range: {
               startDate: new Date(2026, 7, 10),
-              endDate: new Date(2026, 7, 20)
-            }
+              endDate: new Date(2026, 7, 20),
+            },
           }),
           createMockOpportunity({
             range: {
               startDate: new Date(2026, 11, 20),
-              endDate: new Date(2027, 0, 5)
-            }
-          })
+              endDate: new Date(2027, 0, 5),
+            },
+          }),
         ],
-        customHolidays: [
-          { id: '1', date: '2026-04-23', name: 'Άγιος Γεώργιος' }
-        ]
+        customHolidays: [{ id: '1', date: '2026-04-23', name: 'Άγιος Γεώργιος' }],
       })
 
       const url = generateShareUrl(state)

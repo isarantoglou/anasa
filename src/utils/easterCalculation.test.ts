@@ -34,17 +34,17 @@ describe('getJulianGregorianOffset', () => {
 describe('calculateOrthodoxEaster', () => {
   // Known Orthodox Easter dates (verified against official sources)
   const knownEasterDates: [number, { month: number; day: number }][] = [
-    [2020, { month: 4, day: 19 }],  // April 19, 2020
-    [2021, { month: 5, day: 2 }],   // May 2, 2021
-    [2022, { month: 4, day: 24 }],  // April 24, 2022
-    [2023, { month: 4, day: 16 }],  // April 16, 2023
-    [2024, { month: 5, day: 5 }],   // May 5, 2024
-    [2025, { month: 4, day: 20 }],  // April 20, 2025
-    [2026, { month: 4, day: 12 }],  // April 12, 2026
-    [2027, { month: 5, day: 2 }],   // May 2, 2027
-    [2028, { month: 4, day: 16 }],  // April 16, 2028
-    [2029, { month: 4, day: 8 }],   // April 8, 2029
-    [2030, { month: 4, day: 28 }],  // April 28, 2030
+    [2020, { month: 4, day: 19 }], // April 19, 2020
+    [2021, { month: 5, day: 2 }], // May 2, 2021
+    [2022, { month: 4, day: 24 }], // April 24, 2022
+    [2023, { month: 4, day: 16 }], // April 16, 2023
+    [2024, { month: 5, day: 5 }], // May 5, 2024
+    [2025, { month: 4, day: 20 }], // April 20, 2025
+    [2026, { month: 4, day: 12 }], // April 12, 2026
+    [2027, { month: 5, day: 2 }], // May 2, 2027
+    [2028, { month: 4, day: 16 }], // April 16, 2028
+    [2029, { month: 4, day: 8 }], // April 8, 2029
+    [2030, { month: 4, day: 28 }], // April 28, 2030
   ]
 
   it.each(knownEasterDates)(

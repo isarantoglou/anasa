@@ -57,7 +57,7 @@ const exceedsRemaining = computed(() => {
 })
 
 const isZeroLeave = computed(() => {
-  return preview.value && preview.value.leaveDaysRequired === 0
+  return preview.value?.leaveDaysRequired === 0
 })
 
 // Actions
@@ -90,17 +90,22 @@ function formatDate(dateStr: string): string {
 </script>
 
 <template>
-  <div class="border border-(--marble-200) rounded-xl bg-(--marble-50) overflow-hidden">
+  <div class="overflow-hidden rounded-xl border border-(--marble-200) bg-(--marble-50)">
     <!-- Collapsible Header -->
     <button
       @click="isExpanded = !isExpanded"
-      class="w-full px-4 py-3 flex items-center justify-between hover:bg-(--marble-100) transition-colors"
+      class="flex w-full items-center justify-between px-4 py-3 transition-colors hover:bg-(--marble-100)"
       data-testid="custom-period-toggle"
     >
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-(--terracotta-500) flex items-center justify-center">
-          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-(--terracotta-500)">
+          <svg class="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
           </svg>
         </div>
         <span class="text-sm font-semibold text-(--marble-700)">
@@ -108,7 +113,7 @@ function formatDate(dateStr: string): string {
         </span>
       </div>
       <svg
-        class="w-5 h-5 text-(--marble-400) transition-transform duration-200"
+        class="h-5 w-5 text-(--marble-400) transition-transform duration-200"
         :class="{ 'rotate-180': isExpanded }"
         fill="none"
         stroke="currentColor"
@@ -119,11 +124,11 @@ function formatDate(dateStr: string): string {
     </button>
 
     <!-- Expandable Content -->
-    <div v-if="isExpanded" class="px-4 pb-4 space-y-4" data-testid="custom-period-form">
+    <div v-if="isExpanded" class="space-y-4 px-4 pb-4" data-testid="custom-period-form">
       <!-- Date Inputs -->
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label for="custom-start" class="block text-xs font-semibold text-(--marble-600) mb-2">
+          <label for="custom-start" class="mb-2 block text-xs font-semibold text-(--marble-600)">
             Από Ημερομηνία
           </label>
           <input
@@ -137,7 +142,7 @@ function formatDate(dateStr: string): string {
           />
         </div>
         <div>
-          <label for="custom-end" class="block text-xs font-semibold text-(--marble-600) mb-2">
+          <label for="custom-end" class="mb-2 block text-xs font-semibold text-(--marble-600)">
             Έως Ημερομηνία
           </label>
           <input
@@ -154,7 +159,7 @@ function formatDate(dateStr: string): string {
 
       <!-- Label Input -->
       <div>
-        <label for="custom-label" class="block text-xs font-semibold text-(--marble-600) mb-2">
+        <label for="custom-label" class="mb-2 block text-xs font-semibold text-(--marble-600)">
           Περιγραφή <span class="font-normal text-(--marble-400)">(προαιρετικό)</span>
         </label>
         <input
@@ -171,12 +176,17 @@ function formatDate(dateStr: string): string {
       <!-- Validation Error -->
       <div
         v-if="validation.error"
-        class="p-3 rounded-lg bg-(--error-100) border border-(--error-200)"
+        class="rounded-lg border border-(--error-200) bg-(--error-100) p-3"
         data-testid="validation-error"
       >
         <div class="flex items-center gap-2 text-(--error-600)">
-          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <span class="text-sm font-medium">{{ validation.error }}</span>
         </div>
@@ -185,11 +195,11 @@ function formatDate(dateStr: string): string {
       <!-- Preview Stats -->
       <div
         v-if="preview"
-        class="p-4 rounded-xl bg-white border border-(--marble-200)"
+        class="rounded-xl border border-(--marble-200) bg-white p-4"
         data-testid="preview-stats"
       >
-        <div class="flex items-center justify-between mb-3">
-          <div class="text-xs font-semibold text-(--marble-500) uppercase tracking-wider">
+        <div class="mb-3 flex items-center justify-between">
+          <div class="text-xs font-semibold tracking-wider text-(--marble-500) uppercase">
             Προεπισκόπηση
           </div>
           <div class="text-sm font-medium text-(--marble-600)">
@@ -201,54 +211,67 @@ function formatDate(dateStr: string): string {
             <div class="stat-number text-xl font-bold text-(--aegean-600)">
               {{ preview.totalDays }}
             </div>
-            <div class="text-[10px] font-semibold text-(--marble-500) uppercase mt-1">Σύνολο</div>
+            <div class="mt-1 text-[10px] font-semibold text-(--marble-500) uppercase">Σύνολο</div>
           </div>
           <div class="text-center">
             <div class="stat-number text-xl font-bold text-(--warning-600)">
               {{ preview.leaveDaysRequired }}
             </div>
-            <div class="text-[10px] font-semibold text-(--marble-500) uppercase mt-1">Άδεια</div>
+            <div class="mt-1 text-[10px] font-semibold text-(--marble-500) uppercase">Άδεια</div>
           </div>
           <div class="text-center">
             <div class="stat-number text-xl font-bold text-(--success-600)">
               {{ preview.freeDays }}
             </div>
-            <div class="text-[10px] font-semibold text-(--marble-500) uppercase mt-1">Δωρεάν</div>
+            <div class="mt-1 text-[10px] font-semibold text-(--marble-500) uppercase">Δωρεάν</div>
           </div>
           <div class="text-center">
             <div class="stat-number text-xl font-bold text-(--terracotta-600)">
               {{ preview.efficiency.toFixed(1) }}x
             </div>
-            <div class="text-[10px] font-semibold text-(--marble-500) uppercase mt-1">Απόδοση</div>
+            <div class="mt-1 text-[10px] font-semibold text-(--marble-500) uppercase">Απόδοση</div>
           </div>
         </div>
 
         <!-- Zero Leave Warning -->
         <div
           v-if="isZeroLeave"
-          class="mt-3 p-2 rounded-lg bg-(--warning-100) border border-(--warning-200)"
+          class="mt-3 rounded-lg border border-(--warning-200) bg-(--warning-100) p-2"
           data-testid="zero-leave-warning"
         >
           <div class="flex items-center gap-2 text-(--warning-700)">
-            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
-            <span class="text-xs font-medium">Η περίοδος δεν απαιτεί ημέρες άδειας (μόνο Σ/Κ και αργίες)</span>
+            <span class="text-xs font-medium"
+              >Η περίοδος δεν απαιτεί ημέρες άδειας (μόνο Σ/Κ και αργίες)</span
+            >
           </div>
         </div>
 
         <!-- Exceeds Remaining Warning -->
         <div
           v-if="exceedsRemaining"
-          class="mt-3 p-2 rounded-lg bg-(--warning-100) border border-(--warning-200)"
+          class="mt-3 rounded-lg border border-(--warning-200) bg-(--warning-100) p-2"
           data-testid="exceeds-warning"
         >
           <div class="flex items-center gap-2 text-(--warning-700)">
-            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            <svg class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
             </svg>
             <span class="text-xs font-medium">
-              Η περίοδος χρειάζεται {{ preview.leaveDaysRequired }} ημέρες αλλά έχετε μόνο {{ remainingLeaveDays }} διαθέσιμες
+              Η περίοδος χρειάζεται {{ preview.leaveDaysRequired }} ημέρες αλλά έχετε μόνο
+              {{ remainingLeaveDays }} διαθέσιμες
             </span>
           </div>
         </div>
@@ -258,11 +281,16 @@ function formatDate(dateStr: string): string {
       <button
         @click="addPeriod"
         :disabled="!canAdd"
-        class="w-full btn-primary"
+        class="btn-primary w-full"
         data-testid="add-period-button"
       >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+          />
         </svg>
         Προσθήκη στο Πλάνο
       </button>

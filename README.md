@@ -17,12 +17,14 @@ A Vue 3 application by [Oxygen](https://www.oxygen.gr) that helps users maximize
 ## Features
 
 ### Core Optimization
+
 - **Smart Leave Optimization** - Finds all leave periods for the year ranked by efficiency (days off / leave days used)
 - **Dual Sorting** - Sort opportunities by efficiency (best value) or chronologically by date
 - **Orthodox Easter Calculation** - Accurate calculation of movable holidays based on Orthodox Easter
 - **Custom Holidays** - Add local holidays manually or search 130+ Greek towns for patron saint days
 
 ### Annual Planning
+
 - **Annual Leave Plan** - Save multiple opportunities to build a complete yearly plan
 - **Custom Periods** - Add your own leave periods with optional labels (e.g., "Trip to America")
 - **Custom Period Badges** - Custom periods are visually distinct with "Προσαρμοσμένο" badge
@@ -30,12 +32,14 @@ A Vue 3 application by [Oxygen](https://www.oxygen.gr) that helps users maximize
 - **Remaining Days Tracking** - Track used vs remaining days from your total allocation
 
 ### Export & Sharing
+
 - **URL Sharing** - Share your complete plan setup via compressed URL
 - **Share as Image** - Generate PNG cards for any opportunity
 - **Calendar Export** - Download your annual plan as .ics file for Google Calendar/Outlook
 - **Leave Request Generator** - Generate formal Greek leave request letters
 
 ### Additional Features
+
 - **Year Comparison** - Compare holidays across up to 3 years with weekend indicators
 - **Parent Mode** - Optimize for family time during school breaks (Christmas & Easter)
 - **Holy Spirit Toggle** - Include/exclude Agios Pneumatos based on your company policy

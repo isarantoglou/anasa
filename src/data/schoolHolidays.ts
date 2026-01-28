@@ -37,7 +37,7 @@ export function getSchoolBreaks(year: number): SchoolBreak[] {
     nameGreek: 'Διακοπές Χριστουγέννων',
     startDate: new Date(year, 11, 24), // Dec 24
     endDate: new Date(year + 1, 0, 7), // Jan 7 next year
-    icon: '🎄'
+    icon: '🎄',
   })
 
   // Easter Break: Approximately April 5-19 (depends on Orthodox Easter)
@@ -55,7 +55,7 @@ export function getSchoolBreaks(year: number): SchoolBreak[] {
     nameGreek: 'Διακοπές Πάσχα',
     startDate: easterBreakStart,
     endDate: easterBreakEnd,
-    icon: '🐣'
+    icon: '🐣',
   })
 
   return breaks
@@ -73,21 +73,21 @@ export function getSchoolHolidays(year: number): SchoolHoliday[] {
   holidays.push({
     date: new Date(year, 9, 28),
     name: 'Oxi Day',
-    nameGreek: 'Ημέρα του Όχι'
+    nameGreek: 'Ημέρα του Όχι',
   })
 
   // November 17 - Polytechnic Uprising
   holidays.push({
     date: new Date(year, 10, 17),
     name: 'Polytechnic Uprising',
-    nameGreek: '17 Νοεμβρίου'
+    nameGreek: '17 Νοεμβρίου',
   })
 
   // January 30 - Three Hierarchs (school holiday only)
   holidays.push({
     date: new Date(year, 0, 30),
     name: 'Three Hierarchs',
-    nameGreek: 'Τριών Ιεραρχών'
+    nameGreek: 'Τριών Ιεραρχών',
   })
 
   // Clean Monday (48 days before Easter)
@@ -96,21 +96,21 @@ export function getSchoolHolidays(year: number): SchoolHoliday[] {
   holidays.push({
     date: cleanMonday,
     name: 'Clean Monday',
-    nameGreek: 'Καθαρά Δευτέρα'
+    nameGreek: 'Καθαρά Δευτέρα',
   })
 
   // March 25 - Independence Day
   holidays.push({
     date: new Date(year, 2, 25),
     name: 'Independence Day',
-    nameGreek: '25η Μαρτίου'
+    nameGreek: '25η Μαρτίου',
   })
 
   // May 1 - Labor Day
   holidays.push({
     date: new Date(year, 4, 1),
     name: 'Labor Day',
-    nameGreek: 'Πρωτομαγιά'
+    nameGreek: 'Πρωτομαγιά',
   })
 
   // Whit Monday (50 days after Easter)
@@ -119,7 +119,7 @@ export function getSchoolHolidays(year: number): SchoolHoliday[] {
   holidays.push({
     date: whitMonday,
     name: 'Whit Monday',
-    nameGreek: 'Αγίου Πνεύματος'
+    nameGreek: 'Αγίου Πνεύματος',
   })
 
   return holidays
@@ -168,9 +168,10 @@ export function calculateSchoolOverlap(
   const holidays = getSchoolHolidays(year)
 
   // Also check previous year's Christmas break (which ends in January of current year)
-  if (startDate.getMonth() === 0) { // January
+  if (startDate.getMonth() === 0) {
+    // January
     const prevYearBreaks = getSchoolBreaks(year - 1)
-    const christmasBreak = prevYearBreaks.find(b => b.id === 'christmas')
+    const christmasBreak = prevYearBreaks.find((b) => b.id === 'christmas')
     if (christmasBreak) {
       breaks.push(christmasBreak)
     }
@@ -197,8 +198,8 @@ export function calculateSchoolOverlap(
     const holidayTime = holiday.date.getTime()
     if (holidayTime >= startDate.getTime() && holidayTime <= endDate.getTime()) {
       // Only count if not already in a break period
-      const inBreak = breaks.some(b =>
-        holidayTime >= b.startDate.getTime() && holidayTime <= b.endDate.getTime()
+      const inBreak = breaks.some(
+        (b) => holidayTime >= b.startDate.getTime() && holidayTime <= b.endDate.getTime()
       )
       if (!inBreak) {
         overlappingHolidays.push(holiday)
@@ -210,7 +211,7 @@ export function calculateSchoolOverlap(
   return {
     totalOverlapDays,
     overlappingBreaks,
-    overlappingHolidays
+    overlappingHolidays,
   }
 }
 
@@ -223,6 +224,6 @@ export function getSchoolCalendar(year: number): {
 } {
   return {
     breaks: getSchoolBreaks(year),
-    holidays: getSchoolHolidays(year)
+    holidays: getSchoolHolidays(year),
   }
 }

@@ -11,7 +11,7 @@ function createMockHoliday(overrides: Partial<Holiday> = {}): Holiday {
     nameGreek: 'Δοκιμαστική Αργία',
     isMovable: false,
     isCustom: false,
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -21,9 +21,13 @@ describe('PublicHolidaysCard', () => {
     allHolidays: [
       createMockHoliday({ date: new Date(2026, 0, 1), nameGreek: 'Πρωτοχρονιά' }),
       createMockHoliday({ date: new Date(2026, 0, 6), nameGreek: 'Θεοφάνεια' }),
-      createMockHoliday({ date: new Date(2026, 3, 12), nameGreek: 'Κυριακή του Πάσχα', isMovable: true })
+      createMockHoliday({
+        date: new Date(2026, 3, 12),
+        nameGreek: 'Κυριακή του Πάσχα',
+        isMovable: true,
+      }),
     ],
-    weekendHolidays: [] as Holiday[]
+    weekendHolidays: [] as Holiday[],
   }
 
   it('should render the card title with current year', () => {
@@ -44,14 +48,14 @@ describe('PublicHolidaysCard', () => {
     const wrapper = mount(PublicHolidaysCard, { props: defaultProps })
 
     const badges = wrapper.findAll('.badge')
-    expect(badges.some(b => b.text() === 'Σταθερή')).toBe(true)
+    expect(badges.some((b) => b.text() === 'Σταθερή')).toBe(true)
   })
 
   it('should show badge for movable holidays', () => {
     const wrapper = mount(PublicHolidaysCard, { props: defaultProps })
 
     const badges = wrapper.findAll('.badge')
-    expect(badges.some(b => b.text() === 'Κινητή')).toBe(true)
+    expect(badges.some((b) => b.text() === 'Κινητή')).toBe(true)
   })
 
   it('should show badge for custom holidays', () => {
@@ -59,14 +63,14 @@ describe('PublicHolidaysCard', () => {
       ...defaultProps,
       allHolidays: [
         ...defaultProps.allHolidays,
-        createMockHoliday({ nameGreek: 'Τοπική Αργία', isCustom: true })
-      ]
+        createMockHoliday({ nameGreek: 'Τοπική Αργία', isCustom: true }),
+      ],
     }
 
     const wrapper = mount(PublicHolidaysCard, { props: propsWithCustom })
 
     const badges = wrapper.findAll('.badge')
-    expect(badges.some(b => b.text() === 'Προσαρμ.')).toBe(true)
+    expect(badges.some((b) => b.text() === 'Προσαρμ.')).toBe(true)
   })
 
   describe('weekend holidays section', () => {
@@ -80,8 +84,8 @@ describe('PublicHolidaysCard', () => {
       const propsWithWeekend = {
         ...defaultProps,
         weekendHolidays: [
-          createMockHoliday({ date: new Date(2026, 7, 15), nameGreek: 'Δεκαπενταύγουστος' })
-        ]
+          createMockHoliday({ date: new Date(2026, 7, 15), nameGreek: 'Δεκαπενταύγουστος' }),
+        ],
       }
 
       const wrapper = mount(PublicHolidaysCard, { props: propsWithWeekend })
@@ -94,8 +98,8 @@ describe('PublicHolidaysCard', () => {
         ...defaultProps,
         weekendHolidays: [
           createMockHoliday({ date: new Date(2026, 7, 15), nameGreek: 'Δεκαπενταύγουστος' }),
-          createMockHoliday({ date: new Date(2026, 11, 25), nameGreek: 'Χριστούγεννα' })
-        ]
+          createMockHoliday({ date: new Date(2026, 11, 25), nameGreek: 'Χριστούγεννα' }),
+        ],
       }
 
       const wrapper = mount(PublicHolidaysCard, { props: propsWithWeekend })
@@ -107,8 +111,8 @@ describe('PublicHolidaysCard', () => {
       const propsWithWeekend = {
         ...defaultProps,
         weekendHolidays: [
-          createMockHoliday({ date: new Date(2026, 7, 15), nameGreek: 'Δεκαπενταύγουστος' })
-        ]
+          createMockHoliday({ date: new Date(2026, 7, 15), nameGreek: 'Δεκαπενταύγουστος' }),
+        ],
       }
 
       const wrapper = mount(PublicHolidaysCard, { props: propsWithWeekend })

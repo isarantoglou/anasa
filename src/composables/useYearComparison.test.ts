@@ -7,7 +7,7 @@ import {
   getEasterMondayForYear,
   getHolySpiritForYear,
   getFixedHolidayDay,
-  FIXED_HOLIDAYS
+  FIXED_HOLIDAYS,
 } from './useYearComparison'
 
 describe('useYearComparison', () => {
@@ -58,7 +58,7 @@ describe('useYearComparison', () => {
 
     it('should never be weekend (always Friday)', () => {
       const years = [2024, 2025, 2026, 2027, 2028]
-      years.forEach(year => {
+      years.forEach((year) => {
         const result = getGoodFridayForYear(year)
         expect(result.isWeekend).toBe(false)
       })
@@ -75,7 +75,7 @@ describe('useYearComparison', () => {
 
     it('should never be weekend (always Monday)', () => {
       const years = [2024, 2025, 2026, 2027, 2028]
-      years.forEach(year => {
+      years.forEach((year) => {
         const result = getEasterMondayForYear(year)
         expect(result.isWeekend).toBe(false)
       })
@@ -92,7 +92,7 @@ describe('useYearComparison', () => {
 
     it('should never be weekend (always Monday)', () => {
       const years = [2024, 2025, 2026, 2027, 2028]
-      years.forEach(year => {
+      years.forEach((year) => {
         const result = getHolySpiritForYear(year)
         expect(result.isWeekend).toBe(false)
       })
@@ -128,7 +128,7 @@ describe('useYearComparison', () => {
     })
 
     it('should handle all fixed holidays', () => {
-      FIXED_HOLIDAYS.forEach(holiday => {
+      FIXED_HOLIDAYS.forEach((holiday) => {
         const result = getFixedHolidayDay(holiday, 2026)
         expect(result.label).not.toBe('-')
         expect(typeof result.isWeekend).toBe('boolean')
@@ -182,7 +182,7 @@ describe('useYearComparison', () => {
     it('should handle late Easter years', () => {
       // Easter can be as late as May 8
       const years = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]
-      years.forEach(year => {
+      years.forEach((year) => {
         const result = getEasterForYear(year)
         expect(result).toBeTruthy()
         // Should contain month abbreviation

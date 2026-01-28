@@ -16,14 +16,14 @@ export interface HolidayInfo {
 
 // Fixed holiday dates mapping (MM-DD format)
 const FIXED_HOLIDAY_DATES: Record<string, string> = {
-  'Πρωτοχρονιά': '01-01',
-  'Θεοφάνεια': '01-06',
-  'Ευαγγελισμός': '03-25',
-  'Πρωτομαγιά': '05-01',
-  'Δεκαπενταύγουστος': '08-15',
+  Πρωτοχρονιά: '01-01',
+  Θεοφάνεια: '01-06',
+  Ευαγγελισμός: '03-25',
+  Πρωτομαγιά: '05-01',
+  Δεκαπενταύγουστος: '08-15',
   'Ημέρα του Όχι': '10-28',
-  'Χριστούγεννα': '12-25',
-  '2η Χριστουγέννων': '12-26'
+  Χριστούγεννα: '12-25',
+  '2η Χριστουγέννων': '12-26',
 }
 
 // Greek day names
@@ -46,7 +46,7 @@ function getMovableHolidayDate(year: number, offsetFromEaster: number): Date {
 function formatHolidayInfo(date: Date): HolidayInfo {
   return {
     label: format(date, 'd MMM', { locale: el }),
-    isWeekend: isWeekend(date)
+    isWeekend: isWeekend(date),
   }
 }
 
@@ -101,7 +101,7 @@ export function getFixedHolidayDay(holidayName: string, year: number): HolidayIn
 
   return {
     label: `${GREEK_DAYS[dayOfWeek]} ${day}/${month}`,
-    isWeekend: isWeekend(date)
+    isWeekend: isWeekend(date),
   }
 }
 
@@ -116,6 +116,6 @@ export function useYearComparison() {
     getGoodFridayForYear,
     getEasterMondayForYear,
     getHolySpiritForYear,
-    getFixedHolidayDay
+    getFixedHolidayDay,
   }
 }

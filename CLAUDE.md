@@ -19,15 +19,21 @@ npm run test:e2e      # Run Playwright E2E tests
 npm run test:e2e:ui   # Run E2E tests with interactive UI
 npm run test:e2e:headed  # Run E2E tests in headed browser mode
 npm run test:e2e:debug   # Run E2E tests in debug mode
+npm run lint          # Run ESLint to check for issues
+npm run lint:fix      # Run ESLint and auto-fix issues
+npm run format        # Format all files with Prettier
+npm run format:check  # Check if files are formatted correctly
 ```
 
 ## Architecture
 
 ### Tech Stack
+
 - Vue 3 with Composition API (`<script setup>`)
 - TypeScript
 - Tailwind CSS 4 (via @tailwindcss/vite plugin)
 - date-fns for date manipulation (with Greek locale `el`)
+- ESLint (flat config) + Prettier for code quality
 - html2canvas for image generation
 - Vite 7 as build tool
 - Vitest + Vue Test Utils for unit testing
@@ -36,11 +42,13 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 ### Core Composables
 
 **`useGreekHolidays.ts`** - Provides Greek public holidays for any year:
+
 - Re-exports `calculateOrthodoxEaster` from `utils/easterCalculation.ts`
 - Returns fixed holidays (Jan 1, Mar 25, etc.) and movable holidays (Easter-dependent: Clean Monday, Good Friday, etc.)
 - Tracks which holidays fall on weekends
 
 **`useLeaveOptimizer.ts`** - Leave optimization engine:
+
 - Sliding window algorithm to find optimal leave periods
 - Calculates efficiency ratio (totalDays / leaveDaysUsed)
 - Supports "Calculate from Today" vs "Full Year" mode
@@ -48,12 +56,14 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 - All date formatting and labels use Greek locale (`el`)
 
 **`useYearComparison.ts`** - Year comparison utilities:
+
 - `getEasterForYear(year)` - Easter date formatted in Greek
 - `getCleanMondayForYear(year)`, `getGoodFridayForYear(year)`, etc. - Movable holidays with weekend detection
 - `getFixedHolidayDay(holiday, year)` - Fixed holiday day-of-week with weekend detection
 - Reuses `calculateOrthodoxEaster` from useGreekHolidays
 
 **`usePersistedState.ts`** - Generic localStorage persistence:
+
 - `usePersistedBoolean(key, default)` - Boolean settings
 - `usePersistedNumber(key, default)` - Number settings
 - `usePersistedJson<T>(key, default)` - JSON objects/arrays with deep watching
@@ -61,6 +71,7 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 - Loads on mount, persists on change
 
 **`useCustomPeriod.ts`** - Custom leave period creation:
+
 - `generateCustomCalendar(start, end, holidays)` - Generates DayInfo array for date range
 - `createCustomPeriod(start, end, holidays)` - Creates OptimizationResult for custom dates
 - `validateDateRange(start, end, year)` - Validates dates (future only, within year, start ≤ end)
@@ -68,6 +79,7 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 - `useCustomPeriod(holidays)` - Composable wrapper with reactive holidays
 
 **`useShareableState.ts`** - URL-based state sharing:
+
 - `encodeState(state)` - Compresses AppState to URL-safe string using LZ-String
 - `decodeState(encoded)` - Decompresses string back to AppState
 - `generateShareUrl(state)` - Creates full shareable URL with encoded state
@@ -82,11 +94,13 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 ### Shared Utilities (src/utils/)
 
 **`easterCalculation.ts`** - Orthodox Easter calculation:
+
 - `calculateOrthodoxEaster(year)` - Meeus/Jones/Butcher algorithm for Orthodox Easter (Julian → Gregorian conversion)
 - `getJulianGregorianOffset(year)` - Calendar offset calculation (13 days for 1900-2099)
 - Used by `useGreekHolidays`, `schoolHolidays`, and `useYearComparison`
 
 **`labels.ts`** - Greek label generation:
+
 - `getEfficiencyLabel(leaveDays, totalDays)` - Generates Greek efficiency labels (e.g., "Κάντε 3 ημέρες 9")
 - Used by `useLeaveOptimizer` and `useCustomPeriod`
 
@@ -95,16 +109,19 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 **App.vue** (~500 lines) - Main application shell, orchestrates child components
 
 **Settings & Configuration:**
+
 - `SettingsCard.vue` - Year carousel with sliding indicator animation, toggles (Holy Spirit, Parent Mode), leave day inputs, year stats
 - `CustomHolidaysCard.vue` - Town search for patron saints, manual holiday form, holiday list
 - `PublicHolidaysCard.vue` - Public holidays list with weekend warnings
 
 **Plan Management:**
+
 - `AnnualPlanSection.vue` - Annual plan display, stats, export buttons, custom period form
 - `CustomPeriodForm.vue` - Collapsible form to add custom leave periods with date picker and label
 - `HolidayTable.vue` - Full calendar table with all holidays
 
 **Modals:**
+
 - `modals/ConflictWarningModal.vue` - Overlap warning with force-add option
 - `modals/LeaveRequestModal.vue` - Greek leave request letter generator
 - `modals/YearComparisonModal.vue` - Compare holidays across 3 years
@@ -116,6 +133,7 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 **`patronSaints.ts`** - Database of 130+ Greek towns and their patron saints with feast dates. Users can search by town to add local holidays. Some patron saints have movable feasts (Easter-dependent) with `easterOffset` for accurate date calculation.
 
 **`schoolHolidays.ts`** - Greek school calendar for Parent Mode:
+
 - `getSchoolBreaks(year)` - Returns Christmas (Dec 24 - Jan 7) and Easter breaks
 - `getSchoolHolidays(year)` - Returns school-specific holidays (Three Hierarchs, etc.)
 - `calculateSchoolOverlap()` - Calculates overlap between leave periods and school breaks
@@ -124,6 +142,7 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 ### Design System
 
 **`style.css`** - "Modern Aegean" design system with:
+
 - CSS custom properties for theming (light/dark mode)
 - Color palette: Aegean blues, terracotta accents, marble neutrals
 - Fonts: Cormorant Garamond (title only), Inter (body/numbers)
@@ -146,6 +165,7 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 ## App Features
 
 ### Core Features
+
 - **Leave Optimization**: Finds ALL leave periods for the year based on efficiency (days off / leave days used)
 - **Sort Toggle**: Sort opportunities by efficiency (best value) or by date (chronological)
 - **Two Leave Day Inputs**: Total annual leave days (saved) and search days (for finding opportunities)
@@ -154,6 +174,7 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 - **Dark Mode**: Toggle with persistence
 
 ### Annual Plan Features
+
 - **Annual Leave Plan**: Save multiple opportunities to build a yearly plan
 - **Custom Periods**: Add custom leave periods with date picker and optional description label (e.g., "Ταξίδι στην Αμερική")
 - **Custom Period Badge**: Custom periods display "Προσαρμοσμένο" badge to distinguish from optimizer suggestions
@@ -162,18 +183,21 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 - **Warning**: Alerts when searching for more days than remaining
 
 ### Export & Sharing Features
+
 - **URL Sharing**: Share complete plan setup via compressed URL (uses LZ-String)
 - **Share as Image**: Generate PNG of any opportunity (uses html2canvas with hex colors)
 - **Export to Calendar**: Download annual plan as .ics file for Google Calendar/Outlook
 - **Leave Request Generator**: Generate formal Greek leave request letter with copy/download
 
 ### Comparison Features
+
 - **Year Comparison**: Modal comparing all holidays across up to 3 years
   - Fixed holidays: Πρωτοχρονιά, Θεοφάνεια, Ευαγγελισμός, Πρωτομαγιά, Δεκαπενταύγουστος, Ημέρα του Όχι, Χριστούγεννα, 2η Χριστουγέννων
   - Movable holidays: Ορθόδοξο Πάσχα, Καθαρά Δευτέρα, Μεγάλη Παρασκευή, Δευτέρα του Πάσχα, Αγίου Πνεύματος (if enabled)
   - Shows day of week with color coding (green = weekday, yellow = weekend)
 
 ### Parent Mode (Λειτουργία Γονέα)
+
 - **Toggle**: Enable in Settings to optimize for family time during school breaks
 - **School Breaks**: Shows Christmas break (Dec 24 - Jan 7) and Easter break (dynamic based on Orthodox Easter)
 - **Family Sort**: New sort option "Οικογένεια" prioritizes opportunities with school holiday overlap
@@ -183,6 +207,7 @@ npm run test:e2e:debug   # Run E2E tests in debug mode
 ## State Persistence (localStorage)
 
 All under `anasa-*` prefix:
+
 - `anasa-dark-mode` - Boolean for dark mode preference
 - `anasa-custom-holidays` - Array of custom holidays
 - `anasa-total-days` - Total annual leave days allocation
@@ -206,6 +231,7 @@ Unit tests use Vitest with jsdom environment. **688 tests** with 84%+ overall co
 ### Unit Test Files
 
 **Composables:**
+
 - `src/composables/useAnnualPlan.test.ts` - Annual plan management, conflict detection, custom periods with labels, localStorage
 - `src/composables/useGreekHolidays.test.ts` - Orthodox Easter calculation (2020-2030), fixed/movable holidays, recurring patron saints
 - `src/composables/useLeaveOptimizer.test.ts` - Calendar generation, optimization algorithm, statistics
@@ -215,10 +241,12 @@ Unit tests use Vitest with jsdom environment. **688 tests** with 84%+ overall co
 - `src/composables/useShareableState.test.ts` - URL encoding/decoding, state compression, round-trip tests
 
 **Data:**
+
 - `src/data/schoolHolidays.test.ts` - School breaks (Christmas/Easter), overlap calculations
 - `src/data/patronSaints.test.ts` - Patron saints database, search functions, accent-insensitive search, data integrity
 
 **Components:**
+
 - `src/components/SettingsCard.test.ts` - Year picker, toggles, inputs, stats, input validation
 - `src/components/CustomHolidaysCard.test.ts` - Town search, manual form, list
 - `src/components/PublicHolidaysCard.test.ts` - Holiday display, badges
@@ -229,6 +257,7 @@ Unit tests use Vitest with jsdom environment. **688 tests** with 84%+ overall co
 - `src/components/HelpDrawer.test.ts` - FAB button, notification dot, pulse animation, drawer open/close, localStorage persistence, accessibility
 
 **Modals:**
+
 - `src/components/modals/ConflictWarningModal.test.ts` - Warning display, events
 - `src/components/modals/LeaveRequestModal.test.ts` - Request generation, clipboard
 - `src/components/modals/YearComparisonModal.test.ts` - Year selection, comparison
@@ -236,9 +265,11 @@ Unit tests use Vitest with jsdom environment. **688 tests** with 84%+ overall co
 - `src/components/modals/AnnualPlanShareCard.test.ts` - Annual plan image card, date formatting, custom badges
 
 **App:**
+
 - `src/App.test.ts` - Dark mode, sorting, modals, footer, localStorage, component integration
 
 **Utils:**
+
 - `src/utils/easterCalculation.test.ts` - Orthodox Easter algorithm, Julian-Gregorian offset
 - `src/utils/labels.test.ts` - Greek efficiency label generation
 
@@ -253,10 +284,12 @@ Unit tests use Vitest with jsdom environment. **688 tests** with 84%+ overall co
 E2E tests use Playwright with cross-browser support. **44 tests** across Chromium, Firefox, and WebKit.
 
 **E2E Test Files:**
+
 - `e2e/app.spec.ts` - Core app functionality: title, heading, year selector, dark mode, inputs, opportunity cards, settings toggles, holidays display
 - `e2e/workflows.spec.ts` - User workflows: optimization workflow, sorting behavior, custom holidays, custom periods, conflict detection, annual plan management, URL sharing, dark mode persistence, accessibility, responsive design
 
 **E2E Configuration:**
+
 - `playwright.config.ts` - Cross-browser configuration (Chromium, Firefox, WebKit)
 - Tests run against dev server on `http://localhost:5173`
 - CI runs tests headless with 2 retries
@@ -265,6 +298,7 @@ E2E tests use Playwright with cross-browser support. **44 tests** across Chromiu
 ## Versioning
 
 This project follows [Semantic Versioning](https://semver.org/):
+
 - **MAJOR** (x.0.0): Breaking changes or major redesigns
 - **MINOR** (0.x.0): New features, backwards compatible
 - **PATCH** (0.0.x): Bug fixes, backwards compatible
@@ -285,6 +319,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/) format for all 
 ```
 
 **Types:**
+
 - `feat` - New feature
 - `fix` - Bug fix
 - `docs` - Documentation changes
@@ -294,6 +329,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/) format for all 
 - `chore` - Maintenance tasks (deps, build, etc.)
 
 **Examples:**
+
 ```
 feat(optimizer): add family sort option for parent mode
 fix(holidays): correct Holy Spirit date calculation

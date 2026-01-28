@@ -11,7 +11,7 @@ function createMockHoliday(overrides: Partial<Holiday> = {}): Holiday {
     nameGreek: 'Δοκιμαστική Αργία',
     isMovable: false,
     isCustom: false,
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -21,9 +21,13 @@ describe('HolidayTable', () => {
     allHolidays: [
       createMockHoliday({ date: new Date(2026, 0, 1), nameGreek: 'Πρωτοχρονιά' }),
       createMockHoliday({ date: new Date(2026, 0, 6), nameGreek: 'Θεοφάνεια' }),
-      createMockHoliday({ date: new Date(2026, 3, 10), nameGreek: 'Μεγάλη Παρασκευή', isMovable: true }),
-      createMockHoliday({ date: new Date(2026, 6, 15), nameGreek: 'Τοπική Αργία', isCustom: true })
-    ]
+      createMockHoliday({
+        date: new Date(2026, 3, 10),
+        nameGreek: 'Μεγάλη Παρασκευή',
+        isMovable: true,
+      }),
+      createMockHoliday({ date: new Date(2026, 6, 15), nameGreek: 'Τοπική Αργία', isCustom: true }),
+    ],
   }
 
   it('should render table with current year in title', () => {
@@ -55,7 +59,7 @@ describe('HolidayTable', () => {
     const wrapper = mount(HolidayTable, { props: defaultProps })
 
     const badges = wrapper.findAll('.badge')
-    const badgeTexts = badges.map(b => b.text())
+    const badgeTexts = badges.map((b) => b.text())
 
     expect(badgeTexts).toContain('Σταθερή')
     expect(badgeTexts).toContain('Κινητή')
@@ -70,14 +74,14 @@ describe('HolidayTable', () => {
         // Thursday (workday)
         createMockHoliday({ date: new Date(2026, 0, 1), nameGreek: 'Πρωτοχρονιά' }),
         // Saturday (weekend) - Aug 15, 2026 is Saturday
-        createMockHoliday({ date: new Date(2026, 7, 15), nameGreek: 'Δεκαπενταύγουστος' })
-      ]
+        createMockHoliday({ date: new Date(2026, 7, 15), nameGreek: 'Δεκαπενταύγουστος' }),
+      ],
     }
 
     const wrapper = mount(HolidayTable, { props: propsWithWeekend })
 
     const badges = wrapper.findAll('.badge')
-    const badgeTexts = badges.map(b => b.text())
+    const badgeTexts = badges.map((b) => b.text())
 
     expect(badgeTexts).toContain('Ρεπό') // Workday holiday
     expect(badgeTexts).toContain('Σ/Κ') // Weekend holiday
@@ -95,7 +99,7 @@ describe('HolidayTable', () => {
 
     // Greek day names
     const greekDays = ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο']
-    const hasGreekDay = greekDays.some(day => wrapper.text().includes(day))
+    const hasGreekDay = greekDays.some((day) => wrapper.text().includes(day))
 
     expect(hasGreekDay).toBe(true)
   })
@@ -110,14 +114,14 @@ describe('HolidayTable', () => {
   it('should apply correct badge class for movable holidays', () => {
     const wrapper = mount(HolidayTable, { props: defaultProps })
 
-    const movableBadge = wrapper.findAll('.badge').find(b => b.text() === 'Κινητή')
+    const movableBadge = wrapper.findAll('.badge').find((b) => b.text() === 'Κινητή')
     expect(movableBadge?.classes()).toContain('badge-aegean')
   })
 
   it('should apply correct badge class for custom holidays', () => {
     const wrapper = mount(HolidayTable, { props: defaultProps })
 
-    const customBadge = wrapper.findAll('.badge').find(b => b.text() === 'Προσαρμ.')
+    const customBadge = wrapper.findAll('.badge').find((b) => b.text() === 'Προσαρμ.')
     expect(customBadge?.classes()).toContain('badge-terracotta')
   })
 })

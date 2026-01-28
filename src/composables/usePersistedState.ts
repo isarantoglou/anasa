@@ -18,7 +18,7 @@ type Serializer<T> = {
 const serializers = {
   boolean: {
     read: (raw: string) => raw === 'true',
-    write: (value: boolean) => String(value)
+    write: (value: boolean) => String(value),
   } as Serializer<boolean>,
 
   number: {
@@ -26,18 +26,19 @@ const serializers = {
       const num = parseInt(raw, 10)
       return isNaN(num) ? 0 : num
     },
-    write: (value: number) => String(value)
+    write: (value: number) => String(value),
   } as Serializer<number>,
 
   string: {
     read: (raw: string) => raw,
-    write: (value: string) => value
+    write: (value: string) => value,
   } as Serializer<string>,
 
-  json: <T>() => ({
-    read: (raw: string) => JSON.parse(raw) as T,
-    write: (value: T) => JSON.stringify(value)
-  } as Serializer<T>)
+  json: <T>() =>
+    ({
+      read: (raw: string) => JSON.parse(raw) as T,
+      write: (value: T) => JSON.stringify(value),
+    }) as Serializer<T>,
 }
 
 export type SerializerType = 'boolean' | 'number' | 'string' | 'json'

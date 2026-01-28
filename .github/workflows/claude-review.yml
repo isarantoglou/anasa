@@ -25,7 +25,7 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          claude_args: "--model claude-opus-4-5-20251101"
+          claude_args: '--model claude-opus-4-5-20251101'
           prompt: |
             Review this pull request for the Ανάσα (Anasa) Vue 3 + TypeScript project.
 

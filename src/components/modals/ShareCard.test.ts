@@ -15,7 +15,7 @@ function createMockDays(count: number): DayInfo[] {
       isWeekend,
       isHoliday,
       holidayName: isHoliday ? 'Test Holiday' : undefined,
-      cost: isWeekend || isHoliday ? 0 : 1
+      cost: isWeekend || isHoliday ? 0 : 1,
     })
   }
   return days
@@ -26,7 +26,7 @@ function createMockOpportunity(overrides: Partial<OptimizationResult> = {}): Opt
   return {
     range: {
       startDate: new Date(2026, 0, 5),
-      endDate: new Date(2026, 0, 11)
+      endDate: new Date(2026, 0, 11),
     },
     totalDays: 7,
     leaveDaysRequired: 4,
@@ -34,7 +34,7 @@ function createMockOpportunity(overrides: Partial<OptimizationResult> = {}): Opt
     efficiency: 1.75,
     efficiencyLabel: '3 ημέρες δωρεάν',
     days: createMockDays(7),
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -47,12 +47,12 @@ describe('ShareCard', () => {
   const defaultProps = {
     opportunity: createMockOpportunity(),
     currentYear: 2026,
-    formatDateRange
+    formatDateRange,
   }
 
   it('should not render when opportunity is null', () => {
     const wrapper = mount(ShareCard, {
-      props: { ...defaultProps, opportunity: null }
+      props: { ...defaultProps, opportunity: null },
     })
 
     expect(wrapper.find('#share-card').exists()).toBe(false)
@@ -175,8 +175,8 @@ describe('ShareCard', () => {
     const wrapper = mount(ShareCard, {
       props: {
         ...defaultProps,
-        opportunity: createMockOpportunity({ efficiency: 2.333 })
-      }
+        opportunity: createMockOpportunity({ efficiency: 2.333 }),
+      },
     })
 
     expect(wrapper.text()).toContain('2.3x')

@@ -14,9 +14,9 @@ function createLocalStorageMock() {
       delete store[key]
     }),
     clear: vi.fn(() => {
-      Object.keys(store).forEach(key => delete store[key])
+      Object.keys(store).forEach((key) => delete store[key])
     }),
-    _store: store
+    _store: store,
   }
 }
 
@@ -30,7 +30,7 @@ describe('HelpDrawer', () => {
     originalLocalStorage = window.localStorage
     Object.defineProperty(window, 'localStorage', {
       value: localStorageMock,
-      writable: true
+      writable: true,
     })
     vi.useFakeTimers()
   })
@@ -39,7 +39,7 @@ describe('HelpDrawer', () => {
     vi.useRealTimers()
     Object.defineProperty(window, 'localStorage', {
       value: originalLocalStorage,
-      writable: true
+      writable: true,
     })
   })
 

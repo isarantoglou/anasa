@@ -4,11 +4,13 @@ import App from './App.vue'
 
 // Mock html2canvas
 vi.mock('html2canvas', () => ({
-  default: vi.fn(() => Promise.resolve({
-    toBlob: (callback: (blob: Blob) => void) => {
-      callback(new Blob(['test'], { type: 'image/png' }))
-    }
-  }))
+  default: vi.fn(() =>
+    Promise.resolve({
+      toBlob: (callback: (blob: Blob) => void) => {
+        callback(new Blob(['test'], { type: 'image/png' }))
+      },
+    })
+  ),
 }))
 
 // Mock useShareableState
@@ -17,12 +19,12 @@ vi.mock('./composables/useShareableState', () => ({
   hasSharedState: vi.fn(() => false),
   clearUrlState: vi.fn(),
   generateShareUrl: vi.fn(() => 'https://test.com/?s=encoded'),
-  recalculateAppState: vi.fn((state) => state)
+  recalculateAppState: vi.fn((state) => state),
 }))
 
 // Mock package.json version
 vi.mock('../package.json', () => ({
-  version: '1.0.0'
+  version: '1.0.0',
 }))
 
 // Helper to create localStorage mock
@@ -37,13 +39,13 @@ function createLocalStorageMock() {
       delete store[key]
     }),
     clear: vi.fn(() => {
-      Object.keys(store).forEach(key => delete store[key])
+      Object.keys(store).forEach((key) => delete store[key])
     }),
     get length() {
       return Object.keys(store).length
     },
     key: vi.fn((index: number) => Object.keys(store)[index] ?? null),
-    _store: store
+    _store: store,
   }
 }
 
@@ -57,7 +59,7 @@ function createMatchMediaMock(matches: boolean = false) {
     removeListener: vi.fn(),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn()
+    dispatchEvent: vi.fn(),
   }))
 }
 
@@ -75,7 +77,7 @@ describe('App.vue', () => {
     originalLocalStorage = window.localStorage
     Object.defineProperty(window, 'localStorage', {
       value: localStorageMock,
-      writable: true
+      writable: true,
     })
 
     // Setup matchMedia mock
@@ -89,8 +91,8 @@ describe('App.vue', () => {
     // Mock clipboard
     Object.assign(navigator, {
       clipboard: {
-        writeText: vi.fn(() => Promise.resolve())
-      }
+        writeText: vi.fn(() => Promise.resolve()),
+      },
     })
 
     // Reset mocks
@@ -101,7 +103,7 @@ describe('App.vue', () => {
     vi.useRealTimers()
     Object.defineProperty(window, 'localStorage', {
       value: originalLocalStorage,
-      writable: true
+      writable: true,
     })
     window.matchMedia = originalMatchMedia
   })
@@ -249,7 +251,7 @@ describe('App.vue', () => {
       const wrapper = mount(App)
 
       const buttons = wrapper.findAll('.toggle-switch-option')
-      const efficiencyButton = buttons.find(b => b.text() === 'Απόδοση')
+      const efficiencyButton = buttons.find((b) => b.text() === 'Απόδοση')
 
       expect(efficiencyButton?.classes()).toContain('active')
     })
@@ -257,7 +259,9 @@ describe('App.vue', () => {
     it('should switch to date sort when clicked', async () => {
       const wrapper = mount(App)
 
-      const dateButton = wrapper.findAll('.toggle-switch-option').find(b => b.text() === 'Ημερομηνία')
+      const dateButton = wrapper
+        .findAll('.toggle-switch-option')
+        .find((b) => b.text() === 'Ημερομηνία')
       await dateButton?.trigger('click')
 
       expect(dateButton?.classes()).toContain('active')
@@ -272,8 +276,12 @@ describe('App.vue', () => {
     it('should deactivate efficiency sort when date sort is clicked', async () => {
       const wrapper = mount(App)
 
-      const efficiencyButton = wrapper.findAll('.toggle-switch-option').find(b => b.text() === 'Απόδοση')
-      const dateButton = wrapper.findAll('.toggle-switch-option').find(b => b.text() === 'Ημερομηνία')
+      const efficiencyButton = wrapper
+        .findAll('.toggle-switch-option')
+        .find((b) => b.text() === 'Απόδοση')
+      const dateButton = wrapper
+        .findAll('.toggle-switch-option')
+        .find((b) => b.text() === 'Ημερομηνία')
 
       // Initially efficiency is active
       expect(efficiencyButton?.classes()).toContain('active')
@@ -289,8 +297,12 @@ describe('App.vue', () => {
     it('should switch back to efficiency sort when clicked', async () => {
       const wrapper = mount(App)
 
-      const efficiencyButton = wrapper.findAll('.toggle-switch-option').find(b => b.text() === 'Απόδοση')
-      const dateButton = wrapper.findAll('.toggle-switch-option').find(b => b.text() === 'Ημερομηνία')
+      const efficiencyButton = wrapper
+        .findAll('.toggle-switch-option')
+        .find((b) => b.text() === 'Απόδοση')
+      const dateButton = wrapper
+        .findAll('.toggle-switch-option')
+        .find((b) => b.text() === 'Ημερομηνία')
 
       // Switch to date
       await dateButton?.trigger('click')
@@ -339,7 +351,7 @@ describe('App.vue', () => {
       const sortButtons = wrapper.findAll('.toggle-switch-option')
 
       // When parent mode is on, family sort button text should be present
-      const hasFamily = sortButtons.some(b => b.text() === 'Οικογένεια')
+      const hasFamily = sortButtons.some((b) => b.text() === 'Οικογένεια')
       expect(hasFamily).toBe(true)
     })
 
@@ -653,7 +665,7 @@ describe('App.vue - Export functions', () => {
     originalLocalStorage = window.localStorage
     Object.defineProperty(window, 'localStorage', {
       value: localStorageMock,
-      writable: true
+      writable: true,
     })
 
     originalMatchMedia = window.matchMedia
@@ -664,8 +676,8 @@ describe('App.vue - Export functions', () => {
 
     Object.assign(navigator, {
       clipboard: {
-        writeText: vi.fn(() => Promise.resolve())
-      }
+        writeText: vi.fn(() => Promise.resolve()),
+      },
     })
 
     vi.clearAllMocks()
@@ -675,7 +687,7 @@ describe('App.vue - Export functions', () => {
     vi.useRealTimers()
     Object.defineProperty(window, 'localStorage', {
       value: originalLocalStorage,
-      writable: true
+      writable: true,
     })
     window.matchMedia = originalMatchMedia
   })
@@ -718,7 +730,7 @@ describe('App.vue - Year handling', () => {
     originalLocalStorage = window.localStorage
     Object.defineProperty(window, 'localStorage', {
       value: localStorageMock,
-      writable: true
+      writable: true,
     })
 
     originalMatchMedia = window.matchMedia
@@ -731,7 +743,7 @@ describe('App.vue - Year handling', () => {
     vi.useRealTimers()
     Object.defineProperty(window, 'localStorage', {
       value: originalLocalStorage,
-      writable: true
+      writable: true,
     })
     window.matchMedia = originalMatchMedia
   })
@@ -770,7 +782,7 @@ describe('App.vue - Computed properties', () => {
     originalLocalStorage = window.localStorage
     Object.defineProperty(window, 'localStorage', {
       value: localStorageMock,
-      writable: true
+      writable: true,
     })
 
     originalMatchMedia = window.matchMedia
@@ -783,7 +795,7 @@ describe('App.vue - Computed properties', () => {
     vi.useRealTimers()
     Object.defineProperty(window, 'localStorage', {
       value: originalLocalStorage,
-      writable: true
+      writable: true,
     })
     window.matchMedia = originalMatchMedia
   })

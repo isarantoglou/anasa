@@ -50,7 +50,7 @@ import {
   format,
   isAfter,
   isBefore,
-  startOfDay
+  startOfDay,
 } from 'date-fns'
 import { el } from 'date-fns/locale'
 import type { Holiday, DayInfo, OptimizationResult, DateRange } from '../types'
@@ -62,11 +62,7 @@ import { getEfficiencyLabel } from '../utils/labels'
  * @param holidays - List of holidays
  * @param fromDate - Optional start date (for "Today" mode)
  */
-function generateCalendar(
-  year: number,
-  holidays: Holiday[],
-  fromDate?: Date
-): DayInfo[] {
+function generateCalendar(year: number, holidays: Holiday[], fromDate?: Date): DayInfo[] {
   const yearStart = startOfYear(new Date(year, 0, 1))
   const yearEnd = endOfYear(new Date(year, 0, 1))
 
@@ -81,17 +77,17 @@ function generateCalendar(
 
   const allDays = eachDayOfInterval({ start, end: yearEnd })
 
-  return allDays.map(date => {
+  return allDays.map((date) => {
     const weekend = isWeekend(date)
-    const holiday = holidays.find(h => isSameDay(h.date, date))
+    const holiday = holidays.find((h) => isSameDay(h.date, date))
 
     return {
       date,
       // Cost is 0 for weekends and holidays (free days), 1 for workdays
-      cost: (weekend || holiday ? 0 : 1) as 0 | 1,
+      cost: weekend || holiday ? 0 : 1,
       isHoliday: !!holiday,
       isWeekend: weekend,
-      holidayName: holiday?.name
+      holidayName: holiday?.name,
     }
   })
 }
@@ -120,7 +116,7 @@ function findOptimalPeriods(
   // Find all holiday indices in the calendar
   const holidayIndices = calendar
     .map((day, index) => (day.isHoliday ? index : -1))
-    .filter(i => i >= 0)
+    .filter((i) => i >= 0)
 
   if (holidayIndices.length === 0) return results
 
@@ -150,7 +146,7 @@ function findOptimalPeriods(
   }
 
   // Filter out results that don't actually contain a holiday (safety check)
-  const holidayResults = results.filter(r => r.days.some(d => d.isHoliday))
+  const holidayResults = results.filter((r) => r.days.some((d) => d.isHoliday))
 
   // Sort by leave days used (highest first = best use of budget), then by total days
   holidayResults.sort((a, b) => {
@@ -166,7 +162,7 @@ function findOptimalPeriods(
   const nonOverlapping: OptimizationResult[] = []
 
   for (const result of holidayResults) {
-    const overlaps = nonOverlapping.some(existing => {
+    const overlaps = nonOverlapping.some((existing) => {
       return !(
         result.range.endDate < existing.range.startDate ||
         result.range.startDate > existing.range.endDate
@@ -280,8 +276,8 @@ function createResult(
 ): OptimizationResult | null {
   const days = calendar.slice(left, right + 1)
   const totalDays = right - left + 1
-  const freeDays = days.filter(d => d.cost === 0).length
-  const holidayCount = days.filter(d => d.isHoliday).length
+  const freeDays = days.filter((d) => d.cost === 0).length
+  const holidayCount = days.filter((d) => d.isHoliday).length
 
   // Must have at least one holiday and require at least 1 leave day
   if (holidayCount === 0 || cost === 0) return null
@@ -296,24 +292,21 @@ function createResult(
   return {
     range: {
       startDate: leftDay.date,
-      endDate: rightDay.date
+      endDate: rightDay.date,
     },
     totalDays,
     leaveDaysRequired: cost,
     freeDays,
     efficiency: totalDays / cost,
     efficiencyLabel: getEfficiencyLabel(cost, totalDays),
-    days
+    days,
   }
 }
 
 /**
  * Find the single best period for given leave days
  */
-function findBestPeriod(
-  calendar: DayInfo[],
-  leaveDays: number
-): OptimizationResult | null {
+function findBestPeriod(calendar: DayInfo[], leaveDays: number): OptimizationResult | null {
   const results = findOptimalPeriods(calendar, leaveDays, 1)
   return results[0] || null
 }
@@ -321,10 +314,7 @@ function findBestPeriod(
 /**
  * Find periods around specific holidays
  */
-function findHolidayOpportunities(
-  calendar: DayInfo[],
-  maxLeaveDays: number
-): OptimizationResult[] {
+function findHolidayOpportunities(calendar: DayInfo[], maxLeaveDays: number): OptimizationResult[] {
   const opportunities: OptimizationResult[] = []
 
   if (calendar.length === 0) return opportunities
@@ -332,7 +322,7 @@ function findHolidayOpportunities(
   // Find all holidays in the calendar
   const holidayIndices = calendar
     .map((day, index) => (day.isHoliday ? index : -1))
-    .filter(i => i >= 0)
+    .filter((i) => i >= 0)
 
   for (const holidayIndex of holidayIndices) {
     const holidayDay = calendar[holidayIndex]
@@ -365,7 +355,7 @@ function findHolidayOpportunities(
 
     const days = calendar.slice(left, right + 1)
     const totalDays = right - left + 1
-    const freeDays = days.filter(d => d.cost === 0).length
+    const freeDays = days.filter((d) => d.cost === 0).length
 
     const leftDay = calendar[left]
     const rightDay = calendar[right]
@@ -373,14 +363,14 @@ function findHolidayOpportunities(
       opportunities.push({
         range: {
           startDate: leftDay.date,
-          endDate: rightDay.date
+          endDate: rightDay.date,
         },
         totalDays,
         leaveDaysRequired: cost,
         freeDays,
         efficiency: totalDays / cost,
         efficiencyLabel: getEfficiencyLabel(cost, totalDays),
-        days
+        days,
       })
     }
   }
@@ -425,9 +415,7 @@ export function useLeaveOptimizer(
   })
 
   // Generate the full year calendar (for stats)
-  const fullYearCalendar = computed(() =>
-    generateCalendar(year.value, holidays.value)
-  )
+  const fullYearCalendar = computed(() => generateCalendar(year.value, holidays.value))
 
   // Generate the calendar from the effective start date (for opportunities)
   const activeCalendar = computed(() =>
@@ -453,16 +441,16 @@ export function useLeaveOptimizer(
   const stats = computed(() => {
     const cal = calculateFromToday.value ? activeCalendar.value : fullYearCalendar.value
     const totalDays = cal.length
-    const weekendDays = cal.filter(d => d.isWeekend).length
-    const holidayDays = cal.filter(d => d.isHoliday && !d.isWeekend).length
-    const workdays = cal.filter(d => d.cost === 1).length
+    const weekendDays = cal.filter((d) => d.isWeekend).length
+    const holidayDays = cal.filter((d) => d.isHoliday && !d.isWeekend).length
+    const workdays = cal.filter((d) => d.cost === 1).length
 
     return {
       totalDays,
       weekendDays,
       holidayDays,
       workdays,
-      freeDays: weekendDays + holidayDays
+      freeDays: weekendDays + holidayDays,
     }
   })
 
@@ -470,16 +458,16 @@ export function useLeaveOptimizer(
   const fullYearStats = computed(() => {
     const cal = fullYearCalendar.value
     const totalDays = cal.length
-    const weekendDays = cal.filter(d => d.isWeekend).length
-    const holidayDays = cal.filter(d => d.isHoliday && !d.isWeekend).length
-    const workdays = cal.filter(d => d.cost === 1).length
+    const weekendDays = cal.filter((d) => d.isWeekend).length
+    const holidayDays = cal.filter((d) => d.isHoliday && !d.isWeekend).length
+    const workdays = cal.filter((d) => d.cost === 1).length
 
     return {
       totalDays,
       weekendDays,
       holidayDays,
       workdays,
-      freeDays: weekendDays + holidayDays
+      freeDays: weekendDays + holidayDays,
     }
   })
 
@@ -505,6 +493,6 @@ export function useLeaveOptimizer(
     fullYearStats,
     formatDateRange,
     getDayClass,
-    effectiveStartDate
+    effectiveStartDate,
   }
 }

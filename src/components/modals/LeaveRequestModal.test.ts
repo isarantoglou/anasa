@@ -5,7 +5,7 @@ import type { SavedOpportunity } from '../../types'
 
 // Mock clipboard API
 const mockClipboard = {
-  writeText: vi.fn()
+  writeText: vi.fn(),
 }
 Object.assign(navigator, { clipboard: mockClipboard })
 
@@ -20,7 +20,7 @@ function createMockOpportunity(overrides: Partial<SavedOpportunity> = {}): Saved
     id: 'test-id',
     range: {
       startDate: new Date(2026, 0, 5),
-      endDate: new Date(2026, 0, 11)
+      endDate: new Date(2026, 0, 11),
     },
     totalDays: 7,
     leaveDaysRequired: 5,
@@ -29,7 +29,7 @@ function createMockOpportunity(overrides: Partial<SavedOpportunity> = {}): Saved
     efficiencyLabel: '2 ημέρες δωρεάν',
     days: [],
     addedAt: new Date().toISOString(),
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -44,21 +44,21 @@ describe('LeaveRequestModal', () => {
       createMockOpportunity({
         id: '1',
         range: { startDate: new Date(2026, 0, 5), endDate: new Date(2026, 0, 11) },
-        leaveDaysRequired: 5
+        leaveDaysRequired: 5,
       }),
       createMockOpportunity({
         id: '2',
         range: { startDate: new Date(2026, 3, 6), endDate: new Date(2026, 3, 12) },
-        leaveDaysRequired: 4
-      })
+        leaveDaysRequired: 4,
+      }),
     ],
     annualPlanTotalDays: 9,
-    currentYear: 2026
+    currentYear: 2026,
   }
 
   it('should not render when show is false', () => {
     const wrapper = mount(LeaveRequestModal, {
-      props: { ...defaultProps, show: false }
+      props: { ...defaultProps, show: false },
     })
 
     expect(wrapper.find('.fixed').exists()).toBe(false)
@@ -130,7 +130,7 @@ describe('LeaveRequestModal', () => {
   it('should copy text to clipboard when copy button is clicked', async () => {
     const wrapper = mount(LeaveRequestModal, { props: defaultProps })
 
-    const copyButton = wrapper.findAll('button').find(b => b.text().includes('Αντιγραφή'))
+    const copyButton = wrapper.findAll('button').find((b) => b.text().includes('Αντιγραφή'))
     await copyButton?.trigger('click')
 
     expect(mockClipboard.writeText).toHaveBeenCalled()
@@ -145,7 +145,7 @@ describe('LeaveRequestModal', () => {
 
   it('should return empty text when no annual plan', () => {
     const wrapper = mount(LeaveRequestModal, {
-      props: { ...defaultProps, annualPlan: [] }
+      props: { ...defaultProps, annualPlan: [] },
     })
 
     const textarea = wrapper.find('textarea')
@@ -159,14 +159,14 @@ describe('LeaveRequestModal', () => {
         annualPlan: [
           createMockOpportunity({
             id: '2',
-            range: { startDate: new Date(2026, 6, 1), endDate: new Date(2026, 6, 7) }
+            range: { startDate: new Date(2026, 6, 1), endDate: new Date(2026, 6, 7) },
           }),
           createMockOpportunity({
             id: '1',
-            range: { startDate: new Date(2026, 0, 5), endDate: new Date(2026, 0, 11) }
-          })
-        ]
-      }
+            range: { startDate: new Date(2026, 0, 5), endDate: new Date(2026, 0, 11) },
+          }),
+        ],
+      },
     })
 
     const textarea = wrapper.find('textarea')

@@ -6,7 +6,7 @@ import {
   usePersistedState,
   usePersistedBoolean,
   usePersistedNumber,
-  usePersistedJson
+  usePersistedJson,
 } from './usePersistedState'
 
 // Mock localStorage
@@ -21,7 +21,7 @@ const localStorageMock = {
   }),
   removeItem: vi.fn((key: string) => {
     delete localStorageMock.store[key]
-  })
+  }),
 }
 
 vi.stubGlobal('localStorage', localStorageMock)
@@ -41,7 +41,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, String(this.state))
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -60,7 +60,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, String(this.state))
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -79,7 +79,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, String(this.state))
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -96,7 +96,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div')
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -116,7 +116,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div')
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -138,7 +138,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, String(this.state))
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -157,7 +157,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, String(this.state))
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -176,7 +176,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, String(this.state))
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -194,7 +194,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div')
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -221,7 +221,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, JSON.stringify(this.state))
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -241,7 +241,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, JSON.stringify(this.state))
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -261,7 +261,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, JSON.stringify(this.state))
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -278,7 +278,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div')
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -301,7 +301,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div')
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -325,7 +325,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, JSON.stringify(this.state))
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -350,7 +350,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, this.state)
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -367,7 +367,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div')
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)
@@ -391,7 +391,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div')
-        }
+        },
       })
 
       mount(TestComponent)
@@ -413,7 +413,7 @@ describe('usePersistedState', () => {
         },
         render() {
           return h('div', { 'data-testid': 'value' }, String(this.state))
-        }
+        },
       })
 
       const wrapper = mount(TestComponent)

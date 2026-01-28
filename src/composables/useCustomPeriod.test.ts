@@ -5,7 +5,7 @@ import {
   getEfficiencyLabel,
   createCustomPeriod,
   validateDateRange,
-  useCustomPeriod
+  useCustomPeriod,
 } from './useCustomPeriod'
 import type { Holiday } from '../types'
 
@@ -16,22 +16,22 @@ const mockHolidays: Holiday[] = [
     name: "New Year's Day",
     nameGreek: 'Πρωτοχρονιά',
     isMovable: false,
-    isCustom: false
+    isCustom: false,
   },
   {
     date: new Date(2026, 0, 6), // Jan 6, 2026 (Tuesday)
     name: 'Epiphany',
     nameGreek: 'Θεοφάνια',
     isMovable: false,
-    isCustom: false
+    isCustom: false,
   },
   {
     date: new Date(2026, 4, 1), // May 1, 2026 (Friday)
     name: 'Labour Day',
     nameGreek: 'Πρωτομαγιά',
     isMovable: false,
-    isCustom: false
-  }
+    isCustom: false,
+  },
 ]
 
 describe('generateCustomCalendar', () => {
@@ -99,8 +99,8 @@ describe('generateCustomCalendar', () => {
         name: 'Test Holiday',
         nameGreek: 'Δοκιμαστική Αργία',
         isMovable: false,
-        isCustom: false
-      }
+        isCustom: false,
+      },
     ]
 
     const calendar = generateCustomCalendar(
@@ -139,7 +139,7 @@ describe('generateCustomCalendar', () => {
     expect(calendar[0]!.cost).toBe(1)
     expect(calendar[1]!.cost).toBe(1)
     expect(calendar[2]!.cost).toBe(1)
-    expect(calendar.every(d => !d.isHoliday)).toBe(true)
+    expect(calendar.every((d) => !d.isHoliday)).toBe(true)
   })
 })
 
@@ -230,9 +230,27 @@ describe('createCustomPeriod', () => {
   it('should handle period with multiple consecutive holidays', () => {
     // Create holidays for Jan 5-7
     const consecutiveHolidays: Holiday[] = [
-      { date: new Date(2026, 0, 5), name: 'H1', nameGreek: 'Α1', isMovable: false, isCustom: false },
-      { date: new Date(2026, 0, 6), name: 'H2', nameGreek: 'Α2', isMovable: false, isCustom: false },
-      { date: new Date(2026, 0, 7), name: 'H3', nameGreek: 'Α3', isMovable: false, isCustom: false }
+      {
+        date: new Date(2026, 0, 5),
+        name: 'H1',
+        nameGreek: 'Α1',
+        isMovable: false,
+        isCustom: false,
+      },
+      {
+        date: new Date(2026, 0, 6),
+        name: 'H2',
+        nameGreek: 'Α2',
+        isMovable: false,
+        isCustom: false,
+      },
+      {
+        date: new Date(2026, 0, 7),
+        name: 'H3',
+        nameGreek: 'Α3',
+        isMovable: false,
+        isCustom: false,
+      },
     ]
 
     const result = createCustomPeriod(

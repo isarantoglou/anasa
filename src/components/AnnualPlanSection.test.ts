@@ -10,8 +10,8 @@ const mockHolidays: Holiday[] = [
     name: "New Year's Day",
     nameGreek: 'Πρωτοχρονιά',
     isMovable: false,
-    isCustom: false
-  }
+    isCustom: false,
+  },
 ]
 
 // Helper to create mock opportunity
@@ -20,7 +20,7 @@ function createMockOpportunity(overrides: Partial<SavedOpportunity> = {}): Saved
     id: 'test-id',
     range: {
       startDate: new Date(2026, 0, 5),
-      endDate: new Date(2026, 0, 11)
+      endDate: new Date(2026, 0, 11),
     },
     totalDays: 7,
     leaveDaysRequired: 5,
@@ -29,7 +29,7 @@ function createMockOpportunity(overrides: Partial<SavedOpportunity> = {}): Saved
     efficiencyLabel: '2 ημέρες δωρεάν',
     days: [],
     addedAt: new Date().toISOString(),
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -54,7 +54,7 @@ describe('AnnualPlanSection', () => {
     annualPlanTotalDays: 0,
     remainingLeaveDays: 25,
     formatDateRange,
-    holidays: mockHolidays
+    holidays: mockHolidays,
   }
 
   it('should render section title', () => {
@@ -72,7 +72,7 @@ describe('AnnualPlanSection', () => {
   describe('Stats Display', () => {
     it('should show used days', () => {
       const wrapper = mount(AnnualPlanSection, {
-        props: { ...defaultProps, annualPlanTotalDays: 10 }
+        props: { ...defaultProps, annualPlanTotalDays: 10 },
       })
 
       expect(wrapper.text()).toContain('10')
@@ -81,7 +81,7 @@ describe('AnnualPlanSection', () => {
 
     it('should show remaining days', () => {
       const wrapper = mount(AnnualPlanSection, {
-        props: { ...defaultProps, remainingLeaveDays: 15 }
+        props: { ...defaultProps, remainingLeaveDays: 15 },
       })
 
       expect(wrapper.text()).toContain('15')
@@ -90,10 +90,10 @@ describe('AnnualPlanSection', () => {
 
     it('should show negative remaining days in red', () => {
       const wrapper = mount(AnnualPlanSection, {
-        props: { ...defaultProps, remainingLeaveDays: -5 }
+        props: { ...defaultProps, remainingLeaveDays: -5 },
       })
 
-      const remainingDiv = wrapper.findAll('.stat-number').find(d => d.text() === '-5')
+      const remainingDiv = wrapper.findAll('.stat-number').find((d) => d.text() === '-5')
       expect(remainingDiv?.classes()).toContain('text-red-300')
     })
   })
@@ -121,11 +121,11 @@ describe('AnnualPlanSection', () => {
           id: '2',
           range: { startDate: new Date(2026, 3, 6), endDate: new Date(2026, 3, 12) },
           leaveDaysRequired: 4,
-          totalDays: 7
-        })
+          totalDays: 7,
+        }),
       ],
       annualPlanTotalDays: 9,
-      remainingLeaveDays: 16
+      remainingLeaveDays: 16,
     }
 
     it('should display all plan items', () => {
@@ -167,7 +167,7 @@ describe('AnnualPlanSection', () => {
     it('should emit clear-plan when clear button is clicked', async () => {
       const wrapper = mount(AnnualPlanSection, { props: propsWithPlan })
 
-      const clearButton = wrapper.findAll('button').find(b => b.text() === 'Καθαρισμός')
+      const clearButton = wrapper.findAll('button').find((b) => b.text() === 'Καθαρισμός')
       await clearButton?.trigger('click')
 
       expect(wrapper.emitted('clear-plan')).toHaveLength(1)
@@ -188,7 +188,7 @@ describe('AnnualPlanSection', () => {
     const propsWithPlan = {
       ...defaultProps,
       annualPlan: [createMockOpportunity()],
-      annualPlanTotalDays: 5
+      annualPlanTotalDays: 5,
     }
 
     it('should show export button when plan has items', () => {
@@ -213,7 +213,7 @@ describe('AnnualPlanSection', () => {
     it('should emit export-to-calendar when export is clicked', async () => {
       const wrapper = mount(AnnualPlanSection, { props: propsWithPlan })
 
-      const exportButton = wrapper.findAll('button').find(b => b.text().includes('Ημερολόγιο'))
+      const exportButton = wrapper.findAll('button').find((b) => b.text().includes('Ημερολόγιο'))
       await exportButton?.trigger('click')
 
       expect(wrapper.emitted('export-to-calendar')).toHaveLength(1)
@@ -222,7 +222,7 @@ describe('AnnualPlanSection', () => {
     it('should emit show-leave-request when leave request is clicked', async () => {
       const wrapper = mount(AnnualPlanSection, { props: propsWithPlan })
 
-      const requestButton = wrapper.findAll('button').find(b => b.text().includes('Αίτηση'))
+      const requestButton = wrapper.findAll('button').find((b) => b.text().includes('Αίτηση'))
       await requestButton?.trigger('click')
 
       expect(wrapper.emitted('show-leave-request')).toHaveLength(1)
@@ -234,8 +234,8 @@ describe('AnnualPlanSection', () => {
       const wrapper = mount(AnnualPlanSection, {
         props: {
           ...defaultProps,
-          annualPlan: [createMockOpportunity({ id: '1', isCustom: true })]
-        }
+          annualPlan: [createMockOpportunity({ id: '1', isCustom: true })],
+        },
       })
 
       expect(wrapper.find('[data-testid="custom-badge"]').exists()).toBe(true)
@@ -246,8 +246,8 @@ describe('AnnualPlanSection', () => {
       const wrapper = mount(AnnualPlanSection, {
         props: {
           ...defaultProps,
-          annualPlan: [createMockOpportunity({ id: '1' })]
-        }
+          annualPlan: [createMockOpportunity({ id: '1' })],
+        },
       })
 
       expect(wrapper.find('[data-testid="custom-badge"]').exists()).toBe(false)
@@ -262,14 +262,14 @@ describe('AnnualPlanSection', () => {
             createMockOpportunity({
               id: '2',
               isCustom: true,
-              range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+              range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) },
             }),
             createMockOpportunity({
               id: '3',
-              range: { startDate: new Date(2026, 5, 10), endDate: new Date(2026, 5, 15) }
-            })
-          ]
-        }
+              range: { startDate: new Date(2026, 5, 10), endDate: new Date(2026, 5, 15) },
+            }),
+          ],
+        },
       })
 
       const badges = wrapper.findAll('[data-testid="custom-badge"]')
@@ -300,10 +300,10 @@ describe('AnnualPlanSection', () => {
             createMockOpportunity({
               id: '1',
               isCustom: true,
-              label: 'Ταξίδι στην Αμερική'
-            })
-          ]
-        }
+              label: 'Ταξίδι στην Αμερική',
+            }),
+          ],
+        },
       })
 
       expect(wrapper.find('[data-testid="custom-label"]').exists()).toBe(true)
@@ -317,10 +317,10 @@ describe('AnnualPlanSection', () => {
           annualPlan: [
             createMockOpportunity({
               id: '1',
-              isCustom: true
-            })
-          ]
-        }
+              isCustom: true,
+            }),
+          ],
+        },
       })
 
       expect(wrapper.find('[data-testid="custom-label"]').exists()).toBe(false)
@@ -333,10 +333,10 @@ describe('AnnualPlanSection', () => {
           annualPlan: [
             createMockOpportunity({
               id: '1',
-              label: 'Σημαντική Περίοδος'
-            })
-          ]
-        }
+              label: 'Σημαντική Περίοδος',
+            }),
+          ],
+        },
       })
 
       expect(wrapper.find('[data-testid="custom-label"]').exists()).toBe(true)

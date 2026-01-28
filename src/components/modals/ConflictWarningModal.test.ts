@@ -9,7 +9,7 @@ function createMockOpportunity(overrides: Partial<SavedOpportunity> = {}): Saved
     id: 'test-id',
     range: {
       startDate: new Date(2026, 0, 5),
-      endDate: new Date(2026, 0, 11)
+      endDate: new Date(2026, 0, 11),
     },
     totalDays: 7,
     leaveDaysRequired: 5,
@@ -18,7 +18,7 @@ function createMockOpportunity(overrides: Partial<SavedOpportunity> = {}): Saved
     efficiencyLabel: '2 ημέρες δωρεάν',
     days: [],
     addedAt: new Date().toISOString(),
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -31,12 +31,12 @@ describe('ConflictWarningModal', () => {
   const defaultProps = {
     show: true,
     conflictWith: createMockOpportunity(),
-    formatDateRange
+    formatDateRange,
   }
 
   it('should not render when show is false', () => {
     const wrapper = mount(ConflictWarningModal, {
-      props: { ...defaultProps, show: false }
+      props: { ...defaultProps, show: false },
     })
 
     expect(wrapper.find('.fixed').exists()).toBe(false)
@@ -65,7 +65,7 @@ describe('ConflictWarningModal', () => {
   it('should emit dismiss when cancel button is clicked', async () => {
     const wrapper = mount(ConflictWarningModal, { props: defaultProps })
 
-    const cancelButton = wrapper.findAll('button').find(b => b.text() === 'Ακύρωση')
+    const cancelButton = wrapper.findAll('button').find((b) => b.text() === 'Ακύρωση')
     await cancelButton?.trigger('click')
 
     expect(wrapper.emitted('dismiss')).toHaveLength(1)
@@ -82,7 +82,7 @@ describe('ConflictWarningModal', () => {
   it('should emit force-add when force add button is clicked', async () => {
     const wrapper = mount(ConflictWarningModal, { props: defaultProps })
 
-    const forceButton = wrapper.findAll('button').find(b => b.text() === 'Προσθήκη Ούτως ή Άλλως')
+    const forceButton = wrapper.findAll('button').find((b) => b.text() === 'Προσθήκη Ούτως ή Άλλως')
     await forceButton?.trigger('click')
 
     expect(wrapper.emitted('force-add')).toHaveLength(1)
@@ -90,7 +90,7 @@ describe('ConflictWarningModal', () => {
 
   it('should not show conflict details when conflictWith is null', () => {
     const wrapper = mount(ConflictWarningModal, {
-      props: { ...defaultProps, conflictWith: null }
+      props: { ...defaultProps, conflictWith: null },
     })
 
     expect(wrapper.text()).not.toContain('Υπάρχει ήδη άδεια στο πλάνο')

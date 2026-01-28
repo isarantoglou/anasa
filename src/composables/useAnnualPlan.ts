@@ -18,7 +18,7 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
     conflictWith: null,
     pendingOpportunity: null,
     isCustom: false,
-    pendingLabel: ''
+    pendingLabel: '',
   })
 
   // Computed
@@ -31,14 +31,18 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
   })
 
   // Persistence
-  watch(annualPlan, (plan) => {
-    const planData = {
-      year: currentYear.value,
-      opportunities: plan,
-      updatedAt: new Date().toISOString()
-    }
-    localStorage.setItem('anasa-annual-plan', JSON.stringify(planData))
-  }, { deep: true })
+  watch(
+    annualPlan,
+    (plan) => {
+      const planData = {
+        year: currentYear.value,
+        opportunities: plan,
+        updatedAt: new Date().toISOString(),
+      }
+      localStorage.setItem('anasa-annual-plan', JSON.stringify(planData))
+    },
+    { deep: true }
+  )
 
   // Load from localStorage
   function loadFromStorage() {
@@ -53,12 +57,12 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
             ...opp,
             range: {
               startDate: new Date(opp.range.startDate),
-              endDate: new Date(opp.range.endDate)
+              endDate: new Date(opp.range.endDate),
             },
-            days: opp.days.map(day => ({
+            days: opp.days.map((day) => ({
               ...day,
-              date: new Date(day.date)
-            }))
+              date: new Date(day.date),
+            })),
           }))
           if (annualPlan.value.length > 0) {
             showAnnualPlan.value = true
@@ -72,9 +76,10 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
 
   // Check if opportunity is already in plan
   function isInPlan(opportunity: OptimizationResult): boolean {
-    return annualPlan.value.some(saved =>
-      saved.range.startDate.getTime() === opportunity.range.startDate.getTime() &&
-      saved.range.endDate.getTime() === opportunity.range.endDate.getTime()
+    return annualPlan.value.some(
+      (saved) =>
+        saved.range.startDate.getTime() === opportunity.range.startDate.getTime() &&
+        saved.range.endDate.getTime() === opportunity.range.endDate.getTime()
     )
   }
 
@@ -107,7 +112,7 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
       days: opportunity.days,
       addedAt: new Date().toISOString(),
       ...(isCustom && { isCustom: true }),
-      ...(label && { label })
+      ...(label && { label }),
     }
     annualPlan.value.push(saved)
     showAnnualPlan.value = true
@@ -123,7 +128,7 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
       conflictWarning.value = {
         show: true,
         conflictWith: conflict,
-        pendingOpportunity: opportunity
+        pendingOpportunity: opportunity,
       }
       return
     }
@@ -142,7 +147,7 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
         conflictWith: conflict,
         pendingOpportunity: opportunity,
         isCustom: true,
-        pendingLabel: label
+        pendingLabel: label,
       }
       return
     }
@@ -163,12 +168,18 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
 
   // Dismiss conflict warning
   function dismissConflictWarning() {
-    conflictWarning.value = { show: false, conflictWith: null, pendingOpportunity: null, isCustom: false, pendingLabel: '' }
+    conflictWarning.value = {
+      show: false,
+      conflictWith: null,
+      pendingOpportunity: null,
+      isCustom: false,
+      pendingLabel: '',
+    }
   }
 
   // Remove opportunity from annual plan
   function removeFromPlan(id: string) {
-    annualPlan.value = annualPlan.value.filter(opp => opp.id !== id)
+    annualPlan.value = annualPlan.value.filter((opp) => opp.id !== id)
   }
 
   // Clear entire annual plan
@@ -202,6 +213,6 @@ export function useAnnualPlan(currentYear: Ref<number>, totalAnnualLeaveDays: Re
     forceAddToPlan,
     dismissConflictWarning,
     removeFromPlan,
-    clearPlan
+    clearPlan,
   }
 }

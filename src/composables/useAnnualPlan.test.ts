@@ -12,7 +12,7 @@ const localStorageMock = {
   }),
   clear: vi.fn(() => {
     localStorageMock.store = {}
-  })
+  }),
 }
 
 vi.stubGlobal('localStorage', localStorageMock)
@@ -31,9 +31,14 @@ function createMockOpportunity(overrides: Partial<OptimizationResult> = {}): Opt
     efficiencyLabel: 'Μετατρέψτε 3 ημέρες σε 6',
     days: [
       { date: startDate, cost: 1, isHoliday: false, isWeekend: false },
-      { date: new Date(startDate.getTime() + 86400000), cost: 0, isHoliday: false, isWeekend: true },
+      {
+        date: new Date(startDate.getTime() + 86400000),
+        cost: 0,
+        isHoliday: false,
+        isWeekend: true,
+      },
     ],
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -90,8 +95,8 @@ describe('useAnnualPlan', () => {
       const opp1 = createMockOpportunity({
         range: {
           startDate: new Date(2026, 3, 10),
-          endDate: new Date(2026, 3, 15)
-        }
+          endDate: new Date(2026, 3, 15),
+        },
       })
       addToPlan(opp1)
 
@@ -99,8 +104,8 @@ describe('useAnnualPlan', () => {
       const opp2 = createMockOpportunity({
         range: {
           startDate: new Date(2026, 3, 13),
-          endDate: new Date(2026, 3, 18)
-        }
+          endDate: new Date(2026, 3, 18),
+        },
       })
       addToPlan(opp2)
 
@@ -114,21 +119,24 @@ describe('useAnnualPlan', () => {
     it('should add conflicting opportunity when forced', () => {
       const currentYear = ref(2026)
       const totalDays = ref(25)
-      const { annualPlan, addToPlan, forceAddToPlan, conflictWarning } = useAnnualPlan(currentYear, totalDays)
+      const { annualPlan, addToPlan, forceAddToPlan, conflictWarning } = useAnnualPlan(
+        currentYear,
+        totalDays
+      )
 
       const opp1 = createMockOpportunity({
         range: {
           startDate: new Date(2026, 3, 10),
-          endDate: new Date(2026, 3, 15)
-        }
+          endDate: new Date(2026, 3, 15),
+        },
       })
       addToPlan(opp1)
 
       const opp2 = createMockOpportunity({
         range: {
           startDate: new Date(2026, 3, 13),
-          endDate: new Date(2026, 3, 18)
-        }
+          endDate: new Date(2026, 3, 18),
+        },
       })
       addToPlan(opp2)
 
@@ -174,12 +182,16 @@ describe('useAnnualPlan', () => {
       const totalDays = ref(25)
       const { annualPlan, addToPlan, clearPlan } = useAnnualPlan(currentYear, totalDays)
 
-      addToPlan(createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
-      }))
-      addToPlan(createMockOpportunity({
-        range: { startDate: new Date(2026, 4, 10), endDate: new Date(2026, 4, 15) }
-      }))
+      addToPlan(
+        createMockOpportunity({
+          range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) },
+        })
+      )
+      addToPlan(
+        createMockOpportunity({
+          range: { startDate: new Date(2026, 4, 10), endDate: new Date(2026, 4, 15) },
+        })
+      )
 
       expect(annualPlan.value).toHaveLength(2)
 
@@ -218,13 +230,13 @@ describe('useAnnualPlan', () => {
       const { addToPlan, hasConflict } = useAnnualPlan(currentYear, totalDays)
 
       const opp1 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) },
       })
       addToPlan(opp1)
 
       // Overlapping opportunity
       const opp2 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 14), endDate: new Date(2026, 3, 20) }
+        range: { startDate: new Date(2026, 3, 14), endDate: new Date(2026, 3, 20) },
       })
 
       expect(hasConflict(opp2)).not.toBeNull()
@@ -236,13 +248,13 @@ describe('useAnnualPlan', () => {
       const { addToPlan, hasConflict } = useAnnualPlan(currentYear, totalDays)
 
       const opp1 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) },
       })
       addToPlan(opp1)
 
       // Non-overlapping opportunity
       const opp2 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 20), endDate: new Date(2026, 3, 25) }
+        range: { startDate: new Date(2026, 3, 20), endDate: new Date(2026, 3, 25) },
       })
 
       expect(hasConflict(opp2)).toBeNull()
@@ -254,13 +266,13 @@ describe('useAnnualPlan', () => {
       const { addToPlan, hasConflict } = useAnnualPlan(currentYear, totalDays)
 
       const opp1 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) },
       })
       addToPlan(opp1)
 
       // Adjacent opportunity (starts day after opp1 ends)
       const opp2 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 16), endDate: new Date(2026, 3, 20) }
+        range: { startDate: new Date(2026, 3, 16), endDate: new Date(2026, 3, 20) },
       })
 
       expect(hasConflict(opp2)).toBeNull()
@@ -273,14 +285,18 @@ describe('useAnnualPlan', () => {
       const totalDays = ref(25)
       const { addToPlan, annualPlanTotalDays } = useAnnualPlan(currentYear, totalDays)
 
-      addToPlan(createMockOpportunity({
-        leaveDaysRequired: 3,
-        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
-      }))
-      addToPlan(createMockOpportunity({
-        leaveDaysRequired: 5,
-        range: { startDate: new Date(2026, 4, 10), endDate: new Date(2026, 4, 18) }
-      }))
+      addToPlan(
+        createMockOpportunity({
+          leaveDaysRequired: 3,
+          range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) },
+        })
+      )
+      addToPlan(
+        createMockOpportunity({
+          leaveDaysRequired: 5,
+          range: { startDate: new Date(2026, 4, 10), endDate: new Date(2026, 4, 18) },
+        })
+      )
 
       expect(annualPlanTotalDays.value).toBe(8)
     })
@@ -292,10 +308,12 @@ describe('useAnnualPlan', () => {
 
       expect(remainingLeaveDays.value).toBe(25)
 
-      addToPlan(createMockOpportunity({
-        leaveDaysRequired: 5,
-        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 18) }
-      }))
+      addToPlan(
+        createMockOpportunity({
+          leaveDaysRequired: 5,
+          range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 18) },
+        })
+      )
 
       expect(remainingLeaveDays.value).toBe(20)
     })
@@ -305,15 +323,18 @@ describe('useAnnualPlan', () => {
     it('should reset conflict warning state', () => {
       const currentYear = ref(2026)
       const totalDays = ref(25)
-      const { addToPlan, conflictWarning, dismissConflictWarning } = useAnnualPlan(currentYear, totalDays)
+      const { addToPlan, conflictWarning, dismissConflictWarning } = useAnnualPlan(
+        currentYear,
+        totalDays
+      )
 
       const opp1 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) },
       })
       addToPlan(opp1)
 
       const opp2 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 13), endDate: new Date(2026, 3, 18) }
+        range: { startDate: new Date(2026, 3, 13), endDate: new Date(2026, 3, 18) },
       })
       addToPlan(opp2)
 
@@ -331,21 +352,28 @@ describe('useAnnualPlan', () => {
     it('should load plan from localStorage when loadFromStorage is called', () => {
       const storedPlan = {
         year: 2026,
-        opportunities: [{
-          id: 'test-id',
-          range: {
-            startDate: new Date(2026, 3, 10).toISOString(),
-            endDate: new Date(2026, 3, 15).toISOString()
+        opportunities: [
+          {
+            id: 'test-id',
+            range: {
+              startDate: new Date(2026, 3, 10).toISOString(),
+              endDate: new Date(2026, 3, 15).toISOString(),
+            },
+            totalDays: 6,
+            leaveDaysRequired: 3,
+            freeDays: 3,
+            efficiency: 2,
+            efficiencyLabel: 'Test',
+            days: [
+              {
+                date: new Date(2026, 3, 10).toISOString(),
+                cost: 1,
+                isHoliday: false,
+                isWeekend: false,
+              },
+            ],
           },
-          totalDays: 6,
-          leaveDaysRequired: 3,
-          freeDays: 3,
-          efficiency: 2,
-          efficiencyLabel: 'Test',
-          days: [
-            { date: new Date(2026, 3, 10).toISOString(), cost: 1, isHoliday: false, isWeekend: false }
-          ]
-        }]
+        ],
       }
       localStorageMock.store['anasa-annual-plan'] = JSON.stringify(storedPlan)
 
@@ -364,21 +392,23 @@ describe('useAnnualPlan', () => {
     it('should restore Date objects from ISO strings', () => {
       const storedPlan = {
         year: 2026,
-        opportunities: [{
-          id: 'test-id',
-          range: {
-            startDate: '2026-04-10T00:00:00.000Z',
-            endDate: '2026-04-15T00:00:00.000Z'
+        opportunities: [
+          {
+            id: 'test-id',
+            range: {
+              startDate: '2026-04-10T00:00:00.000Z',
+              endDate: '2026-04-15T00:00:00.000Z',
+            },
+            totalDays: 6,
+            leaveDaysRequired: 3,
+            freeDays: 3,
+            efficiency: 2,
+            efficiencyLabel: 'Test',
+            days: [
+              { date: '2026-04-10T00:00:00.000Z', cost: 1, isHoliday: false, isWeekend: false },
+            ],
           },
-          totalDays: 6,
-          leaveDaysRequired: 3,
-          freeDays: 3,
-          efficiency: 2,
-          efficiencyLabel: 'Test',
-          days: [
-            { date: '2026-04-10T00:00:00.000Z', cost: 1, isHoliday: false, isWeekend: false }
-          ]
-        }]
+        ],
       }
       localStorageMock.store['anasa-annual-plan'] = JSON.stringify(storedPlan)
 
@@ -396,19 +426,21 @@ describe('useAnnualPlan', () => {
     it('should only load plan for current year', () => {
       const storedPlan = {
         year: 2025, // Different year
-        opportunities: [{
-          id: 'test-id',
-          range: {
-            startDate: new Date(2025, 3, 10).toISOString(),
-            endDate: new Date(2025, 3, 15).toISOString()
+        opportunities: [
+          {
+            id: 'test-id',
+            range: {
+              startDate: new Date(2025, 3, 10).toISOString(),
+              endDate: new Date(2025, 3, 15).toISOString(),
+            },
+            totalDays: 6,
+            leaveDaysRequired: 3,
+            freeDays: 3,
+            efficiency: 2,
+            efficiencyLabel: 'Test',
+            days: [],
           },
-          totalDays: 6,
-          leaveDaysRequired: 3,
-          freeDays: 3,
-          efficiency: 2,
-          efficiencyLabel: 'Test',
-          days: []
-        }]
+        ],
       }
       localStorageMock.store['anasa-annual-plan'] = JSON.stringify(storedPlan)
 
@@ -462,12 +494,9 @@ describe('useAnnualPlan', () => {
       addToPlan(createMockOpportunity())
 
       // Wait for Vue's next tick for the watcher to trigger
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise((resolve) => setTimeout(resolve, 10))
 
-      expect(localStorageMock.setItem).toHaveBeenCalledWith(
-        'anasa-annual-plan',
-        expect.any(String)
-      )
+      expect(localStorageMock.setItem).toHaveBeenCalledWith('anasa-annual-plan', expect.any(String))
 
       const savedData = JSON.parse(localStorageMock.store['anasa-annual-plan']!)
       expect(savedData.year).toBe(2026)
@@ -481,7 +510,7 @@ describe('useAnnualPlan', () => {
 
       addCustomPeriod(createMockOpportunity())
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise((resolve) => setTimeout(resolve, 10))
 
       const savedData = JSON.parse(localStorageMock.store['anasa-annual-plan']!)
       expect(savedData.opportunities[0].isCustom).toBe(true)
@@ -490,20 +519,22 @@ describe('useAnnualPlan', () => {
     it('should restore isCustom flag from localStorage', () => {
       const storedPlan = {
         year: 2026,
-        opportunities: [{
-          id: 'test-id',
-          range: {
-            startDate: new Date(2026, 3, 10).toISOString(),
-            endDate: new Date(2026, 3, 15).toISOString()
+        opportunities: [
+          {
+            id: 'test-id',
+            range: {
+              startDate: new Date(2026, 3, 10).toISOString(),
+              endDate: new Date(2026, 3, 15).toISOString(),
+            },
+            totalDays: 6,
+            leaveDaysRequired: 3,
+            freeDays: 3,
+            efficiency: 2,
+            efficiencyLabel: 'Test',
+            days: [],
+            isCustom: true,
           },
-          totalDays: 6,
-          leaveDaysRequired: 3,
-          freeDays: 3,
-          efficiency: 2,
-          efficiencyLabel: 'Test',
-          days: [],
-          isCustom: true
-        }]
+        ],
       }
       localStorageMock.store['anasa-annual-plan'] = JSON.stringify(storedPlan)
 
@@ -523,7 +554,7 @@ describe('useAnnualPlan', () => {
 
       addCustomPeriod(createMockOpportunity(), 'Ταξίδι στην Ελλάδα')
 
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await new Promise((resolve) => setTimeout(resolve, 10))
 
       const savedData = JSON.parse(localStorageMock.store['anasa-annual-plan']!)
       expect(savedData.opportunities[0].label).toBe('Ταξίδι στην Ελλάδα')
@@ -532,21 +563,23 @@ describe('useAnnualPlan', () => {
     it('should restore label from localStorage', () => {
       const storedPlan = {
         year: 2026,
-        opportunities: [{
-          id: 'test-id',
-          range: {
-            startDate: new Date(2026, 3, 10).toISOString(),
-            endDate: new Date(2026, 3, 15).toISOString()
+        opportunities: [
+          {
+            id: 'test-id',
+            range: {
+              startDate: new Date(2026, 3, 10).toISOString(),
+              endDate: new Date(2026, 3, 15).toISOString(),
+            },
+            totalDays: 6,
+            leaveDaysRequired: 3,
+            freeDays: 3,
+            efficiency: 2,
+            efficiencyLabel: 'Test',
+            days: [],
+            isCustom: true,
+            label: 'Διακοπές Καλοκαιριού',
           },
-          totalDays: 6,
-          leaveDaysRequired: 3,
-          freeDays: 3,
-          efficiency: 2,
-          efficiencyLabel: 'Test',
-          days: [],
-          isCustom: true,
-          label: 'Διακοπές Καλοκαιριού'
-        }]
+        ],
       }
       localStorageMock.store['anasa-annual-plan'] = JSON.stringify(storedPlan)
 
@@ -588,17 +621,20 @@ describe('useAnnualPlan', () => {
     it('should detect conflict with existing periods', () => {
       const currentYear = ref(2026)
       const totalDays = ref(25)
-      const { annualPlan, addToPlan, addCustomPeriod, conflictWarning } = useAnnualPlan(currentYear, totalDays)
+      const { annualPlan, addToPlan, addCustomPeriod, conflictWarning } = useAnnualPlan(
+        currentYear,
+        totalDays
+      )
 
       // Add regular opportunity
       const opp1 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) },
       })
       addToPlan(opp1)
 
       // Try to add overlapping custom period
       const opp2 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 13), endDate: new Date(2026, 3, 18) }
+        range: { startDate: new Date(2026, 3, 13), endDate: new Date(2026, 3, 18) },
       })
       addCustomPeriod(opp2)
 
@@ -610,15 +646,18 @@ describe('useAnnualPlan', () => {
     it('should preserve isCustom flag when force adding conflicting period', () => {
       const currentYear = ref(2026)
       const totalDays = ref(25)
-      const { annualPlan, addToPlan, addCustomPeriod, forceAddToPlan } = useAnnualPlan(currentYear, totalDays)
+      const { annualPlan, addToPlan, addCustomPeriod, forceAddToPlan } = useAnnualPlan(
+        currentYear,
+        totalDays
+      )
 
       const opp1 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) },
       })
       addToPlan(opp1)
 
       const opp2 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 13), endDate: new Date(2026, 3, 18) }
+        range: { startDate: new Date(2026, 3, 13), endDate: new Date(2026, 3, 18) },
       })
       addCustomPeriod(opp2)
 
@@ -632,16 +671,19 @@ describe('useAnnualPlan', () => {
     it('should add non-conflicting custom period directly', () => {
       const currentYear = ref(2026)
       const totalDays = ref(25)
-      const { annualPlan, addToPlan, addCustomPeriod, conflictWarning } = useAnnualPlan(currentYear, totalDays)
+      const { annualPlan, addToPlan, addCustomPeriod, conflictWarning } = useAnnualPlan(
+        currentYear,
+        totalDays
+      )
 
       const opp1 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) },
       })
       addToPlan(opp1)
 
       // Non-overlapping custom period
       const opp2 = createMockOpportunity({
-        range: { startDate: new Date(2026, 4, 10), endDate: new Date(2026, 4, 15) }
+        range: { startDate: new Date(2026, 4, 10), endDate: new Date(2026, 4, 15) },
       })
       addCustomPeriod(opp2)
 
@@ -677,15 +719,18 @@ describe('useAnnualPlan', () => {
     it('should preserve label when force adding conflicting period', () => {
       const currentYear = ref(2026)
       const totalDays = ref(25)
-      const { annualPlan, addToPlan, addCustomPeriod, forceAddToPlan } = useAnnualPlan(currentYear, totalDays)
+      const { annualPlan, addToPlan, addCustomPeriod, forceAddToPlan } = useAnnualPlan(
+        currentYear,
+        totalDays
+      )
 
       const opp1 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) }
+        range: { startDate: new Date(2026, 3, 10), endDate: new Date(2026, 3, 15) },
       })
       addToPlan(opp1)
 
       const opp2 = createMockOpportunity({
-        range: { startDate: new Date(2026, 3, 13), endDate: new Date(2026, 3, 18) }
+        range: { startDate: new Date(2026, 3, 13), endDate: new Date(2026, 3, 18) },
       })
       addCustomPeriod(opp2, 'Διακοπές Πάσχα')
 

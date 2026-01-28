@@ -1,4 +1,4 @@
-import { type Ref } from 'vue'
+import type { Ref } from 'vue'
 import {
   eachDayOfInterval,
   isWeekend,
@@ -7,7 +7,7 @@ import {
   isBefore,
   startOfDay,
   parseISO,
-  isValid
+  isValid,
 } from 'date-fns'
 import type { Holiday, DayInfo, OptimizationResult } from '../types'
 import { getEfficiencyLabel } from '../utils/labels'
@@ -23,23 +23,19 @@ export interface ValidationResult {
 /**
  * Generate calendar (DayInfo array) for a custom date range
  */
-function generateCustomCalendar(
-  startDate: Date,
-  endDate: Date,
-  holidays: Holiday[]
-): DayInfo[] {
+function generateCustomCalendar(startDate: Date, endDate: Date, holidays: Holiday[]): DayInfo[] {
   const allDays = eachDayOfInterval({ start: startDate, end: endDate })
 
-  return allDays.map(date => {
+  return allDays.map((date) => {
     const weekend = isWeekend(date)
-    const holiday = holidays.find(h => isSameDay(h.date, date))
+    const holiday = holidays.find((h) => isSameDay(h.date, date))
 
     return {
       date,
-      cost: (weekend || holiday ? 0 : 1) as 0 | 1,
+      cost: weekend || holiday ? 0 : 1,
       isHoliday: !!holiday,
       isWeekend: weekend,
-      holidayName: holiday?.nameGreek
+      holidayName: holiday?.nameGreek,
     }
   })
 }
@@ -54,8 +50,8 @@ function createCustomPeriod(
 ): OptimizationResult {
   const days = generateCustomCalendar(startDate, endDate, holidays)
   const totalDays = days.length
-  const leaveDaysRequired = days.filter(d => d.cost === 1).length
-  const freeDays = days.filter(d => d.cost === 0).length
+  const leaveDaysRequired = days.filter((d) => d.cost === 1).length
+  const freeDays = days.filter((d) => d.cost === 0).length
 
   // Calculate efficiency (handle zero case - infinite efficiency)
   const efficiency = leaveDaysRequired === 0 ? totalDays : totalDays / leaveDaysRequired
@@ -67,7 +63,7 @@ function createCustomPeriod(
     freeDays,
     efficiency,
     efficiencyLabel: getEfficiencyLabel(leaveDaysRequired, totalDays),
-    days
+    days,
   }
 }
 
@@ -96,7 +92,7 @@ function validateDateRange(
   if (isAfter(startDate, endDate)) {
     return {
       valid: false,
-      error: 'Η ημερομηνία έναρξης πρέπει να είναι πριν την ημερομηνία λήξης'
+      error: 'Η ημερομηνία έναρξης πρέπει να είναι πριν την ημερομηνία λήξης',
     }
   }
 
@@ -113,7 +109,7 @@ function validateDateRange(
   if (isBefore(startDate, yearStart) || isAfter(endDate, yearEnd)) {
     return {
       valid: false,
-      error: `Οι ημερομηνίες πρέπει να είναι εντός του έτους ${currentYear}`
+      error: `Οι ημερομηνίες πρέπει να είναι εντός του έτους ${currentYear}`,
     }
   }
 
@@ -129,16 +125,12 @@ export function useCustomPeriod(holidays: Ref<Holiday[]>) {
       createCustomPeriod(startDate, endDate, holidays.value),
     validateDateRange,
     generateCustomCalendar: (startDate: Date, endDate: Date) =>
-      generateCustomCalendar(startDate, endDate, holidays.value)
+      generateCustomCalendar(startDate, endDate, holidays.value),
   }
 }
 
 // Export standalone functions for testing
-export {
-  generateCustomCalendar,
-  createCustomPeriod,
-  validateDateRange
-}
+export { generateCustomCalendar, createCustomPeriod, validateDateRange }
 
 // Re-export getEfficiencyLabel from utils for backwards compatibility
 export { getEfficiencyLabel } from '../utils/labels'

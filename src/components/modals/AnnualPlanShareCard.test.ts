@@ -9,7 +9,7 @@ function createMockOpportunity(overrides: Partial<SavedOpportunity> = {}): Saved
     id: 'test-id-1',
     range: {
       startDate: new Date(2026, 0, 5),
-      endDate: new Date(2026, 0, 11)
+      endDate: new Date(2026, 0, 11),
     },
     totalDays: 7,
     leaveDaysRequired: 4,
@@ -18,7 +18,7 @@ function createMockOpportunity(overrides: Partial<SavedOpportunity> = {}): Saved
     efficiencyLabel: 'Κάντε 4 ημέρες 7',
     days: [],
     addedAt: new Date().toISOString(),
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -28,7 +28,7 @@ describe('AnnualPlanShareCard', () => {
     currentYear: 2026,
     annualPlanTotalDays: 0,
     remainingLeaveDays: 25,
-    totalAnnualLeaveDays: 25
+    totalAnnualLeaveDays: 25,
   }
 
   describe('Rendering conditions', () => {
@@ -42,8 +42,8 @@ describe('AnnualPlanShareCard', () => {
       const wrapper = mount(AnnualPlanShareCard, {
         props: {
           ...defaultProps,
-          annualPlan: [createMockOpportunity()]
-        }
+          annualPlan: [createMockOpportunity()],
+        },
       })
 
       expect(wrapper.find('#annual-plan-share-card').exists()).toBe(true)
@@ -54,7 +54,7 @@ describe('AnnualPlanShareCard', () => {
     const propsWithPlan = {
       ...defaultProps,
       annualPlan: [createMockOpportunity()],
-      annualPlanTotalDays: 4
+      annualPlanTotalDays: 4,
     }
 
     it('should be positioned off-screen', () => {
@@ -83,7 +83,7 @@ describe('AnnualPlanShareCard', () => {
     const propsWithPlan = {
       ...defaultProps,
       annualPlan: [createMockOpportunity()],
-      annualPlanTotalDays: 4
+      annualPlanTotalDays: 4,
     }
 
     it('should display header label in Greek', () => {
@@ -100,7 +100,7 @@ describe('AnnualPlanShareCard', () => {
 
     it('should display different year when changed', () => {
       const wrapper = mount(AnnualPlanShareCard, {
-        props: { ...propsWithPlan, currentYear: 2027 }
+        props: { ...propsWithPlan, currentYear: 2027 },
       })
 
       expect(wrapper.text()).toContain('2027')
@@ -108,7 +108,7 @@ describe('AnnualPlanShareCard', () => {
 
     it('should display total days in header badge', () => {
       const wrapper = mount(AnnualPlanShareCard, {
-        props: { ...propsWithPlan, annualPlanTotalDays: 12 }
+        props: { ...propsWithPlan, annualPlanTotalDays: 12 },
       })
 
       expect(wrapper.text()).toContain('12')
@@ -122,7 +122,7 @@ describe('AnnualPlanShareCard', () => {
       annualPlan: [createMockOpportunity()],
       totalAnnualLeaveDays: 25,
       annualPlanTotalDays: 10,
-      remainingLeaveDays: 15
+      remainingLeaveDays: 15,
     }
 
     it('should display total annual leave days', () => {
@@ -151,8 +151,8 @@ describe('AnnualPlanShareCard', () => {
         props: {
           ...propsWithStats,
           annualPlanTotalDays: 25,
-          remainingLeaveDays: 0
-        }
+          remainingLeaveDays: 0,
+        },
       })
 
       expect(wrapper.text()).toContain('0')
@@ -163,8 +163,8 @@ describe('AnnualPlanShareCard', () => {
         props: {
           ...propsWithStats,
           annualPlanTotalDays: 30,
-          remainingLeaveDays: -5
-        }
+          remainingLeaveDays: -5,
+        },
       })
 
       expect(wrapper.text()).toContain('-5')
@@ -176,11 +176,8 @@ describe('AnnualPlanShareCard', () => {
       const wrapper = mount(AnnualPlanShareCard, {
         props: {
           ...defaultProps,
-          annualPlan: [
-            createMockOpportunity({ id: '1' }),
-            createMockOpportunity({ id: '2' })
-          ]
-        }
+          annualPlan: [createMockOpportunity({ id: '1' }), createMockOpportunity({ id: '2' })],
+        },
       })
 
       expect(wrapper.text()).toContain('Προγραμματισμένες Άδειες (2)')
@@ -190,8 +187,8 @@ describe('AnnualPlanShareCard', () => {
       const wrapper = mount(AnnualPlanShareCard, {
         props: {
           ...defaultProps,
-          annualPlan: [createMockOpportunity()]
-        }
+          annualPlan: [createMockOpportunity()],
+        },
       })
 
       expect(wrapper.text()).toContain('Προγραμματισμένες Άδειες (1)')
@@ -205,14 +202,14 @@ describe('AnnualPlanShareCard', () => {
             createMockOpportunity({ id: '1' }),
             createMockOpportunity({
               id: '2',
-              range: { startDate: new Date(2026, 3, 5), endDate: new Date(2026, 3, 10) }
+              range: { startDate: new Date(2026, 3, 5), endDate: new Date(2026, 3, 10) },
             }),
             createMockOpportunity({
               id: '3',
-              range: { startDate: new Date(2026, 6, 1), endDate: new Date(2026, 6, 7) }
-            })
-          ]
-        }
+              range: { startDate: new Date(2026, 6, 1), endDate: new Date(2026, 6, 7) },
+            }),
+          ],
+        },
       })
 
       expect(wrapper.text()).toContain('1')
@@ -224,10 +221,8 @@ describe('AnnualPlanShareCard', () => {
       const wrapper = mount(AnnualPlanShareCard, {
         props: {
           ...defaultProps,
-          annualPlan: [
-            createMockOpportunity({ leaveDaysRequired: 5, totalDays: 9 })
-          ]
-        }
+          annualPlan: [createMockOpportunity({ leaveDaysRequired: 5, totalDays: 9 })],
+        },
       })
 
       expect(wrapper.text()).toContain('5 ημέρες άδειας')
@@ -242,10 +237,10 @@ describe('AnnualPlanShareCard', () => {
           ...defaultProps,
           annualPlan: [
             createMockOpportunity({
-              range: { startDate: new Date(2026, 0, 5), endDate: new Date(2026, 0, 11) }
-            })
-          ]
-        }
+              range: { startDate: new Date(2026, 0, 5), endDate: new Date(2026, 0, 11) },
+            }),
+          ],
+        },
       })
 
       // Greek month abbreviation for January
@@ -259,10 +254,10 @@ describe('AnnualPlanShareCard', () => {
           ...defaultProps,
           annualPlan: [
             createMockOpportunity({
-              range: { startDate: new Date(2026, 7, 10), endDate: new Date(2026, 7, 20) }
-            })
-          ]
-        }
+              range: { startDate: new Date(2026, 7, 10), endDate: new Date(2026, 7, 20) },
+            }),
+          ],
+        },
       })
 
       // Greek month abbreviation for August
@@ -275,10 +270,10 @@ describe('AnnualPlanShareCard', () => {
           ...defaultProps,
           annualPlan: [
             createMockOpportunity({
-              range: { startDate: new Date(2026, 3, 28), endDate: new Date(2026, 4, 5) }
-            })
-          ]
-        }
+              range: { startDate: new Date(2026, 3, 28), endDate: new Date(2026, 4, 5) },
+            }),
+          ],
+        },
       })
 
       // Should show both April and May abbreviations in Greek
@@ -292,8 +287,8 @@ describe('AnnualPlanShareCard', () => {
       const wrapper = mount(AnnualPlanShareCard, {
         props: {
           ...defaultProps,
-          annualPlan: [createMockOpportunity({ isCustom: true })]
-        }
+          annualPlan: [createMockOpportunity({ isCustom: true })],
+        },
       })
 
       expect(wrapper.text()).toContain('CUSTOM')
@@ -303,8 +298,8 @@ describe('AnnualPlanShareCard', () => {
       const wrapper = mount(AnnualPlanShareCard, {
         props: {
           ...defaultProps,
-          annualPlan: [createMockOpportunity({ isCustom: false })]
-        }
+          annualPlan: [createMockOpportunity({ isCustom: false })],
+        },
       })
 
       expect(wrapper.text()).not.toContain('CUSTOM')
@@ -319,15 +314,15 @@ describe('AnnualPlanShareCard', () => {
             createMockOpportunity({
               id: '2',
               isCustom: true,
-              range: { startDate: new Date(2026, 3, 5), endDate: new Date(2026, 3, 10) }
+              range: { startDate: new Date(2026, 3, 5), endDate: new Date(2026, 3, 10) },
             }),
             createMockOpportunity({
               id: '3',
               isCustom: false,
-              range: { startDate: new Date(2026, 6, 1), endDate: new Date(2026, 6, 7) }
-            })
-          ]
-        }
+              range: { startDate: new Date(2026, 6, 1), endDate: new Date(2026, 6, 7) },
+            }),
+          ],
+        },
       })
 
       // Count occurrences of CUSTOM
@@ -345,10 +340,10 @@ describe('AnnualPlanShareCard', () => {
           annualPlan: [
             createMockOpportunity({
               isCustom: true,
-              label: 'Ταξίδι στην Αμερική'
-            })
-          ]
-        }
+              label: 'Ταξίδι στην Αμερική',
+            }),
+          ],
+        },
       })
 
       expect(wrapper.text()).toContain('Ταξίδι στην Αμερική')
@@ -358,8 +353,8 @@ describe('AnnualPlanShareCard', () => {
       const wrapper = mount(AnnualPlanShareCard, {
         props: {
           ...defaultProps,
-          annualPlan: [createMockOpportunity({ isCustom: true })]
-        }
+          annualPlan: [createMockOpportunity({ isCustom: true })],
+        },
       })
 
       // Should not contain the label div (check structure)
@@ -372,10 +367,10 @@ describe('AnnualPlanShareCard', () => {
           ...defaultProps,
           annualPlan: [
             createMockOpportunity({
-              label: 'Διακοπές & Χαλάρωση!'
-            })
-          ]
-        }
+              label: 'Διακοπές & Χαλάρωση!',
+            }),
+          ],
+        },
       })
 
       expect(wrapper.text()).toContain('Διακοπές & Χαλάρωση!')
@@ -388,10 +383,10 @@ describe('AnnualPlanShareCard', () => {
           annualPlan: [
             createMockOpportunity({
               isCustom: false,
-              label: 'Πάσχα'
-            })
-          ]
-        }
+              label: 'Πάσχα',
+            }),
+          ],
+        },
       })
 
       expect(wrapper.text()).toContain('Πάσχα')
@@ -401,7 +396,7 @@ describe('AnnualPlanShareCard', () => {
   describe('Footer display', () => {
     const propsWithPlan = {
       ...defaultProps,
-      annualPlan: [createMockOpportunity()]
+      annualPlan: [createMockOpportunity()],
     }
 
     it('should display app name in footer', () => {
@@ -426,7 +421,7 @@ describe('AnnualPlanShareCard', () => {
   describe('Inline styles (html2canvas compatibility)', () => {
     const propsWithPlan = {
       ...defaultProps,
-      annualPlan: [createMockOpportunity()]
+      annualPlan: [createMockOpportunity()],
     }
 
     it('should use inline styles for card background', () => {
@@ -476,7 +471,7 @@ describe('AnnualPlanShareCard', () => {
           id: '1',
           range: { startDate: new Date(2026, 0, 5), endDate: new Date(2026, 0, 9) },
           leaveDaysRequired: 3,
-          totalDays: 5
+          totalDays: 5,
         }),
         createMockOpportunity({
           id: '2',
@@ -484,14 +479,14 @@ describe('AnnualPlanShareCard', () => {
           leaveDaysRequired: 4,
           totalDays: 7,
           isCustom: true,
-          label: 'Πάσχα'
+          label: 'Πάσχα',
         }),
         createMockOpportunity({
           id: '3',
           range: { startDate: new Date(2026, 7, 10), endDate: new Date(2026, 7, 21) },
           leaveDaysRequired: 8,
-          totalDays: 12
-        })
+          totalDays: 12,
+        }),
       ]
 
       const wrapper = mount(AnnualPlanShareCard, {
@@ -499,8 +494,8 @@ describe('AnnualPlanShareCard', () => {
           ...defaultProps,
           annualPlan: plans,
           annualPlanTotalDays: 15,
-          remainingLeaveDays: 10
-        }
+          remainingLeaveDays: 10,
+        },
       })
 
       // Check all items are rendered

@@ -12,7 +12,7 @@ function createMockSchoolBreaks(): SchoolBreak[] {
       nameGreek: 'Χριστουγεννιάτικες Διακοπές',
       startDate: new Date(2025, 11, 24),
       endDate: new Date(2026, 0, 7),
-      icon: '🎄'
+      icon: '🎄',
     },
     {
       id: 'easter-2026',
@@ -20,8 +20,8 @@ function createMockSchoolBreaks(): SchoolBreak[] {
       nameGreek: 'Πασχαλινές Διακοπές',
       startDate: new Date(2026, 3, 6),
       endDate: new Date(2026, 3, 21),
-      icon: '🐣'
-    }
+      icon: '🐣',
+    },
   ]
 }
 
@@ -42,8 +42,8 @@ describe('SettingsCard', () => {
       workdays: 251,
       weekendDays: 104,
       holidayDays: 10,
-      freeDays: 114
-    }
+      freeDays: 114,
+    },
   }
 
   it('should render settings card title', () => {
@@ -72,7 +72,7 @@ describe('SettingsCard', () => {
     it('should emit update:currentYear when year is changed', async () => {
       const wrapper = mount(SettingsCard, { props: defaultProps })
 
-      const yearButton = wrapper.findAll('button').find(b => b.text() === '2027')
+      const yearButton = wrapper.findAll('button').find((b) => b.text() === '2027')
       await yearButton?.trigger('click')
 
       expect(wrapper.emitted('update:currentYear')).toBeTruthy()
@@ -97,7 +97,7 @@ describe('SettingsCard', () => {
     it('should emit toggle-year-comparison when comparison is clicked', async () => {
       const wrapper = mount(SettingsCard, { props: defaultProps })
 
-      const compareLink = wrapper.findAll('button').find(b => b.text().includes('Σύγκριση'))
+      const compareLink = wrapper.findAll('button').find((b) => b.text().includes('Σύγκριση'))
       await compareLink?.trigger('click')
 
       expect(wrapper.emitted('toggle-year-comparison')).toHaveLength(1)
@@ -116,7 +116,7 @@ describe('SettingsCard', () => {
     it('should emit update:calculateFromToday when toggled', async () => {
       const wrapper = mount(SettingsCard, { props: defaultProps })
 
-      const todayButton = wrapper.findAll('button').find(b => b.text() === 'Σήμερα')
+      const todayButton = wrapper.findAll('button').find((b) => b.text() === 'Σήμερα')
       await todayButton?.trigger('click')
 
       expect(wrapper.emitted('update:calculateFromToday')?.[0]).toEqual([true])
@@ -124,7 +124,7 @@ describe('SettingsCard', () => {
 
     it('should show effective start label when calculating from today', () => {
       const wrapper = mount(SettingsCard, {
-        props: { ...defaultProps, showingFromToday: true, effectiveStartLabel: '15 Μαρτίου 2026' }
+        props: { ...defaultProps, showingFromToday: true, effectiveStartLabel: '15 Μαρτίου 2026' },
       })
 
       expect(wrapper.text()).toContain('15 Μαρτίου 2026')
@@ -146,7 +146,7 @@ describe('SettingsCard', () => {
 
     it('should show correct text when disabled', () => {
       const wrapper = mount(SettingsCard, {
-        props: { ...defaultProps, includeHolySpirit: false }
+        props: { ...defaultProps, includeHolySpirit: false },
       })
 
       expect(wrapper.text()).toContain('Η εταιρεία σας ΔΕΝ δίνει αργία')
@@ -173,7 +173,7 @@ describe('SettingsCard', () => {
 
     it('should show school breaks when parent mode is enabled', () => {
       const wrapper = mount(SettingsCard, {
-        props: { ...defaultProps, parentMode: true }
+        props: { ...defaultProps, parentMode: true },
       })
 
       expect(wrapper.text()).toContain('Χριστουγεννιάτικες Διακοπές')
@@ -217,7 +217,7 @@ describe('SettingsCard', () => {
     it('should emit update:totalAnnualLeaveDays when quick select clicked', async () => {
       const wrapper = mount(SettingsCard, { props: defaultProps })
 
-      const quickSelectButtons = wrapper.findAll('button').filter(b => b.text() === '30')
+      const quickSelectButtons = wrapper.findAll('button').filter((b) => b.text() === '30')
       await quickSelectButtons[0]?.trigger('click')
 
       expect(wrapper.emitted('update:totalAnnualLeaveDays')?.[0]).toEqual([30])
@@ -244,7 +244,12 @@ describe('SettingsCard', () => {
 
     it('should show warning when search exceeds remaining days', () => {
       const wrapper = mount(SettingsCard, {
-        props: { ...defaultProps, searchLeaveDays: 25, remainingLeaveDays: 10, annualPlanLength: 1 }
+        props: {
+          ...defaultProps,
+          searchLeaveDays: 25,
+          remainingLeaveDays: 10,
+          annualPlanLength: 1,
+        },
       })
 
       expect(wrapper.text()).toContain('Αναζητάτε 25 ημέρες αλλά έχετε μόνο 10 διαθέσιμες')
@@ -258,7 +263,12 @@ describe('SettingsCard', () => {
 
     it('should not show warning when annual plan is empty', () => {
       const wrapper = mount(SettingsCard, {
-        props: { ...defaultProps, searchLeaveDays: 30, remainingLeaveDays: 25, annualPlanLength: 0 }
+        props: {
+          ...defaultProps,
+          searchLeaveDays: 30,
+          remainingLeaveDays: 25,
+          annualPlanLength: 0,
+        },
       })
 
       expect(wrapper.text()).not.toContain('Αναζητάτε')
@@ -287,7 +297,7 @@ describe('SettingsCard', () => {
 
     it('should show correct header when showing from today', () => {
       const wrapper = mount(SettingsCard, {
-        props: { ...defaultProps, showingFromToday: true }
+        props: { ...defaultProps, showingFromToday: true },
       })
 
       expect(wrapper.text()).toContain('Υπόλοιπο 2026')
@@ -319,7 +329,7 @@ describe('SettingsCard', () => {
 
       it('should display current value from props', () => {
         const wrapper = mount(SettingsCard, {
-          props: { ...defaultProps, totalAnnualLeaveDays: 22 }
+          props: { ...defaultProps, totalAnnualLeaveDays: 22 },
         })
         const input = wrapper.find('#totalLeaveDays')
         expect((input.element as HTMLInputElement).value).toBe('22')
@@ -327,7 +337,7 @@ describe('SettingsCard', () => {
 
       it('should handle value of 1 (minimum)', () => {
         const wrapper = mount(SettingsCard, {
-          props: { ...defaultProps, totalAnnualLeaveDays: 1 }
+          props: { ...defaultProps, totalAnnualLeaveDays: 1 },
         })
         const input = wrapper.find('#totalLeaveDays')
         expect((input.element as HTMLInputElement).value).toBe('1')
@@ -335,7 +345,7 @@ describe('SettingsCard', () => {
 
       it('should handle max value (50)', () => {
         const wrapper = mount(SettingsCard, {
-          props: { ...defaultProps, totalAnnualLeaveDays: 50 }
+          props: { ...defaultProps, totalAnnualLeaveDays: 50 },
         })
         const input = wrapper.find('#totalLeaveDays')
         expect((input.element as HTMLInputElement).value).toBe('50')
@@ -366,7 +376,7 @@ describe('SettingsCard', () => {
 
       it('should display current value from props', () => {
         const wrapper = mount(SettingsCard, {
-          props: { ...defaultProps, searchLeaveDays: 7 }
+          props: { ...defaultProps, searchLeaveDays: 7 },
         })
         const input = wrapper.find('#searchDays')
         expect((input.element as HTMLInputElement).value).toBe('7')
@@ -374,7 +384,7 @@ describe('SettingsCard', () => {
 
       it('should handle value of 1 (minimum)', () => {
         const wrapper = mount(SettingsCard, {
-          props: { ...defaultProps, searchLeaveDays: 1 }
+          props: { ...defaultProps, searchLeaveDays: 1 },
         })
         const input = wrapper.find('#searchDays')
         expect((input.element as HTMLInputElement).value).toBe('1')
@@ -382,7 +392,7 @@ describe('SettingsCard', () => {
 
       it('should handle value of 30 (maximum)', () => {
         const wrapper = mount(SettingsCard, {
-          props: { ...defaultProps, searchLeaveDays: 30 }
+          props: { ...defaultProps, searchLeaveDays: 30 },
         })
         const input = wrapper.find('#searchDays')
         expect((input.element as HTMLInputElement).value).toBe('30')
@@ -407,7 +417,7 @@ describe('SettingsCard', () => {
   describe('Edge Cases', () => {
     it('should handle zero remaining days', () => {
       const wrapper = mount(SettingsCard, {
-        props: { ...defaultProps, remainingLeaveDays: 0, annualPlanLength: 5 }
+        props: { ...defaultProps, remainingLeaveDays: 0, annualPlanLength: 5 },
       })
       // Should render without error
       expect(wrapper.text()).toContain('Ρυθμίσεις')
@@ -415,7 +425,7 @@ describe('SettingsCard', () => {
 
     it('should handle empty school breaks array', () => {
       const wrapper = mount(SettingsCard, {
-        props: { ...defaultProps, parentMode: true, schoolBreaks: [] }
+        props: { ...defaultProps, parentMode: true, schoolBreaks: [] },
       })
       // Should render without error in parent mode with no breaks
       expect(wrapper.text()).toContain('Λειτουργία Γονέα')
@@ -425,8 +435,8 @@ describe('SettingsCard', () => {
       const wrapper = mount(SettingsCard, {
         props: {
           ...defaultProps,
-          stats: { workdays: 0, weekendDays: 0, holidayDays: 0, freeDays: 0 }
-        }
+          stats: { workdays: 0, weekendDays: 0, holidayDays: 0, freeDays: 0 },
+        },
       })
       expect(wrapper.text()).toContain('0')
     })
@@ -434,7 +444,7 @@ describe('SettingsCard', () => {
     it('should not emit year change when clicking current year', async () => {
       const wrapper = mount(SettingsCard, { props: defaultProps })
 
-      const currentYearButton = wrapper.findAll('button').find(b => b.text() === '2026')
+      const currentYearButton = wrapper.findAll('button').find((b) => b.text() === '2026')
       await currentYearButton?.trigger('click')
 
       // Should not emit since it's already the current year
@@ -446,8 +456,8 @@ describe('SettingsCard', () => {
         props: {
           ...defaultProps,
           showingFromToday: true,
-          effectiveStartLabel: 'Πολύ μεγάλη ημερομηνία που είναι δύσκολο να χωρέσει'
-        }
+          effectiveStartLabel: 'Πολύ μεγάλη ημερομηνία που είναι δύσκολο να χωρέσει',
+        },
       })
       expect(wrapper.text()).toContain('Πολύ μεγάλη ημερομηνία')
     })
@@ -474,7 +484,7 @@ describe('SettingsCard', () => {
 
     it('should display years in correct range (current ± 3)', () => {
       const wrapper = mount(SettingsCard, {
-        props: { ...defaultProps, currentYear: 2030 }
+        props: { ...defaultProps, currentYear: 2030 },
       })
 
       expect(wrapper.text()).toContain('2027')

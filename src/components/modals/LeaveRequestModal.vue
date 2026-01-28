@@ -22,9 +22,9 @@ const leaveRequestText = computed(() => {
   if (props.annualPlan.length === 0) return ''
 
   const today = format(new Date(), 'd MMMM yyyy', { locale: el })
-  const periods = props.annualPlan
+  const periods = [...props.annualPlan]
     .sort((a, b) => a.range.startDate.getTime() - b.range.startDate.getTime())
-    .map(opp => {
+    .map((opp) => {
       const start = format(opp.range.startDate, 'd MMMM yyyy', { locale: el })
       const end = format(opp.range.endDate, 'd MMMM yyyy', { locale: el })
       return `• Από ${start} έως ${end} (${opp.leaveDaysRequired} εργάσιμες ημέρες)`
@@ -80,32 +80,46 @@ function downloadLeaveRequest() {
     @click.self="emit('close')"
   >
     <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
-    <div class="relative bg-(--marble-white) rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden animate-fade-in-up">
+    <div
+      class="animate-fade-in-up relative max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-2xl bg-(--marble-white) shadow-2xl"
+    >
       <!-- Modal Header -->
-      <div class="px-6 py-4 border-b border-(--marble-200) bg-(--marble-50) flex items-center justify-between">
+      <div
+        class="flex items-center justify-between border-b border-(--marble-200) bg-(--marble-50) px-6 py-4"
+      >
         <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-(--terracotta-500) flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-(--terracotta-500)">
+            <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
           </div>
           <h3 class="text-lg font-semibold text-(--marble-800)">Αίτηση Κανονικής Άδειας</h3>
         </div>
         <button
           @click="emit('close')"
-          class="w-8 h-8 rounded-lg flex items-center justify-center text-(--marble-400) hover:text-(--marble-600) hover:bg-(--marble-100) transition-all"
+          class="flex h-8 w-8 items-center justify-center rounded-lg text-(--marble-400) transition-all hover:bg-(--marble-100) hover:text-(--marble-600)"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
           </svg>
         </button>
       </div>
 
       <!-- Modal Body -->
-      <div class="p-6 overflow-y-auto max-h-[60vh]">
+      <div class="max-h-[60vh] overflow-y-auto p-6">
         <!-- Reason Input -->
         <div class="mb-4">
-          <label class="block text-sm font-semibold text-(--marble-600) mb-2">Λόγος Άδειας</label>
+          <label class="mb-2 block text-sm font-semibold text-(--marble-600)">Λόγος Άδειας</label>
           <input
             v-model="leaveRequestReason"
             type="text"
@@ -116,11 +130,13 @@ function downloadLeaveRequest() {
 
         <!-- Generated Text -->
         <div class="mb-4">
-          <label class="block text-sm font-semibold text-(--marble-600) mb-2">Κείμενο Αίτησης</label>
+          <label class="mb-2 block text-sm font-semibold text-(--marble-600)"
+            >Κείμενο Αίτησης</label
+          >
           <textarea
             :value="leaveRequestText"
             readonly
-            class="w-full h-64 px-4 py-3 rounded-xl border border-(--marble-200) bg-(--marble-50) text-(--marble-700) font-mono text-sm resize-none focus:outline-none"
+            class="h-64 w-full resize-none rounded-xl border border-(--marble-200) bg-(--marble-50) px-4 py-3 font-mono text-sm text-(--marble-700) focus:outline-none"
           ></textarea>
         </div>
       </div>
@@ -136,32 +152,47 @@ function downloadLeaveRequest() {
       >
         <div
           v-if="showCopiedAlert"
-          class="absolute bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-2 rounded-lg bg-(--success-600) text-white text-sm font-medium shadow-lg"
+          class="absolute bottom-20 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-lg bg-(--success-600) px-4 py-2 text-sm font-medium text-white shadow-lg"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            />
           </svg>
           Αντιγράφηκε!
         </div>
       </Transition>
 
       <!-- Modal Footer -->
-      <div class="px-6 py-4 border-t border-(--marble-200) bg-(--marble-50) flex gap-3">
+      <div class="flex gap-3 border-t border-(--marble-200) bg-(--marble-50) px-6 py-4">
         <button
           @click="copyLeaveRequest"
-          class="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-(--aegean-600) text-white font-semibold hover:bg-(--aegean-700) transition-colors"
+          class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-(--aegean-600) px-4 py-3 font-semibold text-white transition-colors hover:bg-(--aegean-700)"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+            />
           </svg>
           Αντιγραφή
         </button>
         <button
           @click="downloadLeaveRequest"
-          class="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-(--terracotta-500) text-white font-semibold hover:bg-(--terracotta-600) transition-colors"
+          class="flex flex-1 items-center justify-center gap-2 rounded-xl bg-(--terracotta-500) px-4 py-3 font-semibold text-white transition-colors hover:bg-(--terracotta-600)"
         >
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+          <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+            />
           </svg>
           Λήψη
         </button>

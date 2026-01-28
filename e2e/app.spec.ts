@@ -43,7 +43,7 @@ test.describe('Anasa App', () => {
 
     // Get initial state
     const htmlElement = page.locator('html')
-    const initialDarkMode = await htmlElement.evaluate(el => el.classList.contains('dark'))
+    const initialDarkMode = await htmlElement.evaluate((el) => el.classList.contains('dark'))
 
     // Toggle dark mode - use force:true for Firefox compatibility
     await toggle.click({ force: true })
@@ -116,7 +116,9 @@ test.describe('Settings', () => {
   test('can toggle Holy Spirit setting', async ({ page }) => {
     // Find the Holy Spirit toggle
     const holySpiritSection = page.locator('text=Αγίου Πνεύματος').locator('..')
-    const toggle = holySpiritSection.locator('button, input[type="checkbox"], [role="switch"]').first()
+    const toggle = holySpiritSection
+      .locator('button, input[type="checkbox"], [role="switch"]')
+      .first()
 
     // Click to toggle
     await toggle.click()
@@ -129,7 +131,9 @@ test.describe('Settings', () => {
   test('can toggle Parent mode', async ({ page }) => {
     // Find the Parent mode toggle
     const parentModeSection = page.locator('text=Λειτουργία Γονέα').locator('..')
-    const toggle = parentModeSection.locator('button, input[type="checkbox"], [role="switch"]').first()
+    const toggle = parentModeSection
+      .locator('button, input[type="checkbox"], [role="switch"]')
+      .first()
 
     // Click to toggle
     await toggle.click()

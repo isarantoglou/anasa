@@ -5,7 +5,7 @@ import {
   isInSchoolBreak,
   isSchoolHoliday,
   calculateSchoolOverlap,
-  getSchoolCalendar
+  getSchoolCalendar,
 } from './schoolHolidays'
 
 describe('getSchoolBreaks', () => {
@@ -13,13 +13,13 @@ describe('getSchoolBreaks', () => {
     const breaks = getSchoolBreaks(2026)
 
     expect(breaks).toHaveLength(2)
-    expect(breaks.map(b => b.id)).toContain('christmas')
-    expect(breaks.map(b => b.id)).toContain('easter')
+    expect(breaks.map((b) => b.id)).toContain('christmas')
+    expect(breaks.map((b) => b.id)).toContain('easter')
   })
 
   it('should have Christmas break from Dec 24 to Jan 7', () => {
     const breaks = getSchoolBreaks(2026)
-    const christmas = breaks.find(b => b.id === 'christmas')!
+    const christmas = breaks.find((b) => b.id === 'christmas')!
 
     expect(christmas.startDate.getMonth()).toBe(11) // December
     expect(christmas.startDate.getDate()).toBe(24)
@@ -30,7 +30,7 @@ describe('getSchoolBreaks', () => {
 
   it('should have Christmas break with correct properties', () => {
     const breaks = getSchoolBreaks(2026)
-    const christmas = breaks.find(b => b.id === 'christmas')!
+    const christmas = breaks.find((b) => b.id === 'christmas')!
 
     expect(christmas.name).toBe('Christmas Break')
     expect(christmas.nameGreek).toBe('Διακοπές Χριστουγέννων')
@@ -39,7 +39,7 @@ describe('getSchoolBreaks', () => {
 
   it('should calculate Easter break based on Orthodox Easter', () => {
     const breaks = getSchoolBreaks(2026)
-    const easter = breaks.find(b => b.id === 'easter')!
+    const easter = breaks.find((b) => b.id === 'easter')!
 
     // Orthodox Easter 2026 is April 12
     // Easter break should start 1 week before (April 5) and end 1 week after (April 19)
@@ -53,7 +53,7 @@ describe('getSchoolBreaks', () => {
 
   it('should have Easter break with correct properties', () => {
     const breaks = getSchoolBreaks(2026)
-    const easter = breaks.find(b => b.id === 'easter')!
+    const easter = breaks.find((b) => b.id === 'easter')!
 
     expect(easter.name).toBe('Easter Break')
     expect(easter.nameGreek).toBe('Διακοπές Πάσχα')
@@ -64,8 +64,8 @@ describe('getSchoolBreaks', () => {
     const breaks2026 = getSchoolBreaks(2026)
     const breaks2027 = getSchoolBreaks(2027)
 
-    const easter2026 = breaks2026.find(b => b.id === 'easter')!
-    const easter2027 = breaks2027.find(b => b.id === 'easter')!
+    const easter2026 = breaks2026.find((b) => b.id === 'easter')!
+    const easter2027 = breaks2027.find((b) => b.id === 'easter')!
 
     // Easter dates should be different
     expect(easter2026.startDate.getTime()).not.toBe(easter2027.startDate.getTime())
@@ -81,7 +81,7 @@ describe('getSchoolHolidays', () => {
 
   it('should include Oxi Day (October 28)', () => {
     const holidays = getSchoolHolidays(2026)
-    const oxiDay = holidays.find(h => h.name === 'Oxi Day')
+    const oxiDay = holidays.find((h) => h.name === 'Oxi Day')
 
     expect(oxiDay).toBeDefined()
     expect(oxiDay?.date.getMonth()).toBe(9) // October
@@ -91,7 +91,7 @@ describe('getSchoolHolidays', () => {
 
   it('should include Polytechnic Uprising (November 17)', () => {
     const holidays = getSchoolHolidays(2026)
-    const polytechnic = holidays.find(h => h.name === 'Polytechnic Uprising')
+    const polytechnic = holidays.find((h) => h.name === 'Polytechnic Uprising')
 
     expect(polytechnic).toBeDefined()
     expect(polytechnic?.date.getMonth()).toBe(10) // November
@@ -101,7 +101,7 @@ describe('getSchoolHolidays', () => {
 
   it('should include Three Hierarchs (January 30)', () => {
     const holidays = getSchoolHolidays(2026)
-    const threeHierarchs = holidays.find(h => h.name === 'Three Hierarchs')
+    const threeHierarchs = holidays.find((h) => h.name === 'Three Hierarchs')
 
     expect(threeHierarchs).toBeDefined()
     expect(threeHierarchs?.date.getMonth()).toBe(0) // January
@@ -111,7 +111,7 @@ describe('getSchoolHolidays', () => {
 
   it('should calculate Clean Monday relative to Easter', () => {
     const holidays = getSchoolHolidays(2026)
-    const cleanMonday = holidays.find(h => h.name === 'Clean Monday')
+    const cleanMonday = holidays.find((h) => h.name === 'Clean Monday')
 
     expect(cleanMonday).toBeDefined()
     // Clean Monday is 48 days before Easter
@@ -122,7 +122,7 @@ describe('getSchoolHolidays', () => {
 
   it('should include Independence Day (March 25)', () => {
     const holidays = getSchoolHolidays(2026)
-    const independence = holidays.find(h => h.name === 'Independence Day')
+    const independence = holidays.find((h) => h.name === 'Independence Day')
 
     expect(independence).toBeDefined()
     expect(independence?.date.getMonth()).toBe(2) // March
@@ -131,7 +131,7 @@ describe('getSchoolHolidays', () => {
 
   it('should include Labor Day (May 1)', () => {
     const holidays = getSchoolHolidays(2026)
-    const laborDay = holidays.find(h => h.name === 'Labor Day')
+    const laborDay = holidays.find((h) => h.name === 'Labor Day')
 
     expect(laborDay).toBeDefined()
     expect(laborDay?.date.getMonth()).toBe(4) // May
@@ -140,7 +140,7 @@ describe('getSchoolHolidays', () => {
 
   it('should calculate Whit Monday relative to Easter', () => {
     const holidays = getSchoolHolidays(2026)
-    const whitMonday = holidays.find(h => h.name === 'Whit Monday')
+    const whitMonday = holidays.find((h) => h.name === 'Whit Monday')
 
     expect(whitMonday).toBeDefined()
     // Whit Monday is 50 days after Easter
@@ -172,7 +172,7 @@ describe('isInSchoolBreak', () => {
 
   it('should detect date within Easter break', () => {
     const breaks = getSchoolBreaks(2026)
-    const easter = breaks.find(b => b.id === 'easter')!
+    const easter = breaks.find((b) => b.id === 'easter')!
 
     // Middle of Easter break
     const midBreak = new Date(easter.startDate)
@@ -249,7 +249,7 @@ describe('calculateSchoolOverlap', () => {
     )
 
     expect(result.totalOverlapDays).toBe(5)
-    expect(result.overlappingBreaks.some(b => b.break.id === 'easter')).toBe(true)
+    expect(result.overlappingBreaks.some((b) => b.break.id === 'easter')).toBe(true)
   })
 
   it('should return 0 overlap for non-break periods', () => {
@@ -271,7 +271,7 @@ describe('calculateSchoolOverlap', () => {
     )
 
     // Oxi Day (Oct 28) should be counted
-    expect(result.overlappingHolidays.some(h => h.name === 'Oxi Day')).toBe(true)
+    expect(result.overlappingHolidays.some((h) => h.name === 'Oxi Day')).toBe(true)
   })
 
   it('should not double-count holidays within breaks', () => {
@@ -295,7 +295,7 @@ describe('calculateSchoolOverlap', () => {
     )
 
     // Previous year's Christmas break (2025) ends Jan 7, 2026
-    expect(result.overlappingBreaks.some(b => b.break.id === 'christmas')).toBe(true)
+    expect(result.overlappingBreaks.some((b) => b.break.id === 'christmas')).toBe(true)
   })
 
   it('should calculate correct days for partial overlap', () => {
@@ -306,7 +306,7 @@ describe('calculateSchoolOverlap', () => {
     )
 
     // Only Dec 24-26 overlap (3 days)
-    const christmasOverlap = result.overlappingBreaks.find(b => b.break.id === 'christmas')
+    const christmasOverlap = result.overlappingBreaks.find((b) => b.break.id === 'christmas')
     expect(christmasOverlap?.days).toBe(3)
   })
 })
@@ -337,7 +337,7 @@ describe('edge cases', () => {
     const holidays = getSchoolHolidays(2024)
 
     // Clean Monday in 2024 should be calculated correctly
-    const cleanMonday = holidays.find(h => h.name === 'Clean Monday')
+    const cleanMonday = holidays.find((h) => h.name === 'Clean Monday')
     expect(cleanMonday).toBeDefined()
     expect(cleanMonday?.date.getFullYear()).toBe(2024)
   })
@@ -345,7 +345,7 @@ describe('edge cases', () => {
   it('should calculate Easter break spanning month boundary', () => {
     // Easter 2024 is May 5, break would span late April to mid May
     const breaks = getSchoolBreaks(2024)
-    const easter = breaks.find(b => b.id === 'easter')
+    const easter = breaks.find((b) => b.id === 'easter')
 
     expect(easter).toBeDefined()
     // Break spans about 2 weeks around Easter, potentially crossing month boundary
@@ -358,7 +358,7 @@ describe('edge cases', () => {
   it('should handle year with early Easter (April)', () => {
     // 2029 has Easter on April 8
     const breaks = getSchoolBreaks(2029)
-    const easter = breaks.find(b => b.id === 'easter')
+    const easter = breaks.find((b) => b.id === 'easter')
 
     expect(easter).toBeDefined()
     expect(easter!.startDate.getMonth()).toBe(3) // April (0-indexed)
@@ -367,7 +367,7 @@ describe('edge cases', () => {
   it('should handle year with late Easter (May)', () => {
     // 2024 has Easter on May 5
     const breaks = getSchoolBreaks(2024)
-    const easter = breaks.find(b => b.id === 'easter')
+    const easter = breaks.find((b) => b.id === 'easter')
 
     expect(easter).toBeDefined()
     // Easter break should extend into May
@@ -376,7 +376,7 @@ describe('edge cases', () => {
 
   it('should handle Christmas break crossing year boundary', () => {
     const breaks = getSchoolBreaks(2026)
-    const christmas = breaks.find(b => b.id === 'christmas')
+    const christmas = breaks.find((b) => b.id === 'christmas')
 
     expect(christmas).toBeDefined()
     expect(christmas!.startDate.getFullYear()).toBe(2026)
@@ -421,7 +421,7 @@ describe('edge cases', () => {
     expect(holidays.length).toBeGreaterThan(0)
 
     // Easter should still be a Sunday
-    const easterBreak = breaks.find(b => b.id === 'easter')
+    const easterBreak = breaks.find((b) => b.id === 'easter')
     const easterMiddle = new Date(easterBreak!.startDate)
     easterMiddle.setDate(easterMiddle.getDate() + 7) // Move to Easter Sunday
     expect(easterMiddle.getDay()).toBe(0) // Sunday

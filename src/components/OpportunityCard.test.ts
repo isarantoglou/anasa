@@ -9,10 +9,28 @@ function createMockOpportunity(overrides: Partial<OptimizationResult> = {}): Opt
   const endDate = new Date(2026, 3, 14) // April 14, 2026
 
   const days: DayInfo[] = [
-    { date: new Date(2026, 3, 10), cost: 1, isHoliday: true, isWeekend: false, holidayName: 'Μεγάλη Παρασκευή' },
+    {
+      date: new Date(2026, 3, 10),
+      cost: 1,
+      isHoliday: true,
+      isWeekend: false,
+      holidayName: 'Μεγάλη Παρασκευή',
+    },
     { date: new Date(2026, 3, 11), cost: 0, isHoliday: false, isWeekend: true },
-    { date: new Date(2026, 3, 12), cost: 0, isHoliday: true, isWeekend: true, holidayName: 'Πάσχα' },
-    { date: new Date(2026, 3, 13), cost: 0, isHoliday: true, isWeekend: false, holidayName: 'Δευτέρα Πάσχα' },
+    {
+      date: new Date(2026, 3, 12),
+      cost: 0,
+      isHoliday: true,
+      isWeekend: true,
+      holidayName: 'Πάσχα',
+    },
+    {
+      date: new Date(2026, 3, 13),
+      cost: 0,
+      isHoliday: true,
+      isWeekend: false,
+      holidayName: 'Δευτέρα Πάσχα',
+    },
     { date: new Date(2026, 3, 14), cost: 1, isHoliday: false, isWeekend: false },
   ]
 
@@ -24,7 +42,7 @@ function createMockOpportunity(overrides: Partial<OptimizationResult> = {}): Opt
     efficiency: 2.5,
     efficiencyLabel: 'Κάντε 2 ημέρες 5',
     days,
-    ...overrides
+    ...overrides,
   }
 }
 
@@ -36,7 +54,7 @@ describe('OpportunityCard', () => {
     parentMode: false,
     isInPlan: false,
     isGeneratingImage: false,
-    currentYear: 2026
+    currentYear: 2026,
   }
 
   describe('rendering', () => {
@@ -162,8 +180,12 @@ describe('OpportunityCard', () => {
     })
 
     it('should disable share button when generating image', () => {
-      const wrapper = mount(OpportunityCard, { props: { ...defaultProps, isGeneratingImage: true } })
-      const shareButton = wrapper.findAll('button').find(b => b.attributes('disabled') !== undefined)
+      const wrapper = mount(OpportunityCard, {
+        props: { ...defaultProps, isGeneratingImage: true },
+      })
+      const shareButton = wrapper
+        .findAll('button')
+        .find((b) => b.attributes('disabled') !== undefined)
       expect(shareButton).toBeDefined()
     })
   })
@@ -171,7 +193,7 @@ describe('OpportunityCard', () => {
   describe('events', () => {
     it('should emit addToPlan when add button is clicked', async () => {
       const wrapper = mount(OpportunityCard, { props: defaultProps })
-      const addButton = wrapper.findAll('button').find(b => b.text().includes('Προσθήκη'))
+      const addButton = wrapper.findAll('button').find((b) => b.text().includes('Προσθήκη'))
       await addButton!.trigger('click')
       expect(wrapper.emitted('addToPlan')).toBeTruthy()
       expect(wrapper.emitted('addToPlan')![0]).toEqual([defaultProps.opportunity])
@@ -206,11 +228,11 @@ describe('OpportunityCard', () => {
       const easterOpportunity = createMockOpportunity({
         range: {
           startDate: new Date(2026, 3, 5), // During Easter break
-          endDate: new Date(2026, 3, 19)
-        }
+          endDate: new Date(2026, 3, 19),
+        },
       })
       const wrapper = mount(OpportunityCard, {
-        props: { ...defaultProps, opportunity: easterOpportunity, parentMode: true }
+        props: { ...defaultProps, opportunity: easterOpportunity, parentMode: true },
       })
       expect(wrapper.text()).toContain('ημέρες με τα παιδιά')
     })
@@ -219,11 +241,11 @@ describe('OpportunityCard', () => {
       const easterOpportunity = createMockOpportunity({
         range: {
           startDate: new Date(2026, 3, 5),
-          endDate: new Date(2026, 3, 19)
-        }
+          endDate: new Date(2026, 3, 19),
+        },
       })
       const wrapper = mount(OpportunityCard, {
-        props: { ...defaultProps, opportunity: easterOpportunity, parentMode: true }
+        props: { ...defaultProps, opportunity: easterOpportunity, parentMode: true },
       })
       expect(wrapper.text()).toContain('Διακοπές Πάσχα')
     })

@@ -4,7 +4,7 @@ import {
   searchTown,
   getPatronSaintByTown,
   getAllTowns,
-  getTownsBySaint
+  getTownsBySaint,
 } from './patronSaints'
 
 describe('patronSaints data', () => {
@@ -13,7 +13,7 @@ describe('patronSaints data', () => {
   })
 
   it('should have valid structure for all entries', () => {
-    patronSaints.forEach(ps => {
+    patronSaints.forEach((ps) => {
       expect(ps.town).toBeDefined()
       expect(ps.town.length).toBeGreaterThan(0)
       expect(ps.townGreek).toBeDefined()
@@ -27,7 +27,7 @@ describe('patronSaints data', () => {
   })
 
   it('should have valid dates (month 01-12, day 01-31)', () => {
-    patronSaints.forEach(ps => {
+    patronSaints.forEach((ps) => {
       const [month, day] = ps.date.split('-').map(Number)
       expect(month).toBeGreaterThanOrEqual(1)
       expect(month).toBeLessThanOrEqual(12)
@@ -39,14 +39,14 @@ describe('patronSaints data', () => {
   it('should include major Greek cities', () => {
     const majorCities = ['Athens', 'Thessaloniki', 'Patras', 'Heraklion', 'Piraeus']
 
-    majorCities.forEach(city => {
-      const found = patronSaints.some(ps => ps.town === city)
+    majorCities.forEach((city) => {
+      const found = patronSaints.some((ps) => ps.town === city)
       expect(found).toBe(true)
     })
   })
 
   it('should have Athens with correct patron saint', () => {
-    const athens = patronSaints.find(ps => ps.town === 'Athens')
+    const athens = patronSaints.find((ps) => ps.town === 'Athens')
 
     expect(athens).toBeDefined()
     expect(athens?.saint).toBe('Saint Dionysios the Areopagite')
@@ -55,7 +55,7 @@ describe('patronSaints data', () => {
   })
 
   it('should have Thessaloniki with Saint Demetrios', () => {
-    const thessaloniki = patronSaints.find(ps => ps.town === 'Thessaloniki')
+    const thessaloniki = patronSaints.find((ps) => ps.town === 'Thessaloniki')
 
     expect(thessaloniki).toBeDefined()
     expect(thessaloniki?.saint).toBe('Saint Demetrios')
@@ -64,12 +64,12 @@ describe('patronSaints data', () => {
   })
 
   it('should mark movable feast days correctly', () => {
-    const movableEntries = patronSaints.filter(ps => ps.isMovable === true)
+    const movableEntries = patronSaints.filter((ps) => ps.isMovable === true)
 
     expect(movableEntries.length).toBeGreaterThan(0)
 
     // Check that Andros has movable date
-    const andros = patronSaints.find(ps => ps.town === 'Andros')
+    const andros = patronSaints.find((ps) => ps.town === 'Andros')
     expect(andros?.isMovable).toBe(true)
   })
 
@@ -77,11 +77,11 @@ describe('patronSaints data', () => {
     // Movable feasts that are NOT conditionally movable (like Saint George)
     // should have easterOffset defined
     const movableEntries = patronSaints.filter(
-      ps => ps.isMovable === true && !ps.movesIfBeforeEaster
+      (ps) => ps.isMovable === true && !ps.movesIfBeforeEaster
     )
 
     // All Easter-offset movable feasts should have easterOffset defined
-    movableEntries.forEach(ps => {
+    movableEntries.forEach((ps) => {
       expect(ps.easterOffset).toBeDefined()
       expect(typeof ps.easterOffset).toBe('number')
     })
@@ -90,19 +90,19 @@ describe('patronSaints data', () => {
   it('should have movesIfBeforeEaster for conditionally movable feasts', () => {
     // Conditionally movable feasts (like Saint George) use movesIfBeforeEaster
     const conditionallyMovable = patronSaints.filter(
-      ps => ps.isMovable === true && ps.movesIfBeforeEaster === true
+      (ps) => ps.isMovable === true && ps.movesIfBeforeEaster === true
     )
 
     expect(conditionallyMovable.length).toBeGreaterThan(0)
 
     // These should NOT have easterOffset (they use fixed date unless it conflicts)
-    conditionallyMovable.forEach(ps => {
+    conditionallyMovable.forEach((ps) => {
       expect(ps.movesIfBeforeEaster).toBe(true)
     })
   })
 
   it('should have Aigio with correct movable feast data', () => {
-    const aigio = patronSaints.find(ps => ps.town === 'Aigio')
+    const aigio = patronSaints.find((ps) => ps.town === 'Aigio')
 
     expect(aigio).toBeDefined()
     expect(aigio?.townGreek).toBe('Αίγιο')
@@ -113,37 +113,35 @@ describe('patronSaints data', () => {
 
   it('should have correct Easter offsets for known movable feasts', () => {
     // Ζωοδόχος Πηγή (Life-giving Spring) - Bright Friday = Easter + 5
-    const agiaParaskevi = patronSaints.find(
-      ps => ps.town === 'Agia Paraskevi Thessalonikis'
-    )
+    const agiaParaskevi = patronSaints.find((ps) => ps.town === 'Agia Paraskevi Thessalonikis')
     expect(agiaParaskevi?.easterOffset).toBe(5)
 
     // Αγία Τριάδα (Holy Trinity) - Pentecost = Easter + 49
-    const milos = patronSaints.find(ps => ps.town === 'Milos')
+    const milos = patronSaints.find((ps) => ps.town === 'Milos')
     expect(milos?.easterOffset).toBe(49)
 
     // Παναγία Χρυσοπηγή - Ascension = Easter + 39
-    const sifnos = patronSaints.find(ps => ps.town === 'Sifnos')
+    const sifnos = patronSaints.find((ps) => ps.town === 'Sifnos')
     expect(sifnos?.easterOffset).toBe(39)
   })
 
   it('should have Saint George entries with movesIfBeforeEaster flag', () => {
     // Find all Saint George entries (April 23)
     const stGeorgeEntries = patronSaints.filter(
-      ps => ps.saint === 'Saint George' && ps.date === '04-23'
+      (ps) => ps.saint === 'Saint George' && ps.date === '04-23'
     )
 
     expect(stGeorgeEntries.length).toBeGreaterThan(10) // Should have many towns
 
     // All should have movesIfBeforeEaster: true
-    stGeorgeEntries.forEach(ps => {
+    stGeorgeEntries.forEach((ps) => {
       expect(ps.isMovable).toBe(true)
       expect(ps.movesIfBeforeEaster).toBe(true)
     })
   })
 
   it('should have Ierapetra with Saint George correctly configured', () => {
-    const ierapetra = patronSaints.find(ps => ps.town === 'Ierapetra')
+    const ierapetra = patronSaints.find((ps) => ps.town === 'Ierapetra')
 
     expect(ierapetra).toBeDefined()
     expect(ierapetra?.saintGreek).toBe('Άγιος Γεώργιος')
@@ -158,14 +156,14 @@ describe('searchTown', () => {
     const results = searchTown('Athens')
 
     expect(results.length).toBeGreaterThan(0)
-    expect(results.some(r => r.town === 'Athens')).toBe(true)
+    expect(results.some((r) => r.town === 'Athens')).toBe(true)
   })
 
   it('should find towns by Greek name', () => {
     const results = searchTown('Αθήνα')
 
     expect(results.length).toBeGreaterThan(0)
-    expect(results.some(r => r.townGreek === 'Αθήνα')).toBe(true)
+    expect(results.some((r) => r.townGreek === 'Αθήνα')).toBe(true)
   })
 
   it('should be case insensitive', () => {
@@ -182,7 +180,7 @@ describe('searchTown', () => {
     const results = searchTown('Thess')
 
     expect(results.length).toBeGreaterThan(0)
-    expect(results.some(r => r.town === 'Thessaloniki')).toBe(true)
+    expect(results.some((r) => r.town === 'Thessaloniki')).toBe(true)
   })
 
   it('should return empty array for short queries (< 2 chars)', () => {
@@ -201,7 +199,7 @@ describe('searchTown', () => {
     const results = searchTown('  Athens  ')
 
     expect(results.length).toBeGreaterThan(0)
-    expect(results.some(r => r.town === 'Athens')).toBe(true)
+    expect(results.some((r) => r.town === 'Athens')).toBe(true)
   })
 
   it('should return empty array for non-matching query', () => {
@@ -216,17 +214,17 @@ describe('searchTown', () => {
     const resultsWithAccent = searchTown('Ηράκλειο')
 
     expect(resultsNoAccent.length).toBeGreaterThan(0)
-    expect(resultsNoAccent.some(r => r.townGreek === 'Ηράκλειο')).toBe(true)
+    expect(resultsNoAccent.some((r) => r.townGreek === 'Ηράκλειο')).toBe(true)
     expect(resultsNoAccent.length).toEqual(resultsWithAccent.length)
   })
 
   it('should match regardless of accent placement', () => {
     // Test various accent combinations
-    const results1 = searchTown('Αθηνα')  // no accent
-    const results2 = searchTown('Αθήνα')  // with accent
+    const results1 = searchTown('Αθηνα') // no accent
+    const results2 = searchTown('Αθήνα') // with accent
 
     expect(results1.length).toBeGreaterThan(0)
-    expect(results1.some(r => r.townGreek === 'Αθήνα')).toBe(true)
+    expect(results1.some((r) => r.townGreek === 'Αθήνα')).toBe(true)
     expect(results1.length).toEqual(results2.length)
   })
 })
@@ -302,7 +300,7 @@ describe('getAllTowns', () => {
     const towns = getAllTowns()
 
     // Should not contain Greek characters in any town name
-    towns.forEach(town => {
+    towns.forEach((town) => {
       // English names shouldn't have Greek letters
       expect(town).not.toMatch(/[α-ωά-ώ]/i)
     })
@@ -316,7 +314,7 @@ describe('getTownsBySaint', () => {
     expect(results.length).toBeGreaterThan(0)
 
     // Multiple towns have Saint Nicholas as patron
-    const towns = results.map(r => r.town)
+    const towns = results.map((r) => r.town)
     expect(towns).toContain('Volos')
     expect(towns).toContain('Alexandroupoli')
     expect(towns).toContain('Kavala')
@@ -352,7 +350,7 @@ describe('getTownsBySaint', () => {
 
     expect(results.length).toBeGreaterThan(5)
 
-    const towns = results.map(r => r.town)
+    const towns = results.map((r) => r.town)
     expect(towns).toContain('Thessaloniki')
   })
 
@@ -366,7 +364,7 @@ describe('getTownsBySaint', () => {
 
 describe('data integrity', () => {
   it('should have unique town entries', () => {
-    const towns = patronSaints.map(ps => ps.town.toLowerCase())
+    const towns = patronSaints.map((ps) => ps.town.toLowerCase())
     const uniqueTowns = new Set(towns)
 
     // Note: There might be intentional duplicates (e.g., different neighborhoods)
@@ -375,22 +373,22 @@ describe('data integrity', () => {
   })
 
   it('should have consistent date format', () => {
-    patronSaints.forEach(ps => {
+    patronSaints.forEach((ps) => {
       expect(ps.date).toMatch(/^(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/)
     })
   })
 
   it('should have non-empty Greek translations', () => {
-    patronSaints.forEach(ps => {
+    patronSaints.forEach((ps) => {
       expect(ps.townGreek.trim().length).toBeGreaterThan(0)
       expect(ps.saintGreek.trim().length).toBeGreaterThan(0)
     })
   })
 
   it('should have valid February dates', () => {
-    const februaryEntries = patronSaints.filter(ps => ps.date.startsWith('02-'))
+    const februaryEntries = patronSaints.filter((ps) => ps.date.startsWith('02-'))
 
-    februaryEntries.forEach(ps => {
+    februaryEntries.forEach((ps) => {
       const day = parseInt(ps.date.split('-')[1]!)
       expect(day).toBeLessThanOrEqual(29) // Max Feb days (leap year)
     })
@@ -398,11 +396,9 @@ describe('data integrity', () => {
 
   it('should have valid April, June, September, November dates (30 days)', () => {
     const thirtyDayMonths = ['04', '06', '09', '11']
-    const entries = patronSaints.filter(ps =>
-      thirtyDayMonths.includes(ps.date.split('-')[0]!)
-    )
+    const entries = patronSaints.filter((ps) => thirtyDayMonths.includes(ps.date.split('-')[0]!))
 
-    entries.forEach(ps => {
+    entries.forEach((ps) => {
       const day = parseInt(ps.date.split('-')[1]!)
       expect(day).toBeLessThanOrEqual(30)
     })

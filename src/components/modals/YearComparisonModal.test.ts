@@ -6,12 +6,12 @@ describe('YearComparisonModal', () => {
   const defaultProps = {
     show: true,
     currentYear: 2026,
-    includeHolySpirit: true
+    includeHolySpirit: true,
   }
 
   it('should not render when show is false', () => {
     const wrapper = mount(YearComparisonModal, {
-      props: { ...defaultProps, show: false }
+      props: { ...defaultProps, show: false },
     })
 
     expect(wrapper.find('.fixed').exists()).toBe(false)
@@ -69,7 +69,7 @@ describe('YearComparisonModal', () => {
 
   it('should hide Holy Spirit row when includeHolySpirit is false', () => {
     const wrapper = mount(YearComparisonModal, {
-      props: { ...defaultProps, includeHolySpirit: false }
+      props: { ...defaultProps, includeHolySpirit: false },
     })
 
     expect(wrapper.text()).not.toContain('Αγίου Πνεύματος')
@@ -102,7 +102,7 @@ describe('YearComparisonModal', () => {
     const wrapper = mount(YearComparisonModal, { props: defaultProps })
 
     // Click on 2025 to add it
-    const yearButton2025 = wrapper.findAll('button').find(b => b.text() === '2025')
+    const yearButton2025 = wrapper.findAll('button').find((b) => b.text() === '2025')
     await yearButton2025?.trigger('click')
 
     // Should now have 3 years
@@ -114,9 +114,9 @@ describe('YearComparisonModal', () => {
     const wrapper = mount(YearComparisonModal, { props: defaultProps })
 
     // Remove all years
-    const selectedYearButtons = wrapper.findAll('button.bg-\\(--aegean-600\\)').filter(b =>
-      ['2025', '2026', '2027', '2028'].includes(b.text())
-    )
+    const selectedYearButtons = wrapper
+      .findAll('button.bg-\\(--aegean-600\\)')
+      .filter((b) => ['2025', '2026', '2027', '2028'].includes(b.text()))
 
     for (const btn of selectedYearButtons) {
       await btn.trigger('click')

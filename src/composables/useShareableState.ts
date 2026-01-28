@@ -20,13 +20,13 @@ const URL_PARAM = 's'
  * Uses short keys to minimize URL length
  */
 interface ShareableState {
-  v: number              // Version
-  y: number              // Year
-  h: boolean             // Include Holy Spirit
-  p: boolean             // Parent mode
-  t: number              // Total annual leave days
-  c: [string, string][]  // Custom holidays: [date, name][]
-  a: ShareablePlan[]     // Annual plan items
+  v: number // Version
+  y: number // Year
+  h: boolean // Include Holy Spirit
+  p: boolean // Parent mode
+  t: number // Total annual leave days
+  c: [string, string][] // Custom holidays: [date, name][]
+  a: ShareablePlan[] // Annual plan items
 }
 
 /**
@@ -64,8 +64,8 @@ export function encodeState(state: AppState): string {
     h: state.includeHolySpirit,
     p: state.parentMode,
     t: state.totalAnnualLeaveDays,
-    c: state.customHolidays.map(h => [h.date, h.name]),
-    a: state.annualPlan.map(opp => {
+    c: state.customHolidays.map((h) => [h.date, h.name]),
+    a: state.annualPlan.map((opp) => {
       const startDate = formatDateCompact(opp.range.startDate)
       const endDate = formatDateCompact(opp.range.endDate)
 
@@ -78,7 +78,7 @@ export function encodeState(state: AppState): string {
         return [startDate, endDate, '', true]
       }
       return [startDate, endDate]
-    })
+    }),
   }
 
   const json = JSON.stringify(shareable)
@@ -103,10 +103,12 @@ export function decodeState(encoded: string): AppState | null {
     }
 
     // Validate required fields
-    if (typeof shareable.y !== 'number' ||
-        typeof shareable.h !== 'boolean' ||
-        typeof shareable.p !== 'boolean' ||
-        typeof shareable.t !== 'number') {
+    if (
+      typeof shareable.y !== 'number' ||
+      typeof shareable.h !== 'boolean' ||
+      typeof shareable.p !== 'boolean' ||
+      typeof shareable.t !== 'number'
+    ) {
       return null
     }
 
@@ -118,11 +120,11 @@ export function decodeState(encoded: string): AppState | null {
       customHolidays: (shareable.c || []).map(([date, name], index) => ({
         id: `shared-${index}-${Date.now()}`,
         date,
-        name
+        name,
       })),
       annualPlan: (shareable.a || []).map((item, index) =>
         createOpportunityFromShared(item, index, shareable.y)
-      )
+      ),
     }
   } catch (error) {
     console.error('Failed to decode shared state:', error)
@@ -203,20 +205,21 @@ function createOpportunityFromShared(
   const endDate = parseDateCompact(endDateStr)
 
   // Calculate basic properties from dates
-  const totalDays = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1
+  const totalDays =
+    Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1
 
   return {
     id: `shared-${index}-${Date.now()}`,
     range: { startDate, endDate },
     totalDays,
     leaveDaysRequired: 0, // Will be recalculated
-    freeDays: 0,          // Will be recalculated
-    efficiency: 0,        // Will be recalculated
-    efficiencyLabel: '',  // Will be recalculated
-    days: [],             // Will be recalculated
+    freeDays: 0, // Will be recalculated
+    efficiency: 0, // Will be recalculated
+    efficiencyLabel: '', // Will be recalculated
+    days: [], // Will be recalculated
     addedAt: new Date().toISOString(),
     isCustom: isCustom || false,
-    label: label || undefined
+    label: label || undefined,
   }
 }
 
@@ -241,20 +244,17 @@ export function recalculateOpportunity(
     freeDays: result.freeDays,
     efficiency: result.efficiency,
     efficiencyLabel: result.efficiencyLabel,
-    days: result.days
+    days: result.days,
   }
 }
 
 /**
  * Recalculate all opportunities in an AppState
  */
-export function recalculateAppState(
-  state: AppState,
-  holidays: Holiday[]
-): AppState {
+export function recalculateAppState(state: AppState, holidays: Holiday[]): AppState {
   return {
     ...state,
-    annualPlan: state.annualPlan.map(opp => recalculateOpportunity(opp, holidays))
+    annualPlan: state.annualPlan.map((opp) => recalculateOpportunity(opp, holidays)),
   }
 }
 
@@ -270,6 +270,6 @@ export function useShareableState() {
     hasSharedState,
     clearUrlState,
     recalculateOpportunity,
-    recalculateAppState
+    recalculateAppState,
   }
 }

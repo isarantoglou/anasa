@@ -123,7 +123,9 @@ test.describe('Sorting Behavior', () => {
   test('parent mode enables family sort option', async ({ page }) => {
     // Enable parent mode
     const parentModeSection = page.locator('text=Λειτουργία Γονέα').locator('..')
-    const toggle = parentModeSection.locator('button, input[type="checkbox"], [role="switch"]').first()
+    const toggle = parentModeSection
+      .locator('button, input[type="checkbox"], [role="switch"]')
+      .first()
     await toggle.click()
     await page.waitForTimeout(500)
 
@@ -162,7 +164,9 @@ test.describe('Custom Holiday Workflow', () => {
       await page.waitForTimeout(500)
 
       // Look for search results dropdown
-      const searchResults = page.locator('[role="listbox"], [role="option"], .search-results, .dropdown')
+      const searchResults = page.locator(
+        '[role="listbox"], [role="option"], .search-results, .dropdown'
+      )
 
       if (await searchResults.first().isVisible()) {
         // Click first result
@@ -177,13 +181,15 @@ test.describe('Custom Holiday Workflow', () => {
     const dateInput = page.locator('input[type="date"]').first()
     const nameInput = page.getByPlaceholder(/όνομα|αργία/i)
 
-    if (await dateInput.isVisible() && await nameInput.isVisible()) {
+    if ((await dateInput.isVisible()) && (await nameInput.isVisible())) {
       // Fill in a custom holiday
       await dateInput.fill('2026-06-15')
       await nameInput.fill('Τοπική Εορτή')
 
       // Submit the form
-      const addButton = page.getByRole('button', { name: /Προσθήκη/i }).filter({ hasText: /Προσθήκη/ })
+      const addButton = page
+        .getByRole('button', { name: /Προσθήκη/i })
+        .filter({ hasText: /Προσθήκη/ })
       if (await addButton.first().isVisible()) {
         await addButton.first().click()
         await page.waitForTimeout(300)
@@ -200,7 +206,9 @@ test.describe('Custom Period Creation', () => {
 
   test('can create custom leave period with dates and label', async ({ page }) => {
     // Look for custom period form or button to open it
-    const customPeriodButton = page.getByRole('button', { name: /Προσαρμοσμένη|Custom|Προσθήκη περιόδου/i })
+    const customPeriodButton = page.getByRole('button', {
+      name: /Προσαρμοσμένη|Custom|Προσθήκη περιόδου/i,
+    })
 
     if (await customPeriodButton.isVisible()) {
       await customPeriodButton.click()
@@ -367,9 +375,9 @@ test.describe('URL Sharing', () => {
       await shareButton.click()
       await page.waitForTimeout(500)
 
-      // URL should now contain state parameter
-      const currentUrl = page.url()
-      // Check that URL was modified or copy dialog appeared
+      // URL should now contain state parameter or copy dialog appeared
+      const _currentUrl = page.url()
+      // Note: URL modification depends on share implementation
     }
   })
 })
@@ -381,7 +389,7 @@ test.describe('Dark Mode Persistence', () => {
 
     // Get initial state
     const htmlElement = page.locator('html')
-    const initialDarkMode = await htmlElement.evaluate(el => el.classList.contains('dark'))
+    const initialDarkMode = await htmlElement.evaluate((el) => el.classList.contains('dark'))
 
     // Toggle dark mode
     const toggle = page.locator('.dark-mode-toggle')
@@ -389,7 +397,7 @@ test.describe('Dark Mode Persistence', () => {
     await page.waitForTimeout(300)
 
     // Verify toggle worked
-    const afterToggle = await htmlElement.evaluate(el => el.classList.contains('dark'))
+    const afterToggle = await htmlElement.evaluate((el) => el.classList.contains('dark'))
     expect(afterToggle).toBe(!initialDarkMode)
 
     // Reload the page
@@ -397,7 +405,7 @@ test.describe('Dark Mode Persistence', () => {
     await page.waitForLoadState('networkidle')
 
     // Verify dark mode persisted
-    const afterReload = await htmlElement.evaluate(el => el.classList.contains('dark'))
+    const afterReload = await htmlElement.evaluate((el) => el.classList.contains('dark'))
     expect(afterReload).toBe(!initialDarkMode)
   })
 })
