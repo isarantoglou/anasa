@@ -3,6 +3,13 @@ name: Claude PR Review
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  # Manual trigger for trusted fork PRs
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to review'
+        required: true
+        type: number
 
 # Permissions required for Claude to comment on PRs
 permissions:
@@ -20,12 +27,19 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Checkout PR (manual trigger)
+        if: github.event_name == 'workflow_dispatch'
+        run: gh pr checkout ${{ inputs.pr_number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Claude Code Review
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           claude_args: '--model claude-opus-4-5-20251101'
+          pr_number: ${{ inputs.pr_number || github.event.pull_request.number }}
           prompt: |
             Review this pull request for the Ανάσα (Anasa) Vue 3 + TypeScript project.
 
