@@ -4,6 +4,7 @@ import { parseISO, format } from 'date-fns'
 import { el } from 'date-fns/locale'
 import { useCustomPeriod } from '../composables/useCustomPeriod'
 import type { Holiday, OptimizationResult } from '../types'
+import DatePicker from './ui/DatePicker.vue'
 
 const props = defineProps<{
   currentYear: number
@@ -126,13 +127,12 @@ function formatDate(dateStr: string): string {
           <label for="custom-start" class="block text-xs font-semibold text-(--marble-600) mb-2">
             Από Ημερομηνία
           </label>
-          <input
+          <DatePicker
             id="custom-start"
             v-model="startDate"
-            type="date"
-            :min="todayISO"
-            :max="`${currentYear}-12-31`"
-            class="input-elegant text-sm"
+            :min-date="todayISO"
+            :max-date="`${currentYear}-12-31`"
+            placeholder="Επιλέξτε ημερομηνία"
             data-testid="start-date-input"
           />
         </div>
@@ -140,13 +140,12 @@ function formatDate(dateStr: string): string {
           <label for="custom-end" class="block text-xs font-semibold text-(--marble-600) mb-2">
             Έως Ημερομηνία
           </label>
-          <input
+          <DatePicker
             id="custom-end"
             v-model="endDate"
-            type="date"
-            :min="startDate || todayISO"
-            :max="`${currentYear}-12-31`"
-            class="input-elegant text-sm"
+            :min-date="startDate || todayISO"
+            :max-date="`${currentYear}-12-31`"
+            placeholder="Επιλέξτε ημερομηνία"
             data-testid="end-date-input"
           />
         </div>

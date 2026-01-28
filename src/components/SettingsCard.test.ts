@@ -271,7 +271,7 @@ describe('SettingsCard', () => {
 
       expect(wrapper.text()).toContain('Εργάσιμες')
       expect(wrapper.text()).toContain('251')
-      expect(wrapper.text()).toContain('Σαββατοκύριακα')
+      expect(wrapper.text()).toContain('Σ/Κ')
       expect(wrapper.text()).toContain('104')
       expect(wrapper.text()).toContain('Αργίες')
       expect(wrapper.text()).toContain('10')

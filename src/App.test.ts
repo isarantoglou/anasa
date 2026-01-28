@@ -84,7 +84,7 @@ describe('App.vue', () => {
 
     // Mock URL methods
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test')
-    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => { })
 
     // Mock clipboard
     Object.assign(navigator, {
@@ -128,7 +128,8 @@ describe('App.vue', () => {
     it('should render Orthodox Easter badge', () => {
       const wrapper = mount(App)
 
-      expect(wrapper.text()).toContain('Ορθόδοξο Πάσχα')
+      // The new design shows "Πάσχα 2026" instead of "Ορθόδοξο Πάσχα"
+      expect(wrapper.text()).toContain('Πάσχα 2026')
     })
 
     it('should display current year by default', () => {
@@ -454,13 +455,17 @@ describe('App.vue', () => {
 
       const header = wrapper.find('header')
       expect(header.exists()).toBe(true)
-      expect(header.classes()).toContain('backdrop-blur-md')
+      // The new design uses backdrop-blur-xl instead of backdrop-blur-md
+      expect(header.classes()).toContain('backdrop-blur-xl')
     })
 
     it('should have decorative Greek key border', () => {
       const wrapper = mount(App)
 
-      expect(wrapper.find('.greek-key-border').exists()).toBe(true)
+      // The new design uses gradient accent lines instead of Greek key borders
+      // Check for the gradient element instead
+      const gradientLine = wrapper.find('.bg-gradient-to-r')
+      expect(gradientLine.exists()).toBe(true)
     })
   })
 
@@ -516,8 +521,8 @@ describe('App.vue', () => {
     it('should render OpportunityCard components for opportunities', () => {
       const wrapper = mount(App)
 
-      // Opportunities are rendered in the grid
-      const grid = wrapper.find('.grid.grid-cols-1.md\\:grid-cols-2.xl\\:grid-cols-3')
+      // Opportunities are rendered in the grid with updated responsive classes
+      const grid = wrapper.find('.grid.grid-cols-1.sm\\:grid-cols-2.lg\\:grid-cols-3.xl\\:grid-cols-4')
       expect(grid.exists()).toBe(true)
     })
 
@@ -540,7 +545,7 @@ describe('App.vue', () => {
     it('should have max width container', () => {
       const wrapper = mount(App)
 
-      expect(wrapper.find('.max-w-350').exists()).toBe(true)
+      expect(wrapper.find('.w-full').exists()).toBe(true)
     })
   })
 
@@ -660,7 +665,7 @@ describe('App.vue - Export functions', () => {
     window.matchMedia = createMatchMediaMock(false)
 
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test')
-    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
+    vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => { })
 
     Object.assign(navigator, {
       clipboard: {

@@ -134,7 +134,7 @@ describe('HelpDrawer', () => {
       expect(wrapper.find('.help-backdrop').exists()).toBe(true)
 
       // Close drawer
-      await wrapper.find('.help-drawer-close').trigger('click')
+      await wrapper.find('.help-drawer-close-btn').trigger('click')
       expect(wrapper.find('.help-backdrop').exists()).toBe(false)
     })
 
@@ -151,7 +151,7 @@ describe('HelpDrawer', () => {
       await wrapper.find('.help-fab').trigger('click')
 
       // Click the understand button
-      const understandButton = wrapper.find('.help-drawer-footer .btn-primary')
+      const understandButton = wrapper.find('.help-drawer-action-btn')
       await understandButton.trigger('click')
 
       expect(wrapper.find('.help-backdrop').exists()).toBe(false)
@@ -349,7 +349,7 @@ describe('HelpDrawer', () => {
 
       await wrapper.find('.help-fab').trigger('click')
 
-      const closeButton = wrapper.find('.help-drawer-close')
+      const closeButton = wrapper.find('.help-drawer-close-btn')
       expect(closeButton.attributes('aria-label')).toBe('Κλείσιμο')
     })
   })
