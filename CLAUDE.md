@@ -272,8 +272,9 @@ This project follows [Semantic Versioning](https://semver.org/):
 Current version is defined in `package.json`. Update the version and `CHANGELOG.md` when releasing:
 
 1. Update `version` in `package.json`
-2. Add new section to `CHANGELOG.md` with date and changes
-3. Commit with message: `chore: release vX.Y.Z`
+2. Update `softwareVersion` in `index.html` (JSON-LD structured data)
+3. Add new section to `CHANGELOG.md` with date and changes
+4. Commit with message: `chore: release vX.Y.Z`
 
 ## Commit Message Convention
 
